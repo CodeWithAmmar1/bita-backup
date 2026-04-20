@@ -7,7 +7,6 @@ import 'package:testappbita/Views/aqua%20master/main_screen/mainpage.dart';
 import 'package:testappbita/Views/csm/csm_noti_screen/csm_noti_screen.dart';
 import 'package:testappbita/Views/csm/widget/csm_setpoint.dart';
 import 'package:testappbita/Views/csm/widget/temperature_containercsm.dart';
-import 'package:testappbita/Views/sp1/sp_notification_page/sp_notification.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/controller/notification_controller/csm_notification_controller/notification_controllercsm.dart';
 import 'package:testappbita/utils/theme/theme.dart';
@@ -244,13 +243,13 @@ class CsmMainscreenState extends State<CsmMainscreen>
                     () => buildIconContainer(
                       context,
                       Icons.power_settings_new,
-                      _mqttController.csmSw.value == false
+                      _mqttController.csmSw.value == true
                           ? Color(0xFF24C48E)
                           : Colors.red,
                       Colors.grey.shade200,
-                      _mqttController.csmSw.value == false
-                          ? 'start'.tr
-                          : 'stop'.tr,
+                      _mqttController.csmSw.value == true
+                          ? 'Power On'.tr
+                          : 'Power Off'.tr,
                       Get.isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
