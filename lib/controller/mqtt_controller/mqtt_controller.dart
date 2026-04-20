@@ -384,7 +384,8 @@ class MqttController extends GetxController {
   RxInt hrscsm = 0.obs;
   RxInt csmValue = 0.obs;
   RxBool csmSw = false.obs;
- 
+  RxInt csmResetValues = 0.obs;
+  RxBool csmResetload = false.obs;
   // alert master 01
   final psiTobar1 = true.obs;
   final ftoC1 = true.obs;
@@ -467,7 +468,7 @@ class MqttController extends GetxController {
     loadLastNotifiedValuesDx();
     loadLastNotifiedValuesDxm();
     loadLastNotifiedValuesDm();
- loadLastNotifiedValuesCsm();
+    loadLastNotifiedValuesCsm();
     loadLastNotifiedValuesTel();
     loadLastNotifiedValuesSp1();
     loadLastNotifiedValuesDm1();
@@ -1093,12 +1094,12 @@ class MqttController extends GetxController {
     saveLastNotifiedValuesSp1();
   }
 
-
 //Csm
   void clearLastNotifiedValuesCsm(String deviceId) {
     lastNotifiedValuePerDeviceCsm.remove(deviceId);
     saveLastNotifiedValuesCsm();
   }
+
 //RCM
   void clearLastNotifiedValuesRcm(String deviceId) {
     lastNotifiedValuePerDeviceRcm.remove(deviceId);
@@ -1139,6 +1140,7 @@ class MqttController extends GetxController {
       });
     }
   }
+
   /// ✅ Save to SharedPreferences
   Future<void> saveLastNotifiedValuesCsm() async {
     final prefs = await SharedPreferences.getInstance();
@@ -1163,6 +1165,7 @@ class MqttController extends GetxController {
       });
     }
   }
+
   // ✅ Save to SharedPreferences
   Future<void> saveLastNotifiedValuesAm1() async {
     final prefs = await SharedPreferences.getInstance();
@@ -1428,8 +1431,9 @@ class MqttController extends GetxController {
       saveLastNotifiedValuesAm1(); // Save updated state
     }
   }
+
   //csm
- void _handleMessageCsm(String message, String topics) async {
+  void _handleMessageCsm(String message, String topics) async {
     try {
       Map<String, dynamic> jsonMap = jsonDecode(message);
       tempcsm.value = double.tryParse(jsonMap['temperature'].toString()) ?? 0.0;
@@ -1438,6 +1442,8 @@ class MqttController extends GetxController {
       humcsm.value = int.tryParse(jsonMap['humidity'].toString()) ?? 0;
       hrscsm.value = int.tryParse(jsonMap['hrs'].toString()) ?? 0;
       int systemSwitch = int.tryParse(jsonMap['sw'].toString()) ?? 0;
+      csmResetValues.value =
+          int.tryParse(jsonMap['resetValues']?.toString() ?? '') ?? 0;
       csmSw.value = systemSwitch == 1;
     } catch (e) {
       log("CSM Error parsing message: $e");
@@ -1458,6 +1464,7 @@ class MqttController extends GetxController {
 
   void buildJsonPayloadCsm() {
     Map<String, dynamic> jsonPayload = {
+      "resetValues": csmResetValues.value,
       "tempSp": tempcsmSp.value.toString(),
       "sw": csmSw.value ? 1 : 0,
     };
@@ -1481,27 +1488,27 @@ class MqttController extends GetxController {
           checkAndNotifyCsm(
             deviceid: topicid,
             id: "temp1",
-            condition: tempcsm.value >= 38.0 ,
-            title: 'Temperature',
+            condition: tempcsm.value >= 38.0,
+            title: 'Turned On',
             value: tempcsm.value.toDouble(),
             type: "temperature",
-            status: "High",
+            status: "",
           );
         }
-         if (csmValue.value == 1) {
+        if (csmValue.value == 1) {
           checkAndNotifyCsm(
             deviceid: topicid,
             id: "temp1",
-            condition: tempcsm.value <= 34.0 ,
-            title: 'Temperature',
+            condition: tempcsm.value <= 34.0,
+            title: 'Turned Off',
             value: tempcsm.value.toDouble(),
             type: "temperature",
-            status: "High",
+            status: "",
           );
         }
       }
     } catch (e) {
-      log("AM1 notification Error parsing message: $e");
+      log("CSM notification Error parsing message: $e");
     }
   }
 
@@ -1522,24 +1529,22 @@ class MqttController extends GetxController {
     final deviceMap = lastNotifiedValuePerDeviceCsm[deviceid]!;
 
     if (condition) {
-      
-        double? parsed = double.tryParse(value.toString());
-        if (parsed == null) return;
+      double? parsed = double.tryParse(value.toString());
+      if (parsed == null) return;
 
-        double roundedValue = parsed.floorToDouble();
-        double? lastValue = deviceMap[id];
+      double roundedValue = parsed.floorToDouble();
+      double? lastValue = deviceMap[id];
 
-        if (lastValue == null || lastValue != roundedValue) {
-          deviceMap[id] = roundedValue;
+      if (lastValue == null || lastValue != roundedValue) {
+        deviceMap[id] = roundedValue;
 
-          if (type == "temperature") {
-            _notificationControllerCsm.showTemperatureAlertNotification(
-                deviceid, title, parsed, status);
-          } 
-
-          saveLastNotifiedValuesAm1(); // Save updated state
+        if (type == "temperature") {
+          _notificationControllerCsm.showTemperatureAlertNotification(
+              deviceid, title, parsed, status);
         }
-      
+
+        saveLastNotifiedValuesAm1(); // Save updated state
+      }
     } else {
       deviceMap.remove(id);
       saveLastNotifiedValuesAm1(); // Save updated state

@@ -48,7 +48,7 @@ class NotificationControllercsm extends GetxController {
       channelKey: 'temperature_alerts',
       title: '$deviceId Alert:',
       body:
-          '$title Temp. - $status (${temperature.toStringAsFixed(1)}°C)\n${getCurrentDateTime()}',
+          'Machine is not $title  (${temperature.toStringAsFixed(1)}°C)\n${getCurrentDateTime()}',
       notificationLayout: NotificationLayout.Default,
       autoDismissible: false,
       wakeUpScreen: true,

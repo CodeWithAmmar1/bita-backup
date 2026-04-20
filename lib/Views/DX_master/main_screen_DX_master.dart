@@ -247,8 +247,7 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
                                                                         .dmStatusB
                                                                         .value ==
                                                                     3
-                                                                ? 'stopping'
-                                                                    .tr
+                                                                ? 'stopping'.tr
                                                                 : _mqttController
                                                                             .dmStatusB
                                                                             .value ==
@@ -317,8 +316,7 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
                                                                         .dmStatusA
                                                                         .value ==
                                                                     3
-                                                                ? 'stopping'
-                                                                    .tr
+                                                                ? 'stopping'.tr
                                                                 : _mqttController
                                                                             .dmStatusA
                                                                             .value ==
@@ -387,8 +385,7 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
                                                                         .dmStatusA
                                                                         .value ==
                                                                     3
-                                                                ? 'stopping'
-                                                                    .tr
+                                                                ? 'stopping'.tr
                                                                 : _mqttController
                                                                             .dmStatusA
                                                                             .value ==
@@ -457,8 +454,7 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
                                                                         .dmStatusB
                                                                         .value ==
                                                                     3
-                                                                ? 'Stopping'
-                                                                    .tr
+                                                                ? 'Stopping'.tr
                                                                 : _mqttController
                                                                             .dmStatusB
                                                                             .value ==
