@@ -1,0 +1,12 @@
+# Fixed Gitignore
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+.gradle/
+android/.gradle/
+android/app/build/
+ios/.symlinks/
+*.log
+*.rar

@@ -1,0 +1,2 @@
+E:/bitahomesupdated/android/app/.cxx/Debug/445g5s6l/x86/CMakeFiles/edit_cache.dir
+E:/bitahomesupdated/android/app/.cxx/Debug/445g5s6l/x86/CMakeFiles/rebuild_cache.dir
