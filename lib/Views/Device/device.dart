@@ -13,6 +13,7 @@ import 'package:testappbita/Views/Device/customWidget/dxCard.dart';
 import 'package:testappbita/Views/Device/customWidget/dxMiniCard.dart';
 import 'package:testappbita/Views/Device/customWidget/greenHouseCard.dart';
 import 'package:testappbita/Views/Device/customWidget/rcmCard.dart';
+import 'package:testappbita/Views/Device/customWidget/rmsCard.dart';
 import 'package:testappbita/Views/Device/customWidget/sewerageCard.dart';
 import 'package:testappbita/Views/Device/customWidget/spCard.dart';
 import 'package:testappbita/Views/Device/customWidget/telecome_card.dart';
@@ -188,7 +189,11 @@ class DevicesPageState extends State<DevicesPage> {
                               return Rcmastercard(device: device);
                             } else if (id.startsWith("CSM-")) {
                               return Csmcard(device: device);
-                            } else if (id.startsWith("DM-")) {
+                            } 
+                             else if (id.startsWith("RMS-")) {
+                              return Rmscard(device: device);
+                            }
+                            else if (id.startsWith("DM-")) {
                               return Dmcard(device: device);
                             }
                             return const SizedBox.shrink();

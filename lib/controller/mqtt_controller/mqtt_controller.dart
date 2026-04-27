@@ -5462,6 +5462,7 @@ class MqttController extends GetxController {
   RxDouble light2value = 10.0.obs;
   RxDouble curtainValue = 70.0.obs;
 
+//rms handle message
   void rmsMessageReceived(String messages, topic) {
     try {
       Map<String, dynamic> data = jsonDecode(messages);
