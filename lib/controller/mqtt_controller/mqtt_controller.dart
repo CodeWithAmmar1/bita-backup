@@ -742,6 +742,8 @@ class MqttController extends GetxController {
             handleMessageDMDevice(payload, topic); //RCM
           } else if (topiid.startsWith("CSM")) {
             handleMessageDMDevice(payload, topic); //CSM
+          } else if (topiid.startsWith("RMS")) {
+            handleMessageDMDevice(payload, topic); //RMS
           }
         }
       }
@@ -1678,7 +1680,7 @@ class MqttController extends GetxController {
   }
 
   var pass = true.obs;
-  Future<void> showPasswordDialog(BuildContext context) async {
+  Future<void> showPasswordDialog(BuildContext context, bool permission) async {
     TextEditingController passwordController = TextEditingController();
     await Get.dialog(
       Center(
@@ -1733,7 +1735,9 @@ class MqttController extends GetxController {
                     startLockTimer();
                     Get.back();
                     await Get.bottomSheet(
-                      CustomBottomSheet1(),
+                      CustomBottomSheet1(
+                        permission: permission,
+                      ),
                       backgroundColor: Get.isDarkMode
                           ? const Color(0xFF121212)
                           : ThemeColor().mode1Sec,
@@ -1782,14 +1786,17 @@ class MqttController extends GetxController {
     lastDamperValue.refresh();
   }
 
-  Future<void> selectSeason(var summer) async {
+  Future<void> selectSeason(var summer, var permission) async {
     isSeasonLoading.value = true;
     isSummer.value = summer;
     receivedMessage.value = "Season Selected: ${summer ? 'Summer' : 'Winter'}";
-
     String message = "Season Selected: ${summer ? 'Winter' : 'Summer'}";
-    message = createjson();
-    publishMessage(message);
+    if (permission) {
+      message = createjson();
+      publishMessage(message);
+    } else {
+      buildJsonPayloadRms();
+    }
     await Future.delayed(Duration(seconds: 4));
     isSeasonLoading.value = false;
   }
@@ -5474,55 +5481,33 @@ class MqttController extends GetxController {
   void rmsMessageReceived(String messages, topic) {
     try {
       Map<String, dynamic> data = jsonDecode(messages);
-      int acSwitch = data['acSwitch'] ?? 0;
-      int curtainsw = data['curtainsw'] ?? 0;
-      int shuttersw = data['shuttersw'] ?? 0;
-      int smartTv = data['smartTv'] ?? 0;
-      // int voiceControl = data['voiceControl'] ?? 0;
-      // int doorLock = data['doorLock'] ?? 0;
-      // int motionSensor = data['motionSensor'] ?? 0;
-      // int carbonmono = data['carbonmono'] ?? 0;
-      int roomLight1 = data['roomLight1'] ?? 0;
-      int roomLight2 = data['roomLight2'] ?? 0;
-      int roomFan = data['roomFan'] ?? 0;
-      String light1intense = data['light1intense'];
-      String light2intense = data['light2intense'];
-      String curtainintense = data['curtainintense'];
-      String shutterintense = data['shutterintense'];
-      String roomfanintense = data['roomfanintense'];
-      String actemp = data['actemp'];
 
-      String season = data['season'];
-      String dmptemp = data['dmptemp'];
-      String dmptempsp = data['dmptempsp'];
-      int dampersw = data['dampersw'] ?? 0;
-      String cfm = data['cfm'];
-      String dampstate = data['dampstate'];
+      // 1. Handle Integers (Direct assignments)
+      acswitch.value = data['acSwitch'] ?? 0;
+      curtainSw.value = data['curtainsw'] ?? 0;
+      shutterSw.value = data['shuttersw'] ?? 0;
+      smarttv.value = data['smartTv'] ?? 0;
+      roomlight1.value = data['Light1'] ?? 0;
+      roomlight2.value = data['Light2'] ?? 0;
+      roomfan.value = data['roomFan'] ?? 0;
+      damperSw.value = data['dampersw'] ?? 0;
+      isSummer.value = data['season'].toString() == "1";
+      temperature.value = double.tryParse(data['dmptemp'].toString()) ?? 0.0;
+      lastDamperValue.value = int.tryParse(data['dmptempsp'].toString()) ?? 0;
+      currentValue.value = double.tryParse(data['cfm'].toString()) ?? 0.0;
+      flapstate.value = data['dampstate']?.toString() ?? "CLOSE";
 
-      damperSw.value = dampersw;
-      isSummer.value = season == "1";
-      temperature.value = double.parse(dmptemp);
-      lastDamperValue.value = int.parse(dmptempsp);
-      currentValue.value = double.parse(cfm);
-      flapstate.value = dampstate;
-
-      // carbonMono.value = carbonmono;
-      light1value.value = double.parse(light1intense);
-      light2value.value = double.parse(light2intense);
-      curtainValue.value = double.parse(curtainintense);
-      shutterValue.value = double.parse(shutterintense);
-      roomfanIntensity.value = double.parse(roomfanintense);
-      acTemp.value = double.parse(actemp);
-      acswitch.value = acSwitch;
-      curtainSw.value = curtainsw;
-      shutterSw.value = shuttersw;
-      smarttv.value = smartTv;
-      // voicecontrol.value = voiceControl;
-      // doorlock.value = doorLock;
-      // motionsensor.value = motionSensor;
-      roomlight1.value = roomLight1;
-      roomlight2.value = roomLight2;
-      roomfan.value = roomFan;
+      light1value.value =
+          double.tryParse(data['light1intense'].toString()) ?? 0.0;
+      light2value.value =
+          double.tryParse(data['light2intense'].toString()) ?? 0.0;
+      curtainValue.value =
+          double.tryParse(data['curtainintense'].toString()) ?? 0.0;
+      shutterValue.value =
+          double.tryParse(data['shutterintense'].toString()) ?? 0.0;
+      roomfanIntensity.value =
+          double.tryParse(data['roomfanintense'].toString()) ?? 0.0;
+      acTemp.value = double.tryParse(data['actemp'].toString()) ?? 0.0;
     } catch (e) {
       log("❌ Error processing MQTT message: $e");
     }
@@ -5532,16 +5517,23 @@ class MqttController extends GetxController {
     Map<String, dynamic> jsonPayload = {
       "acSwitch": acswitch.value,
       "curtainsw": curtainSw.value,
+      "shuttersw": shutterSw.value,
       "smartTv": smarttv.value,
-      "voiceControl": voicecontrol.value,
-      "doorLock": doorlock.value,
-      "motionSensor": motionsensor.value,
-      "roomLight1": roomlight1.value,
-      "roomLight2": roomlight2.value,
+      "Light1": roomlight1.value,
+      "Light2": roomlight2.value,
       "roomFan": roomfan.value,
       "light1intense": light1value.value,
       "light2intense": light2value.value,
       "curtainintense": curtainValue.value,
+      // "voiceControl": voicecontrol.value,
+      // "doorLock": doorlock.value,
+      // "motionSensor": motionsensor.value,
+      "shutterintense": shutterValue.value,
+      "roomfanintense": roomfanIntensity.value,
+      "season": isSummer.value ? "1" : "0",
+      "dmptempsp": lastDamperValue.value,
+      "dampersw": damperSw.value,
+      "cfm": currentValue.value,
     };
 
     String jsonString = jsonEncode(jsonPayload);

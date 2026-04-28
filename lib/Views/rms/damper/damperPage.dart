@@ -21,7 +21,7 @@ Timer? publishTimer;
 class _DamperPageState extends State<DamperPage> {
   void _showBottomSheet(String title) {
     Get.bottomSheet(
-      CustomBottomSheet(),
+      CustomBottomSheet( permission: false,),
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -157,8 +157,7 @@ class _DamperPageState extends State<DamperPage> {
                             onChangeEnd: (double value) {
                               publishTimer?.cancel();
                               publishTimer = Timer(Duration(seconds: 1), () {
-                                _mqttcontroller.publishMessage(
-                                    _mqttcontroller.createjson());
+                                _mqttcontroller.buildJsonPayloadRms();
                                 publishTimer = Timer(Duration(seconds: 1), () {
                                   _mqttcontroller.isUserInteracting.value =
                                       false;
@@ -273,8 +272,7 @@ class _DamperPageState extends State<DamperPage> {
                                   publishTimer?.cancel();
                                   publishTimer =
                                       Timer(Duration(seconds: 1), () {
-                                    _mqttcontroller.publishMessage(
-                                        _mqttcontroller.createjson());
+                                    _mqttcontroller.buildJsonPayloadRms();
                                     _mqttcontroller.isUserInteracting.value =
                                         false;
                                   });
@@ -325,8 +323,7 @@ class _DamperPageState extends State<DamperPage> {
                                   publishTimer?.cancel();
                                   publishTimer =
                                       Timer(Duration(seconds: 1), () {
-                                    _mqttcontroller.publishMessage(
-                                        _mqttcontroller.createjson());
+                                    _mqttcontroller.buildJsonPayloadRms();
                                     _mqttcontroller.isUserInteracting.value =
                                         false;
                                   });
@@ -442,8 +439,7 @@ class _DamperPageState extends State<DamperPage> {
                                 future: () async {
                                   final newValue = !_mqttcontroller.isOn.value;
                                   _mqttcontroller.isOn.value = newValue;
-                                  String message = _mqttcontroller.createjson();
-                                  _mqttcontroller.publishMessage(message);
+                                 _mqttcontroller.buildJsonPayloadRms();
                                   await Future.delayed(
                                       Duration(milliseconds: 2000));
                                   return newValue;
@@ -532,7 +528,7 @@ class _DamperPageState extends State<DamperPage> {
                   ),
                   GestureDetector(
                     onLongPress: () =>
-                        _mqttcontroller.showPasswordDialog(context),
+                        _mqttcontroller.showPasswordDialog(context ,false),
                     child: _buildIconContainer(
                       context,
                       Icons.tune,

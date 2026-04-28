@@ -68,10 +68,10 @@ class TemperatureAlertTelecome extends StatelessWidget {
                       ),
                     ),
                     min: 0,
-                    max: 30,
+                    max: 40,
                     initialValue: _mqttController.tempAlertTel.value
                         .toDouble()
-                        .clamp(0, 30),
+                        .clamp(0, 40),
                     onChangeStart: (_) {
                       _mqttController.isUserInteracting.value = true;
                     },
@@ -185,7 +185,7 @@ class TemperatureAlertTelecome extends StatelessWidget {
                           onPressed: () {
                             _mqttController.isUserInteracting.value = true;
 
-                            if (_mqttController.tempAlertTel.value < 30) {
+                            if (_mqttController.tempAlertTel.value < 40) {
                               _mqttController.tempAlertTel.value += 1;
                               publishTimer?.cancel();
                               publishTimer = Timer(Duration(seconds: 1), () {

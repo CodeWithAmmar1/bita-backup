@@ -6,8 +6,9 @@ import 'package:testappbita/utils/theme/theme.dart';
 
 // ignore: must_be_immutable
 class CustomBottomSheet1 extends StatelessWidget {
+  final bool permission; 
   final MqttController _mqttcontroller = Get.find();
-  CustomBottomSheet1({super.key});
+  CustomBottomSheet1({super.key, required this.permission});
   Timer? publishTimer;
   @override
   Widget build(BuildContext context) {
@@ -98,9 +99,14 @@ class CustomBottomSheet1 extends StatelessWidget {
                                       publishTimer?.cancel();
                                       publishTimer =
                                           Timer(Duration(seconds: 1), () {
+                                            if (permission) {
                                         String message =
                                             _mqttcontroller.createjson();
                                         _mqttcontroller.publishMessage(message);
+                                              
+                                            } else {
+                                                _mqttcontroller.buildJsonPayloadRms();
+                                            }
                                         publishTimer =
                                             Timer(Duration(seconds: 1), () {
                                           _mqttcontroller

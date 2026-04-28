@@ -22,7 +22,9 @@ Timer? publishTimer;
 class _PannelState extends State<Pannel> {
   void _showBottomSheet(String title) {
     Get.bottomSheet(
-      CustomBottomSheet(),
+      CustomBottomSheet(
+        permission: true,
+      ),
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -270,7 +272,6 @@ class _PannelState extends State<Pannel> {
                       ],
                     ),
                   ),
-                 
                   if ((_mqttcontroller.lastDamperValue.value > 4) &&
                       (_mqttcontroller.isOn.value == true))
                     Padding(
@@ -548,7 +549,7 @@ class _PannelState extends State<Pannel> {
                   ),
                   GestureDetector(
                     onLongPress: () =>
-                        _mqttcontroller.showPasswordDialog(context),
+                        _mqttcontroller.showPasswordDialog(context, true),
                     child: _buildIconContainer(
                       context,
                       Icons.tune,

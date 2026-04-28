@@ -47,7 +47,7 @@ class TelecomTemperature extends StatelessWidget {
                         onTap: () => Get.to(() => TemperatureAlertTelecome()),
                         child: Obx(() => TelecomeTempWidget(
                               unit: "°C",
-                              limit: 30,
+                              limit: 40,
                               title: 'temp_alert'.tr,
                               setpoint:
                                   _mqttController.tempAlertTel.value.toString(),

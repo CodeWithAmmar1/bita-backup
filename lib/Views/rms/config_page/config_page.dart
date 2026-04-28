@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:testappbita/Views/rms/config_page_slider/config_page_slider.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
@@ -54,23 +55,22 @@ class ConfigPage extends StatelessWidget {
               width: Get.width * 0.8,
               color: Get.isDarkMode ? Colors.white : Colors.black,
             ),
-            Obx(
-              () => GestureDetector(
-                onTap: () {
-                  power.value = power.value == 1 ? 0 : 1;
-                  _mqttcontroller.buildJsonPayloadRms();
-                },
-                child: Image.asset(
-                  Get.isDarkMode
-                      ? (power.value == 1
-                          ? "assets/images/buttondarkon.png"
-                          : "assets/images/buttondarkoff.png")
-                      : (power.value == 1
-                          ? "assets/images/buttonlighton.png"
-                          : "assets/images/buttonlightoff.png"),
-                  width: Get.width,
-                  height: Get.height * 0.55,
-                  fit: BoxFit.cover,
+            SizedBox(
+              height: 90,
+            ),
+            GestureDetector(
+              onTap: () {
+                _mqttcontroller.isUserInteracting.value = true;
+              },
+              child: Obx(
+                () => SimpleSunkenButton(
+                  isOn: power.value == 1,
+                  size: Get.height * 0.30,
+                  baseColor:
+                      Get.isDarkMode ? const Color(0xFF202020) : Colors.white,
+                  onTap: () {
+                    power.value = power.value == 1 ? 0 : 1;
+                  },
                 ),
               ),
             ),

@@ -6,9 +6,10 @@ import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class CustomBottomSheet extends StatelessWidget {
+  final bool permission;
   final MqttController _mqttcontroller = Get.find();
 
-  CustomBottomSheet({super.key});
+  CustomBottomSheet({super.key, required this.permission});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,7 @@ class CustomBottomSheet extends StatelessWidget {
                     future: () async {
                       _mqttcontroller.isOilLoading.value = true;
                       final newValue = !_mqttcontroller.isSummer.value;
-                      await _mqttcontroller.selectSeason(newValue);
+                      await _mqttcontroller.selectSeason(newValue , permission);
                       _mqttcontroller.isSeasonLoading.value = false;
                       return newValue;
                     },

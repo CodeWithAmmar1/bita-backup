@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:testappbita/Views/rms/config_page/config_page.dart';
@@ -22,9 +24,27 @@ class RmsMainScreen extends StatefulWidget {
   State<RmsMainScreen> createState() => _RmsMainScreenState();
 }
 
-final MqttController _mqttcontroller = Get.find<MqttController>();
+late String deviceName;
+late String deviceid;
+Timer? publishTimer;
 
 class _RmsMainScreenState extends State<RmsMainScreen> {
+  @override
+  void initState() {
+    super.initState();
+    deviceName = Get.arguments?["name"] ?? "Unknown Device";
+    deviceid = Get.arguments?["id"] ?? "Unknown id";
+    _mqttcontroller.timeAm2.value = true;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _mqttcontroller.updatetopicSSIDvalue("");
+    _mqttcontroller.timeAm2.value = false;
+  }
+
+  final MqttController _mqttcontroller = Get.find<MqttController>();
   final themeController = Get.find<ThemeController>();
   @override
   Widget build(BuildContext context) {
@@ -210,14 +230,14 @@ class _RmsMainScreenState extends State<RmsMainScreen> {
                   GestureDetector(
                     onTap: () {
                       Get.to(() => DamperPage(
-                            deviceId: "RMS-AAA001",
+                            deviceId: deviceid,
                           ));
                     },
                     child: Damper(
                       cfm: _mqttcontroller.currentValue,
                       isActive: _mqttcontroller.damperSw,
                       season: _mqttcontroller.isSummer,
-                      temp: _mqttcontroller.acTemp,
+                      temp: _mqttcontroller.temperature,
                     ),
                   ),
                 ],

@@ -78,84 +78,89 @@ class _DamperState extends State<Damper> {
                   )
                 ],
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      widget.season.value
-                          ? Icon(Icons.sunny, color: Colors.orange, size: 20)
-                          : Icon(Icons.ac_unit, color: Colors.blue, size: 20),
-                      SizedBox(width: 3),
-                      Container(
-                        height: 15,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          color: widget.season.value
-                              ? Colors.yellow
-                              : Colors.lightBlueAccent,
-                          borderRadius: BorderRadius.circular(5),
+              Obx(
+                () => Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        widget.season.value
+                            ? Icon(Icons.sunny, color: Colors.orange, size: 20)
+                            : Icon(Icons.ac_unit, color: Colors.blue, size: 20),
+                        SizedBox(width: 3),
+                        Container(
+                          height: 15,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            color: widget.season.value
+                                ? Colors.yellow
+                                : Colors.lightBlueAccent,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Center(
+                            child: Text(
+                              widget.season.value ? "SUMMER" : "WINTER",
+                              style: TextStyle(
+                                fontSize: 6,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
-                        child: Center(
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.thermostat_outlined,
+                            color: Colors.green, size: 25),
+                        Center(
                           child: Text(
-                            widget.season.value ? "SUMMER" : "WINTER",
+                            "${widget.temp.value.toStringAsFixed(1)}°C",
                             style: TextStyle(
-                              fontSize: 6,
-                              color: Colors.black,
+                              fontSize: 12,
+                              color:
+                                  Get.isDarkMode ? Colors.white : Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.thermostat_outlined,
-                          color: Colors.green, size: 25),
-                      Center(
-                        child: Text(
-                          "${widget.temp.value.toStringAsFixed(1)}°C",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Get.isDarkMode ? Colors.white : Colors.black,
-                            fontWeight: FontWeight.bold,
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Text(
+                            "CFM",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color:
+                                  Get.isDarkMode ? Colors.white : Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Text(
-                          "CFM",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Get.isDarkMode ? Colors.white : Colors.black,
-                            fontWeight: FontWeight.bold,
+                        SizedBox(width: 5),
+                        Center(
+                          child: Text(
+                            "${widget.cfm.value.toStringAsFixed(0)}%",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color:
+                                  Get.isDarkMode ? Colors.white : Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(width: 5),
-                      Center(
-                        child: Text(
-                          "${widget.cfm.value.toStringAsFixed(0)}%",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Get.isDarkMode ? Colors.white : Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               )
             ],
           ),
