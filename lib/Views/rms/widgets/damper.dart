@@ -2,7 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Damper extends StatefulWidget {
-  const Damper({super.key});
+  final RxInt isActive;
+  final RxBool season;
+  final RxDouble temp;
+  final RxDouble cfm;
+
+  const Damper({
+    super.key,
+    required this.isActive,
+    required this.season,
+    required this.temp,
+    required this.cfm,
+  });
 
   @override
   State<Damper> createState() => _DamperState();
@@ -44,22 +55,19 @@ class _DamperState extends State<Damper> {
                     ),
                   ),
                   SizedBox(height: 5),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        shutter = !shutter;
-                      });
-                    },
-                    child: Container(
+                  Obx(
+                    () => Container(
                       height: 20,
                       width: 60,
                       decoration: BoxDecoration(
-                        color: shutter ? Colors.green : Colors.red,
+                        color: widget.isActive.value == 1
+                            ? Colors.green
+                            : Colors.red,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Center(
                         child: Text(
-                          shutter ? "OPEN" : "CLOSE",
+                          widget.isActive.value == 1 ? "OPEN" : "CLOSE",
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -71,10 +79,12 @@ class _DamperState extends State<Damper> {
                 ],
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      shutter
+                      widget.season.value
                           ? Icon(Icons.sunny, color: Colors.orange, size: 20)
                           : Icon(Icons.ac_unit, color: Colors.blue, size: 20),
                       SizedBox(width: 3),
@@ -82,13 +92,14 @@ class _DamperState extends State<Damper> {
                         height: 15,
                         width: 30,
                         decoration: BoxDecoration(
-                          color:
-                              shutter ? Colors.yellow : Colors.lightBlueAccent,
+                          color: widget.season.value
+                              ? Colors.yellow
+                              : Colors.lightBlueAccent,
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: Center(
                           child: Text(
-                            shutter ? "SUMMER" : "WINTER",
+                            widget.season.value ? "SUMMER" : "WINTER",
                             style: TextStyle(
                               fontSize: 6,
                               color: Colors.black,
@@ -99,14 +110,15 @@ class _DamperState extends State<Damper> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 5),
+                  SizedBox(height: 8),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.thermostat_outlined,
                           color: Colors.green, size: 25),
                       Center(
                         child: Text(
-                          "36°C",
+                          "${widget.temp.value.toStringAsFixed(1)}°C",
                           style: TextStyle(
                             fontSize: 12,
                             color: Get.isDarkMode ? Colors.white : Colors.black,
@@ -116,8 +128,9 @@ class _DamperState extends State<Damper> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 5),
+                  SizedBox(height: 8),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Center(
                         child: Text(
@@ -132,7 +145,7 @@ class _DamperState extends State<Damper> {
                       SizedBox(width: 5),
                       Center(
                         child: Text(
-                          "45%",
+                          "${widget.cfm.value.toStringAsFixed(0)}%",
                           style: TextStyle(
                             fontSize: 12,
                             color: Get.isDarkMode ? Colors.white : Colors.black,
@@ -140,17 +153,6 @@ class _DamperState extends State<Damper> {
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Icon(Icons.calendar_month_outlined,
-                          color: Colors.green, size: 25),
-                      SizedBox(width: 5),
-                      Icon(Icons.settings,
-                          color: Get.isDarkMode ? Colors.white : Colors.black,
-                          size: 25),
                     ],
                   ),
                 ],

@@ -58,12 +58,10 @@ class TemperatureContainercsm extends StatelessWidget {
             () => Row(
               children: [
                 Expanded(
-                  child: TemperatureWidgetSp(
+                  child: TempWidget(
                     temperature:
                         _mqttController.deviceConnections[deviceId] ?? false
-                            ? value.value == 999.0
-                                ? "--.-"
-                                : "${value.value}$unit"
+                            ? "${value.value}$unit"
                             : "--.-",
                     getColorLogic: () =>
                         value.value >= _mqttController.tempcsmSp.value
@@ -86,8 +84,8 @@ class HumidityContainercsm extends StatelessWidget {
   final String unit;
   final String heading;
   final IconData icon;
-  final RxInt value;
-
+  final RxString value;
+  final String status;
   final String deviceId;
   final MqttController _mqttController = Get.find<MqttController>();
   HumidityContainercsm(
@@ -96,7 +94,8 @@ class HumidityContainercsm extends StatelessWidget {
       required this.unit,
       required this.heading,
       required this.icon,
-      required this.value});
+      required this.value,
+      required this.status});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -136,13 +135,11 @@ class HumidityContainercsm extends StatelessWidget {
             () => Row(
               children: [
                 Expanded(
-                  child: TemperatureWidgetSp(
+                  child: TempWidget(
                     temperature:
                         _mqttController.deviceConnections[deviceId] ?? false
-                            ? value.value == 999.0
-                                ? "--.-"
-                                : "${value.value}$unit"
-                            : "--.-",
+                            ? "${value.value}$unit"
+                            : status,
                     getColorLogic: () =>
                         Get.isDarkMode ? Colors.white : Colors.black,
                   ),
@@ -156,11 +153,11 @@ class HumidityContainercsm extends StatelessWidget {
   }
 }
 
-class TemperatureWidgetSp extends StatelessWidget {
+class TempWidget extends StatelessWidget {
   final String temperature;
   final Color Function()? getColorLogic;
 
-  const TemperatureWidgetSp({
+  const TempWidget({
     required this.temperature,
     super.key,
     this.getColorLogic,

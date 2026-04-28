@@ -4,7 +4,12 @@ import 'package:get/get.dart';
 class Roomlight extends StatefulWidget {
   final String title;
   final RxInt isActive;
-  const Roomlight({super.key, required this.title, required this.isActive});
+  final RxDouble brightness;
+  const Roomlight(
+      {super.key,
+      required this.title,
+      required this.isActive,
+      required this.brightness});
 
   @override
   State<Roomlight> createState() => _RoomlightState();
@@ -74,9 +79,23 @@ class _RoomlightState extends State<Roomlight> {
               ),
               Column(
                 children: [
-                  Icon(Icons.settings,
-                      color: Get.isDarkMode ? Colors.white : Colors.black,
-                      size: 25),
+                  Row(
+                    children: [
+                      Icon(Icons.model_training_rounded,
+                          color: Colors.yellowAccent, size: 25),
+                      SizedBox(width: 5),
+                      Obx(
+                        () => Text(
+                          "${widget.brightness.value.toStringAsFixed(0)}%",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Get.isDarkMode ? Colors.white : Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               )
             ],

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Shutter extends StatefulWidget {
-  const Shutter({super.key});
+  final RxInt isActive;
+  final RxDouble brightness;
+  const Shutter({super.key, required this.isActive, required this.brightness});
 
   @override
   State<Shutter> createState() => _ShutterState();
@@ -49,22 +51,19 @@ class _ShutterState extends State<Shutter> {
                     ),
                   ),
                   SizedBox(height: 5),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        shutter = !shutter;
-                      });
-                    },
-                    child: Container(
+                  Obx(
+                    () => Container(
                       height: 20,
                       width: 60,
                       decoration: BoxDecoration(
-                        color: shutter ? Colors.green : Colors.red,
+                        color: widget.isActive.value == 1
+                            ? Colors.green
+                            : Colors.red,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Center(
                         child: Text(
-                          shutter ? "OPEN" : "CLOSE",
+                          widget.isActive.value == 1 ? "OPEN" : "CLOSE",
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -77,9 +76,25 @@ class _ShutterState extends State<Shutter> {
               ),
               Column(
                 children: [
-                  Icon(Icons.settings,
-                      color: Get.isDarkMode ? Colors.white : Colors.black,
-                      size: 25),
+                  Row(
+                    children: [
+                      Icon(Icons.shutter_speed_outlined,
+                          color: Colors.blue, size: 25),
+                      Center(
+                        child: Obx(
+                          () => Text(
+                            "${widget.brightness.value.toStringAsFixed(0)}%",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color:
+                                  Get.isDarkMode ? Colors.white : Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               )
             ],

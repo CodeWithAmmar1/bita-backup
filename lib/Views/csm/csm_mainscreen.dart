@@ -181,6 +181,80 @@ class CsmMainscreenState extends State<CsmMainscreen>
                         ),
                       ],
                     ),
+                    Center(
+                      child: Container(
+                        width: constraints.maxWidth * 0.95,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color:
+                              isDark ? ThemeColor().mode2 : ThemeColor().mode1,
+                        ),
+                        child: Obx(
+                          () => Row(
+                            // mainAxisAlignment:
+                            //     MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    "${'compressor_status'.tr} :",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          isDark ? Colors.white : Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    _mqttController
+                                                .deviceConnections[deviceid] ??
+                                            false
+                                        ? _mqttController
+                                                    .systemStatusCsm.value ==
+                                                0
+                                            ? 'off'.tr
+                                            : _mqttController.systemStatusCsm
+                                                        .value ==
+                                                    1
+                                                ? 'on'.tr
+                                                : _mqttController
+                                                            .systemStatusCsm
+                                                            .value ==
+                                                        2
+                                                    ? 'Turned On'.tr
+                                                    : _mqttController
+                                                                .systemStatusCsm
+                                                                .value ==
+                                                            3
+                                                        ? 'Turned Off'.tr
+                                                        : 'off'.tr
+                                        : "--",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: _mqttController
+                                                    .systemStatusCsm.value ==
+                                                1
+                                            ? Colors.green
+                                            : Colors.redAccent),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                     SizedBox(height: Get.height * 0.02),
                     TemperatureContainercsm(
                       value: _mqttController.tempcsm,
@@ -191,6 +265,7 @@ class CsmMainscreenState extends State<CsmMainscreen>
                     ),
                     SizedBox(height: Get.height * 0.02),
                     HumidityContainercsm(
+                      status: "--.-",
                       value: _mqttController.humcsm,
                       heading: "Current Humidity".tr,
                       unit: "%",
@@ -199,9 +274,10 @@ class CsmMainscreenState extends State<CsmMainscreen>
                     ),
                     SizedBox(height: Get.height * 0.02),
                     HumidityContainercsm(
+                      status: "--:--",
                       value: _mqttController.hrscsm,
                       heading: "Running Hours".tr,
-                      unit: "Hr",
+                      unit: "",
                       icon: Icons.access_time,
                       deviceId: deviceid,
                     ),

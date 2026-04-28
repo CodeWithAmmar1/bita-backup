@@ -3,11 +3,13 @@ import 'package:get/get.dart';
 
 class RoomFan extends StatefulWidget {
   final RxInt isActive;
-  const RoomFan({super.key, required this.isActive});
+  final RxDouble intensity;
+  const RoomFan({super.key, required this.isActive, required this.intensity});
 
   @override
   State<RoomFan> createState() => _RoomFanState();
 }
+
 class _RoomFanState extends State<RoomFan> {
   @override
   Widget build(BuildContext context) {
@@ -48,31 +50,46 @@ class _RoomFanState extends State<RoomFan> {
                   ),
                   SizedBox(height: 5),
                   Obx(
-                ()=> Container(
-                        height: 20,
-                        width: 60,
-                        decoration: BoxDecoration(
-                          color: widget.isActive.value == 1 ? Colors.green : Colors.red,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Center(
-                          child: Text(
-                            widget.isActive.value == 1 ? "ON" : "OFF",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    () => Container(
+                      height: 20,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: widget.isActive.value == 1
+                            ? Colors.green
+                            : Colors.red,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          widget.isActive.value == 1 ? "ON" : "OFF",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-              ),
+                    ),
+                  ),
                 ],
               ),
               Column(
                 children: [
-                  Icon(Icons.settings,
-                      color: Get.isDarkMode ? Colors.white : Colors.black,
-                      size: 25),
+                  Row(
+                    children: [
+                      Icon(Icons.air, color: Colors.yellowAccent, size: 25),
+                      SizedBox(width: 5),
+                      Obx(
+                        () => Text(
+                          "${widget.intensity.value.toStringAsFixed(0)}%",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Get.isDarkMode ? Colors.white : Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               )
             ],

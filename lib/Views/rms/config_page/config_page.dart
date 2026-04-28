@@ -7,8 +7,8 @@ class ConfigPage extends StatelessWidget {
   final RxInt power;
   final String title;
 
-   ConfigPage({super.key, required this.title, required this.power});
-final MqttController _mqttcontroller = Get.find<MqttController>();
+  ConfigPage({super.key, required this.title, required this.power});
+  final MqttController _mqttcontroller = Get.find<MqttController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,11 +19,11 @@ final MqttController _mqttcontroller = Get.find<MqttController>();
           children: [
             Image.asset("assets/images/rms.png", width: 40, height: 40),
             const SizedBox(width: 8),
-            const Expanded(
+            Expanded(
               child: Text(
-                "RMS-AAA010",
+                title,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                style: const TextStyle(color: Colors.white, fontSize: 18),
               ),
             ),
           ],
@@ -57,9 +57,8 @@ final MqttController _mqttcontroller = Get.find<MqttController>();
             Obx(
               () => GestureDetector(
                 onTap: () {
-                  power.value =
-                      power.value == 1 ? 0 : 1; 
-                      _mqttcontroller.buildJsonPayloadRms();
+                  power.value = power.value == 1 ? 0 : 1;
+                  _mqttcontroller.buildJsonPayloadRms();
                 },
                 child: Image.asset(
                   Get.isDarkMode

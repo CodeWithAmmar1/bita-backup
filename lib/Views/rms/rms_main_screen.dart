@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:testappbita/Views/rms/carbon_mono/carbon_mono.dart';
 import 'package:testappbita/Views/rms/config_page/config_page.dart';
 import 'package:testappbita/Views/rms/config_page_slider/config_page_slider.dart';
+import 'package:testappbita/Views/rms/damper/damperPage.dart';
 import 'package:testappbita/Views/rms/widgets/ac_switch.dart';
 import 'package:testappbita/Views/rms/widgets/curtain.dart';
-import 'package:testappbita/Views/rms/widgets/door.dart';
-import 'package:testappbita/Views/rms/widgets/motion.dart';
+import 'package:testappbita/Views/rms/widgets/damper.dart';
 import 'package:testappbita/Views/rms/widgets/room_fan.dart';
 import 'package:testappbita/Views/rms/widgets/room_light.dart';
+import 'package:testappbita/Views/rms/widgets/shutter.dart';
 import 'package:testappbita/Views/rms/widgets/smart_tv.dart';
-import 'package:testappbita/Views/rms/widgets/voice_control.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 import 'package:testappbita/utils/theme/theme_controller.dart';
@@ -63,59 +62,98 @@ class _RmsMainScreenState extends State<RmsMainScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      CarbonMono(
-                        value: _mqttcontroller.carbonMono,
-                      ),
-                      Column(
-                        children: [
-                          Text("CO",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: Get.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
-                              )),
-                          SizedBox(
-                            height: 20,
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.cloud_queue,
-                        size: 40,
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Text("24°C",
-                          style: TextStyle(
-                            fontSize: 30,
-                            color: Get.isDarkMode ? Colors.white : Colors.black,
-                          )),
-                    ],
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Row(
+              //       children: [
+              //         CarbonMono(
+              //           value: _mqttcontroller.carbonMono,
+              //         ),
+              //         Column(
+              //           children: [
+              //             Text("CO",
+              //                 style: TextStyle(
+              //                   fontWeight: FontWeight.bold,
+              //                   fontSize: 14,
+              //                   color: Get.isDarkMode
+              //                       ? Colors.white
+              //                       : Colors.black,
+              //                 )),
+              //             SizedBox(
+              //               height: 20,
+              //             )
+              //           ],
+              //         )
+              //       ],
+              //     ),
+              //     Row(
+              //       children: [
+              //         Icon(
+              //           Icons.cloud_queue,
+              //           size: 40,
+              //         ),
+              //         SizedBox(
+              //           width: 10,
+              //         ),
+              //         Text("24°C",
+              //             style: TextStyle(
+              //               fontSize: 30,
+              //               color: Get.isDarkMode ? Colors.white : Colors.black,
+              //             )),
+              //       ],
+              //     ),
+              //   ],
+              // ),
               SizedBox(
                 height: 10,
               ),
               Text(
-                "DEVICE",
+                "DEVICES :",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: Get.isDarkMode ? Colors.white : Colors.black,
                 ),
+              ),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => ConfigPageSlider(
+                            currentValue: _mqttcontroller.light1value,
+                            power: _mqttcontroller.roomlight1,
+                            heading: "INTENSITY",
+                            title: "LIGHT 1",
+                            image: "assets/images/bulb.png",
+                          ));
+                    },
+                    child: Roomlight(
+                      brightness: _mqttcontroller.light1value,
+                      isActive: _mqttcontroller.roomlight1,
+                      title: "LIGHT 1",
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => ConfigPageSlider(
+                            currentValue: _mqttcontroller.light2value,
+                            power: _mqttcontroller.roomlight2,
+                            heading: "INTENSITY",
+                            title: "LIGHT 2",
+                            image: "assets/images/bulb.png",
+                          ));
+                    },
+                    child: Roomlight(
+                      brightness: _mqttcontroller.light2value,
+                      isActive: _mqttcontroller.roomlight2,
+                      title: "LIGHT 2",
+                    ),
+                  )
+                ],
               ),
               Row(
                 children: [
@@ -128,6 +166,7 @@ class _RmsMainScreenState extends State<RmsMainScreen> {
                     },
                     child: AcSwitch(
                       isActive: _mqttcontroller.acswitch,
+                      brightness: _mqttcontroller.acTemp,
                     ),
                   ),
                   SizedBox(
@@ -144,20 +183,45 @@ class _RmsMainScreenState extends State<RmsMainScreen> {
                     },
                     child: Curtain(
                       isActive: _mqttcontroller.curtainSw,
+                      curtainValue: _mqttcontroller.curtainValue,
                     ),
                   ),
                 ],
               ),
               // in kuwait
-              // Row(
-              //   children: [
-              //     Shutter(),
-              //     SizedBox(
-              //       width: 10,
-              //     ),
-              //     Damper(),
-              //   ],
-              // ),
+              Row(
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        Get.to(() => ConfigPageSlider(
+                            currentValue: _mqttcontroller.shutterValue,
+                            power: _mqttcontroller.shutterSw,
+                            heading: "RANGE",
+                            image: "assets/images/shutter.png",
+                            title: "SHUTTER"));
+                      },
+                      child: Shutter(
+                        isActive: _mqttcontroller.shutterSw,
+                        brightness: _mqttcontroller.shutterValue,
+                      )),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => DamperPage(
+                            deviceId: "RMS-AAA001",
+                          ));
+                    },
+                    child: Damper(
+                      cfm: _mqttcontroller.currentValue,
+                      isActive: _mqttcontroller.damperSw,
+                      season: _mqttcontroller.isSummer,
+                      temp: _mqttcontroller.acTemp,
+                    ),
+                  ),
+                ],
+              ),
               Row(
                 children: [
                   GestureDetector(
@@ -175,86 +239,6 @@ class _RmsMainScreenState extends State<RmsMainScreen> {
                     width: 10,
                   ),
                   GestureDetector(
-                      onTap: () {
-                        Get.to(() => ConfigPage(
-                              title: "VOICE CONTROL",
-                              power: _mqttcontroller.voicecontrol,
-                            ));
-                      },
-                      child: VoiceControl(
-                        isActive: _mqttcontroller.voicecontrol,
-                      ))
-                ],
-              ),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => ConfigPage(
-                            title: "DOOR LOCK",
-                            power: _mqttcontroller.doorlock,
-                          ));
-                    },
-                    child: Door(
-                      isActive: _mqttcontroller.doorlock,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => ConfigPage(
-                            title: "MOTION DETECTOR",
-                            power: _mqttcontroller.motionsensor,
-                          ));
-                    },
-                    child: Motion(
-                      isActive: _mqttcontroller.motionsensor,
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => ConfigPageSlider(
-                            currentValue: _mqttcontroller.light1value,
-                            power: _mqttcontroller.roomlight1,
-                            heading: "INTENSITY",
-                            title: "ROOM LIGHT 1",
-                            image: "assets/images/bulb.png",
-                          ));
-                    },
-                    child: Roomlight(
-                      isActive: _mqttcontroller.roomlight1,
-                      title: "ROOM LIGHT 1",
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => ConfigPageSlider(
-                            currentValue: _mqttcontroller.light2value,
-                            power: _mqttcontroller.roomlight2,
-                            heading: "INTENSITY",
-                            title: "ROOM LIGHT 2",
-                            image: "assets/images/bulb.png",
-                          ));
-                    },
-                    child: Roomlight(
-                      isActive: _mqttcontroller.roomlight2,
-                      title: "ROOM LIGHT 2",
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  GestureDetector(
                     onTap: () {
                       Get.to(() => ConfigPage(
                             title: "ROOM FAN",
@@ -262,14 +246,59 @@ class _RmsMainScreenState extends State<RmsMainScreen> {
                           ));
                     },
                     child: RoomFan(
+                      intensity: _mqttcontroller.roomfanIntensity,
                       isActive: _mqttcontroller.roomfan,
                     ),
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
                 ],
               ),
+              // Row(
+              //   children: [
+              //     GestureDetector(
+              //       onTap: () {
+              //         Get.to(() => ConfigPage(
+              //               title: "DOOR LOCK",
+              //               power: _mqttcontroller.doorlock,
+              //             ));
+              //       },
+              //       child: Door(
+              //         isActive: _mqttcontroller.doorlock,
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       width: 10,
+              //     ),
+              //     GestureDetector(
+              //       onTap: () {
+              //         Get.to(() => ConfigPage(
+              //               title: "MOTION DETECTOR",
+              //               power: _mqttcontroller.motionsensor,
+              //             ));
+              //       },
+              //       child: Motion(
+              //         isActive: _mqttcontroller.motionsensor,
+              //       ),
+              //     )
+              //   ],
+              // ),
+
+              // Row(
+              //   children: [
+              //     GestureDetector(
+              //         onTap: () {
+              //           Get.to(() => ConfigPage(
+              //                 title: "VOICE CONTROL",
+              //                 power: _mqttcontroller.voicecontrol,
+              //               ));
+              //         },
+              //         child: VoiceControl(
+              //           isActive: _mqttcontroller.voicecontrol,
+              //         )),
+              //     SizedBox(
+              //       width: 10,
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ),

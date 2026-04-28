@@ -378,10 +378,11 @@ class MqttController extends GetxController {
   RxInt rcexvStepDelay = 0.obs;
 
 //csm
+  RxInt systemStatusCsm = 0.obs;
   RxDouble tempcsm = 0.0.obs;
   RxInt tempcsmSp = 0.obs;
-  RxInt humcsm = 0.obs;
-  RxInt hrscsm = 0.obs;
+  RxString humcsm = "0".obs;
+  RxString hrscsm = "00:00".obs;
   RxInt csmValue = 0.obs;
   RxBool csmSw = false.obs;
   RxInt csmResetValues = 0.obs;
@@ -1436,15 +1437,17 @@ class MqttController extends GetxController {
   void _handleMessageCsm(String message, String topics) async {
     try {
       Map<String, dynamic> jsonMap = jsonDecode(message);
+      String systemStatus = jsonMap['systemStatus'].toString();
       tempcsm.value = double.tryParse(jsonMap['temperature'].toString()) ?? 0.0;
       tempcsmSp.value = int.tryParse(jsonMap['tempSp'].toString()) ?? 0;
       csmValue.value = int.tryParse(jsonMap['val'].toString()) ?? 0;
-      humcsm.value = int.tryParse(jsonMap['humidity'].toString()) ?? 0;
-      hrscsm.value = int.tryParse(jsonMap['hrs'].toString()) ?? 0;
+      humcsm.value = jsonMap['humidity'].toString();
+      hrscsm.value = jsonMap['hrs'].toString();
       int systemSwitch = int.tryParse(jsonMap['sw'].toString()) ?? 0;
       csmResetValues.value =
           int.tryParse(jsonMap['resetValues']?.toString() ?? '') ?? 0;
       csmSw.value = systemSwitch == 1;
+      systemStatusCsm.value = int.tryParse(systemStatus) ?? 0;
     } catch (e) {
       log("CSM Error parsing message: $e");
     }
@@ -5449,7 +5452,9 @@ class MqttController extends GetxController {
 
 //RMS
   RxInt acswitch = 0.obs;
+  RxInt damperSw = 0.obs;
   RxInt curtainSw = 0.obs;
+  RxInt shutterSw = 0.obs;
   RxInt smarttv = 0.obs;
   RxInt voicecontrol = 0.obs;
   RxInt doorlock = 0.obs;
@@ -5461,6 +5466,9 @@ class MqttController extends GetxController {
   RxDouble light1value = 50.0.obs;
   RxDouble light2value = 10.0.obs;
   RxDouble curtainValue = 70.0.obs;
+  RxDouble acTemp = 20.0.obs;
+  RxDouble shutterValue = 70.0.obs;
+  RxDouble roomfanIntensity = 50.0.obs;
 
 //rms handle message
   void rmsMessageReceived(String messages, topic) {
@@ -5468,27 +5476,50 @@ class MqttController extends GetxController {
       Map<String, dynamic> data = jsonDecode(messages);
       int acSwitch = data['acSwitch'] ?? 0;
       int curtainsw = data['curtainsw'] ?? 0;
+      int shuttersw = data['shuttersw'] ?? 0;
       int smartTv = data['smartTv'] ?? 0;
-      int voiceControl = data['voiceControl'] ?? 0;
-      int doorLock = data['doorLock'] ?? 0;
-      int motionSensor = data['motionSensor'] ?? 0;
+      // int voiceControl = data['voiceControl'] ?? 0;
+      // int doorLock = data['doorLock'] ?? 0;
+      // int motionSensor = data['motionSensor'] ?? 0;
+      // int carbonmono = data['carbonmono'] ?? 0;
       int roomLight1 = data['roomLight1'] ?? 0;
       int roomLight2 = data['roomLight2'] ?? 0;
       int roomFan = data['roomFan'] ?? 0;
-      int carbonmono = data['carbonmono'] ?? 0;
       String light1intense = data['light1intense'];
       String light2intense = data['light2intense'];
       String curtainintense = data['curtainintense'];
-      carbonMono.value = carbonmono;
+      String shutterintense = data['shutterintense'];
+      String roomfanintense = data['roomfanintense'];
+      String actemp = data['actemp'];
+
+      String season = data['season'];
+      String dmptemp = data['dmptemp'];
+      String dmptempsp = data['dmptempsp'];
+      int dampersw = data['dampersw'] ?? 0;
+      String cfm = data['cfm'];
+      String dampstate = data['dampstate'];
+
+      damperSw.value = dampersw;
+      isSummer.value = season == "1";
+      temperature.value = double.parse(dmptemp);
+      lastDamperValue.value = int.parse(dmptempsp);
+      currentValue.value = double.parse(cfm);
+      flapstate.value = dampstate;
+
+      // carbonMono.value = carbonmono;
       light1value.value = double.parse(light1intense);
       light2value.value = double.parse(light2intense);
       curtainValue.value = double.parse(curtainintense);
+      shutterValue.value = double.parse(shutterintense);
+      roomfanIntensity.value = double.parse(roomfanintense);
+      acTemp.value = double.parse(actemp);
       acswitch.value = acSwitch;
       curtainSw.value = curtainsw;
+      shutterSw.value = shuttersw;
       smarttv.value = smartTv;
-      voicecontrol.value = voiceControl;
-      doorlock.value = doorLock;
-      motionsensor.value = motionSensor;
+      // voicecontrol.value = voiceControl;
+      // doorlock.value = doorLock;
+      // motionsensor.value = motionSensor;
       roomlight1.value = roomLight1;
       roomlight2.value = roomLight2;
       roomfan.value = roomFan;

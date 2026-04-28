@@ -36,9 +36,9 @@ class _ConfigPageState extends State<ConfigPageSlider> {
           children: [
             Image.asset("assets/images/rms.png", width: 40, height: 40),
             const SizedBox(width: 8),
-            const Expanded(
+            Expanded(
               child: Text(
-                "RMS-AAA010",
+                widget.title,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
@@ -72,7 +72,7 @@ class _ConfigPageState extends State<ConfigPageSlider> {
               color: Get.isDarkMode ? Colors.white : Colors.black,
             ),
             Obx(
-              ()=> GestureDetector(
+              () => GestureDetector(
                 onTap: () {
                   widget.power.value = widget.power.value == 1 ? 0 : 1;
                   _mqttcontroller.buildJsonPayloadRms();
@@ -118,7 +118,7 @@ class _ConfigPageState extends State<ConfigPageSlider> {
               ),
             ),
             Obx(
-              ()=> Center(
+              () => Center(
                 child: SliderTheme(
                   data: SliderTheme.of(context).copyWith(
                     activeTrackColor: Colors.green,

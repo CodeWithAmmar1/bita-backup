@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 
 class AcSwitch extends StatefulWidget {
   final RxInt isActive;
-  const AcSwitch({super.key, required this.isActive});
+  final RxDouble brightness;
+  const AcSwitch({super.key, required this.isActive, required this.brightness});
 
   @override
   State<AcSwitch> createState() => _AcSwitchState();
@@ -75,84 +76,21 @@ class _AcSwitchState extends State<AcSwitch> {
                 children: [
                   Row(
                     children: [
-                      widget.isActive.value == 1
-                          ? Icon(Icons.sunny, color: Colors.orange, size: 20)
-                          : Icon(Icons.ac_unit, color: Colors.blue, size: 20),
-                      SizedBox(width: 3),
-                      Container(
-                        height: 15,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          color: widget.isActive.value == 1
-                              ? Colors.yellow
-                              : Colors.lightBlueAccent,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Center(
-                          child: Text(
-                            widget.isActive.value == 1 ? "SUMMER" : "WINTER",
+                      Icon(Icons.thermostat_outlined,
+                          color: Colors.green, size: 25),
+                      Center(
+                        child: Obx(
+                          () => Text(
+                            "${widget.brightness.value}°C",
                             style: TextStyle(
-                              fontSize: 6,
-                              color: Colors.black,
+                              fontSize: 12,
+                              color:
+                                  Get.isDarkMode ? Colors.white : Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Icon(Icons.thermostat_outlined,
-                          color: Colors.green, size: 25),
-                      Center(
-                        child: Text(
-                          "36°C",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Get.isDarkMode ? Colors.white : Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Center(
-                        child: Text(
-                          "CFM",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Get.isDarkMode ? Colors.white : Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      Center(
-                        child: Text(
-                          "20%",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Get.isDarkMode ? Colors.white : Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Icon(Icons.calendar_month_outlined,
-                          color: Colors.green, size: 25),
-                      SizedBox(width: 5),
-                      Icon(Icons.settings,
-                          color: Get.isDarkMode ? Colors.white : Colors.black,
-                          size: 25),
                     ],
                   ),
                 ],

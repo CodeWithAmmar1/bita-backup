@@ -48,34 +48,29 @@ class _SmartTvState extends State<SmartTv> {
                     ),
                   ),
                   SizedBox(height: 5),
-              Obx(
-                ()=> Container(
-                        height: 20,
-                        width: 60,
-                        decoration: BoxDecoration(
-                          color: widget.isActive.value == 1 ? Colors.green : Colors.red,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Center(
-                          child: Text(
-                            widget.isActive.value == 1 ? "ON" : "OFF",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                  Obx(
+                    () => Container(
+                      height: 20,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: widget.isActive.value == 1
+                            ? Colors.green
+                            : Colors.red,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Center(
+                        child: Text(
+                          widget.isActive.value == 1 ? "ON" : "OFF",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-              ),
+                    ),
+                  ),
                 ],
               ),
-              Column(
-                children: [
-                  Icon(Icons.settings,
-                      color: Get.isDarkMode ? Colors.white : Colors.black,
-                      size: 25),
-                ],
-              )
             ],
           ),
         ),
