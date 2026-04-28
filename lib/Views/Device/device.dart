@@ -19,7 +19,6 @@ import 'package:testappbita/Views/Device/customWidget/spCard.dart';
 import 'package:testappbita/Views/Device/customWidget/telecome_card.dart';
 import 'package:testappbita/Views/Device/customWidget/wtcCard.dart';
 import 'package:testappbita/Views/Device/customWidget/zonemasterCard.dart';
-import 'package:testappbita/Views/csm/csm_mainscreen.dart';
 import 'package:testappbita/Views/qr_code/qr_code_scanner_page.dart';
 import 'package:testappbita/Views/weather/weather_cards.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
