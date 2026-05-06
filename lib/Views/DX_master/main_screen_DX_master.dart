@@ -380,7 +380,7 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
                                                                     .dmStatusA
                                                                     .value ==
                                                                 2
-                                                            ? 'On'.tr
+                                                            ? 'on'.tr
                                                             : _mqttController
                                                                         .dmStatusA
                                                                         .value ==
@@ -449,7 +449,7 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
                                                                     .dmStatusB
                                                                     .value ==
                                                                 2
-                                                            ? 'On'.tr
+                                                            ? 'on'.tr
                                                             : _mqttController
                                                                         .dmStatusB
                                                                         .value ==

@@ -81,7 +81,7 @@ class _AcSwitchState extends State<AcSwitch> {
                       Center(
                         child: Obx(
                           () => Text(
-                            "${widget.brightness.value}°C",
+                            "${widget.brightness.value.toStringAsFixed(1)}°C",
                             style: TextStyle(
                               fontSize: 12,
                               color:

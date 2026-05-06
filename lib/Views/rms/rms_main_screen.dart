@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:testappbita/Views/Device/device.dart';
 import 'package:testappbita/Views/rms/config_page/config_page.dart';
 import 'package:testappbita/Views/rms/config_page_slider/config_page_slider.dart';
 import 'package:testappbita/Views/rms/damper/damperPage.dart';
@@ -27,6 +27,7 @@ class RmsMainScreen extends StatefulWidget {
 late String deviceName;
 late String deviceid;
 Timer? publishTimer;
+final MqttController _mqttController = Get.find<MqttController>();
 
 class _RmsMainScreenState extends State<RmsMainScreen> {
   @override
@@ -49,32 +50,64 @@ class _RmsMainScreenState extends State<RmsMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: ThemeColor().actual,
-        title: Row(
-          children: [
-            Image.asset("assets/images/rms.png", width: 40, height: 40),
-            const SizedBox(width: 8),
-            const Expanded(
-              child: Text(
-                "RMS-AAA010",
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: Colors.white, fontSize: 18),
-              ),
+      appBar: PreferredSize(
+           preferredSize: Size.fromHeight(kToolbarHeight),
+        child: Obx(
+          ()=> AppBar(
+            
+            automaticallyImplyLeading: false,
+            backgroundColor: ThemeColor().actual,
+            title: Row(
+              children: [
+                Image.asset("assets/images/rms.png", width: 40, height: 40),
+                const SizedBox(width: 8),
+                const Expanded(
+                  child: Text(
+                    "RMS-AAA010",
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
+                _mqttController.deviceConnections[deviceid] ?? false
+                    ? CustomIconButton(
+                        nextcolor: Colors.blue.shade800,
+                        backgroundcolor1: Colors.grey.withOpacity(0.2),
+                        color: Colors.red,
+                        icon: Icons.cell_tower,
+                        onPressed: () {},
+                      )
+                    : Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          CustomIconButton(
+                            nextcolor: Colors.black,
+                            backgroundcolor1: Colors.yellow.withOpacity(0.7),
+                            color: Colors.black,
+                            icon: Icons.cell_tower,
+                            onPressed: () {},
+                          ),
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child:
+                                Icon(Icons.cancel, size: 16, color: Colors.red),
+                          ),
+                        ],
+                      ),
+              ],
             ),
-          ],
+            centerTitle: true,
+            // actions: [
+            //   IconButton(
+            //     icon: const Icon(Icons.settings, color: Colors.white),
+            //     onPressed: () {
+            //       // Handle settings button press
+            //     },
+            //   ),
+            //   const SizedBox(width: 12),
+            // ],
+          ),
         ),
-        centerTitle: true,
-        // actions: [
-        //   IconButton(
-        //     icon: const Icon(Icons.settings, color: Colors.white),
-        //     onPressed: () {
-        //       // Handle settings button press
-        //     },
-        //   ),
-        //   const SizedBox(width: 12),
-        // ],
       ),
       body: SingleChildScrollView(
         child: Padding(

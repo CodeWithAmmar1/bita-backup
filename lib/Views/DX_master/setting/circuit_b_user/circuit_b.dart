@@ -50,6 +50,7 @@ class _CircuitAState extends State<CircuitBUser> {
                     color: Get.isDarkMode ? Colors.white : Colors.black,
                     size: 20,
                   ),
+                  
                   title: Text(
                     'Circuit Settings'.tr,
                     style: TextStyle(
@@ -81,29 +82,29 @@ class _CircuitAState extends State<CircuitBUser> {
                   ),
                 ),
               ),
-              SizedBox(height: Get.height * 0.02),
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => OilChange());
-                },
-                child: ListTile(
-                  leading: Icon(
-                    Icons.settings,
-                    color: Get.isDarkMode ? Colors.white : Colors.black,
-                  ),
-                  trailing: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: Get.isDarkMode ? Colors.white : Colors.black,
-                    size: 20,
-                  ),
-                  title: Text(
-                    'Oil Change Hours'.tr,
-                    style: TextStyle(
-                      color: Get.isDarkMode ? Colors.white : Colors.black,
-                    ),
-                  ),
-                ),
-              ),
+              // SizedBox(height: Get.height * 0.02),
+              // GestureDetector(
+              //   onTap: () {
+              //     Get.to(() => OilChange());
+              //   },
+              //   child: ListTile(
+              //     leading: Icon(
+              //       Icons.settings,
+              //       color: Get.isDarkMode ? Colors.white : Colors.black,
+              //     ),
+              //     trailing: Icon(
+              //       Icons.arrow_forward_ios_rounded,
+              //       color: Get.isDarkMode ? Colors.white : Colors.black,
+              //       size: 20,
+              //     ),
+              //     title: Text(
+              //       'Oil Change Hours'.tr,
+              //       style: TextStyle(
+              //         color: Get.isDarkMode ? Colors.white : Colors.black,
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ));
