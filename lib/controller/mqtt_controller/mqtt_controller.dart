@@ -5459,7 +5459,7 @@ class MqttController extends GetxController {
 
 //RMS
   RxInt acswitch = 0.obs;
-  RxInt damperSw = 0.obs;
+  RxBool damperSw = false.obs;
   RxInt curtainSw = 0.obs;
   RxInt shutterSw = 0.obs;
   RxInt smarttv = 0.obs;
@@ -5490,7 +5490,7 @@ class MqttController extends GetxController {
       roomlight1.value = data['Light1'] ?? 0;
       roomlight2.value = data['Light2'] ?? 0;
       roomfan.value = data['roomFan'] ?? 0;
-      damperSw.value = data['dampersw'] ?? 0;
+      damperSw.value = data['dampersw'].toString() == "1";
       isSummer.value = data['season'].toString() == "1";
       temperature.value = double.tryParse(data['dmptemp'].toString()) ?? 0.0;
       lastDamperValue.value = int.tryParse(data['dmptempsp'].toString()) ?? 0;
@@ -5525,14 +5525,11 @@ class MqttController extends GetxController {
       "light1intense": light1value.value,
       "light2intense": light2value.value,
       "curtainintense": curtainValue.value,
-      // "voiceControl": voicecontrol.value,
-      // "doorLock": doorlock.value,
-      // "motionSensor": motionsensor.value,
       "shutterintense": shutterValue.value,
       "roomfanintense": roomfanIntensity.value,
       "season": isSummer.value ? "1" : "0",
       "dmptempsp": lastDamperValue.value,
-      "dampersw": damperSw.value,
+      "dampersw": damperSw.value ? "1" : "0",
       "cfm": currentValue.value,
     };
 

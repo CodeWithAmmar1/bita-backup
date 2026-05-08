@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
@@ -79,26 +78,21 @@ class _ConfigPageState extends State<ConfigPageSlider> {
                   SizedBox(
                     height: 90,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      _mqttcontroller.isUserInteracting.value = true;
-                      publishTimer = Timer(Duration(seconds: 1), () {
-                        widget.power.value = widget.power.value == 1 ? 0 : 1;
-                        _mqttcontroller.buildJsonPayloadRms();
-                        _mqttcontroller.isUserInteracting.value = false;
-                      });
-                    },
-                    child: Obx(
-                      () => SimpleSunkenButton(
-                        isOn: widget.power.value == 1,
-                        size: Get.height * 0.30,
-                        baseColor: Get.isDarkMode
-                            ? const Color(0xFF202020)
-                            : Colors.white,
-                        onTap: () {
-                          widget.power.value = widget.power.value == 1 ? 0 : 1;
-                        },
-                      ),
+                  Obx(
+                    () => SimpleSunkenButton(
+                      isOn: widget.power.value == 1,
+                      size: Get.height * 0.30,
+                      baseColor: Get.isDarkMode
+                          ? const Color(0xFF202020)
+                          : Colors.white,
+                      onTap: () {
+                         _mqttcontroller.isUserInteracting.value = true;
+                    publishTimer = Timer(Duration(seconds: 1), () {
+                      widget.power.value = widget.power.value == 1 ? 0 : 1;
+                      _mqttcontroller.buildJsonPayloadRms();
+                      _mqttcontroller.isUserInteracting.value = false;
+                    });
+                      },
                     ),
                   ),
                 ]),

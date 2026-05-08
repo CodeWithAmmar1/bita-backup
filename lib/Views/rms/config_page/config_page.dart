@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:testappbita/Views/rms/config_page_slider/config_page_slider.dart';
@@ -10,6 +12,7 @@ class ConfigPage extends StatelessWidget {
 
   ConfigPage({super.key, required this.title, required this.power});
   final MqttController _mqttcontroller = Get.find<MqttController>();
+  Timer? publishTimer;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,20 +61,20 @@ class ConfigPage extends StatelessWidget {
             SizedBox(
               height: 90,
             ),
-            GestureDetector(
-              onTap: () {
+            Obx(
+              () => SimpleSunkenButton(
+                isOn: power.value == 1,
+                size: Get.height * 0.30,
+                baseColor:
+                    Get.isDarkMode ? const Color(0xFF202020) : Colors.white,
+                onTap: () {
                 _mqttcontroller.isUserInteracting.value = true;
-              },
-              child: Obx(
-                () => SimpleSunkenButton(
-                  isOn: power.value == 1,
-                  size: Get.height * 0.30,
-                  baseColor:
-                      Get.isDarkMode ? const Color(0xFF202020) : Colors.white,
-                  onTap: () {
-                    power.value = power.value == 1 ? 0 : 1;
-                  },
-                ),
+                    publishTimer = Timer(Duration(seconds: 1), () {
+                      power.value = power.value == 1 ? 0 : 1;
+                      _mqttcontroller.buildJsonPayloadRms();
+                      _mqttcontroller.isUserInteracting.value = false;
+                    });
+                },
               ),
             ),
           ]),

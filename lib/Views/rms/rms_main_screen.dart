@@ -97,15 +97,7 @@ class _RmsMainScreenState extends State<RmsMainScreen> {
               ],
             ),
             centerTitle: true,
-            // actions: [
-            //   IconButton(
-            //     icon: const Icon(Icons.settings, color: Colors.white),
-            //     onPressed: () {
-            //       // Handle settings button press
-            //     },
-            //   ),
-            //   const SizedBox(width: 12),
-            // ],
+      
           ),
         ),
       ),
@@ -115,49 +107,7 @@ class _RmsMainScreenState extends State<RmsMainScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     Row(
-              //       children: [
-              //         CarbonMono(
-              //           value: _mqttcontroller.carbonMono,
-              //         ),
-              //         Column(
-              //           children: [
-              //             Text("CO",
-              //                 style: TextStyle(
-              //                   fontWeight: FontWeight.bold,
-              //                   fontSize: 14,
-              //                   color: Get.isDarkMode
-              //                       ? Colors.white
-              //                       : Colors.black,
-              //                 )),
-              //             SizedBox(
-              //               height: 20,
-              //             )
-              //           ],
-              //         )
-              //       ],
-              //     ),
-              //     Row(
-              //       children: [
-              //         Icon(
-              //           Icons.cloud_queue,
-              //           size: 40,
-              //         ),
-              //         SizedBox(
-              //           width: 10,
-              //         ),
-              //         Text("24°C",
-              //             style: TextStyle(
-              //               fontSize: 30,
-              //               color: Get.isDarkMode ? Colors.white : Colors.black,
-              //             )),
-              //       ],
-              //     ),
-              //   ],
-              // ),
+             
               SizedBox(
                 height: 10,
               ),
@@ -305,53 +255,7 @@ class _RmsMainScreenState extends State<RmsMainScreen> {
                   ),
                 ],
               ),
-              // Row(
-              //   children: [
-              //     GestureDetector(
-              //       onTap: () {
-              //         Get.to(() => ConfigPage(
-              //               title: "DOOR LOCK",
-              //               power: _mqttcontroller.doorlock,
-              //             ));
-              //       },
-              //       child: Door(
-              //         isActive: _mqttcontroller.doorlock,
-              //       ),
-              //     ),
-              //     SizedBox(
-              //       width: 10,
-              //     ),
-              //     GestureDetector(
-              //       onTap: () {
-              //         Get.to(() => ConfigPage(
-              //               title: "MOTION DETECTOR",
-              //               power: _mqttcontroller.motionsensor,
-              //             ));
-              //       },
-              //       child: Motion(
-              //         isActive: _mqttcontroller.motionsensor,
-              //       ),
-              //     )
-              //   ],
-              // ),
-
-              // Row(
-              //   children: [
-              //     GestureDetector(
-              //         onTap: () {
-              //           Get.to(() => ConfigPage(
-              //                 title: "VOICE CONTROL",
-              //                 power: _mqttcontroller.voicecontrol,
-              //               ));
-              //         },
-              //         child: VoiceControl(
-              //           isActive: _mqttcontroller.voicecontrol,
-              //         )),
-              //     SizedBox(
-              //       width: 10,
-              //     ),
-              //   ],
-              // ),
+             
             ],
           ),
         ),

@@ -111,7 +111,7 @@ class _DamperPageState extends State<DamperPage> {
                     height: 30,
                   ),
                   if ((_mqttcontroller.lastDamperValue.value < 5) ||
-                      (_mqttcontroller.isOn.value == false))
+                      (_mqttcontroller.damperSw.value == false))
                     SizedBox(
                       height: 20,
                     ),
@@ -120,7 +120,7 @@ class _DamperPageState extends State<DamperPage> {
                       alignment: Alignment.center,
                       children: [
                         if ((_mqttcontroller.lastDamperValue.value > 4) &&
-                            (_mqttcontroller.isOn.value == true))
+                            (_mqttcontroller.damperSw.value == true))
                           SleekCircularSlider(
                             appearance: CircularSliderAppearance(
                               size: baseSize * 0.35,
@@ -205,7 +205,7 @@ class _DamperPageState extends State<DamperPage> {
                                           _mqttcontroller.deviceConnections[
                                                   widget.deviceId] ==
                                               false ||
-                                          !_mqttcontroller.isOn.value
+                                          !_mqttcontroller.damperSw.value
                                       ? "--.-"
                                       : "${_mqttcontroller.lastDamperValue.value.round()}°C",
                                   style: TextStyle(
@@ -233,7 +233,7 @@ class _DamperPageState extends State<DamperPage> {
                                   : Text(
                                       _mqttcontroller.lastDamperValue.value < 5
                                           ? 'Thermostat Error'.tr
-                                          : !_mqttcontroller.isOn.value
+                                          : !_mqttcontroller.damperSw.value
                                               ? "Power Off"
                                               : '${"Room Temp.".tr} ${_mqttcontroller.temperature}°C',
                                       style: TextStyle(
@@ -241,7 +241,7 @@ class _DamperPageState extends State<DamperPage> {
                                         color: (_mqttcontroller
                                                         .lastDamperValue.value <
                                                     5) ||
-                                                (!_mqttcontroller.isOn.value)
+                                                (!_mqttcontroller.damperSw.value)
                                             ? Colors.red
                                             : Get.isDarkMode
                                                 ? Colors.white
@@ -255,7 +255,7 @@ class _DamperPageState extends State<DamperPage> {
                     ),
                   ),
                   if ((_mqttcontroller.lastDamperValue.value > 4) &&
-                      (_mqttcontroller.isOn.value == true))
+                      (_mqttcontroller.damperSw.value == true))
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
@@ -429,16 +429,18 @@ class _DamperPageState extends State<DamperPage> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                _mqttcontroller.isOn.value =
-                                    !_mqttcontroller.isOn.value;
+                                _mqttcontroller.damperSw.value =
+                                    !_mqttcontroller.damperSw.value;
+                                    
                               },
                               child: LoadSwitch(
                                 height: baseSize * 0.048,
                                 width: baseSize * 0.048,
-                                value: _mqttcontroller.isOn.value,
+                                value: _mqttcontroller.damperSw.value,
                                 future: () async {
-                                  final newValue = !_mqttcontroller.isOn.value;
-                                  _mqttcontroller.isOn.value = newValue;
+                                  final newValue = !_mqttcontroller.damperSw.value;
+                                  _mqttcontroller.damperSw.value = newValue;
+                                  log("damper power change : ${_mqttcontroller.damperSw.value}");
                                  _mqttcontroller.buildJsonPayloadRms();
                                   await Future.delayed(
                                       Duration(milliseconds: 2000));
@@ -479,7 +481,7 @@ class _DamperPageState extends State<DamperPage> {
                                 spinStrokeWidth: 3,
                                 thumbDecoration: (value, loading) =>
                                     BoxDecoration(
-                                  color: _mqttcontroller.isOn.value
+                                  color: _mqttcontroller.damperSw.value
                                       ? Color(0xFF24C48E)
                                       : Colors.grey,
                                   borderRadius: BorderRadius.circular(30),

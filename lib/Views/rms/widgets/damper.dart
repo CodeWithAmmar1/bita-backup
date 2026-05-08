@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Damper extends StatefulWidget {
-  final RxInt isActive;
+  final RxBool isActive;
   final RxBool season;
   final RxDouble temp;
   final RxDouble cfm;
@@ -60,14 +60,14 @@ class _DamperState extends State<Damper> {
                       height: 20,
                       width: 60,
                       decoration: BoxDecoration(
-                        color: widget.isActive.value == 1
+                        color: widget.isActive.value
                             ? Colors.green
                             : Colors.red,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Center(
                         child: Text(
-                          widget.isActive.value == 1 ? "OPEN" : "CLOSE",
+                          widget.isActive.value ? "OPEN" : "CLOSE",
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
