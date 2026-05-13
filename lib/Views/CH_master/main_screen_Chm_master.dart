@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_flip_card/flipcard/gesture_flip_card.dart';
 import 'package:flutter_flip_card/modal/flip_side.dart';
 import 'package:get/get.dart';
-import 'package:testappbita/Views/DX_master/chw/chw.dart';
-import 'package:testappbita/Views/DX_master/circuits_widget/circuit.dart';
-import 'package:testappbita/Views/DX_master/circuits_widget/circuit2.dart';
+import 'package:testappbita/Views/CH_master/chw_chm/chw_chm.dart';
+import 'package:testappbita/Views/CH_master/circuits_chm_widget/circuit2_chm.dart';
+import 'package:testappbita/Views/CH_master/circuits_chm_widget/circuit_chm.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/setting_chm.dart';
+import 'package:testappbita/Views/CH_master/user_setting_chm/user_setting_chm.dart';
 import 'package:testappbita/Views/DX_master/input_output/input_output.dart';
 import 'package:testappbita/Views/DX_master/notification_screen/notification_dm.dart';
-import 'package:testappbita/Views/DX_master/setting/setting.dart';
-import 'package:testappbita/Views/DX_master/user_setting/user_setting.dart';
 import 'package:testappbita/Views/Device/device.dart';
 import 'package:testappbita/Views/aqua%20master/main_screen/mainpage.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
@@ -177,7 +177,7 @@ class _MainScreenChmMasterState extends State<MainScreenChmMaster> {
                                 !_mqttController.dmStatusShow.value;
                           },
                           child: Text(
-                            "CH-MASTER",
+                            "CHILLER MASTER",
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -507,7 +507,7 @@ class _MainScreenChmMasterState extends State<MainScreenChmMaster> {
                       ),
                     ),
                   ),
-                  Chw(deviceid: deviceid),
+                  ChwMaster(deviceid: deviceid),
                   Obx(
                     () => GestureDetector(
                       behavior: HitTestBehavior.opaque,
@@ -528,7 +528,7 @@ class _MainScreenChmMasterState extends State<MainScreenChmMaster> {
                                         .circuitAenable.value &&
                                     !_mqttController.dmStatusShow.value)
                                 ? Center(
-                                    child: Circuit(
+                                    child: Circuitchm(
                                     deviceid: deviceid,
                                   ))
                                 : (!_mqttController.circuitBenable.value &&
@@ -545,12 +545,12 @@ class _MainScreenChmMasterState extends State<MainScreenChmMaster> {
                                           ),
                                         ),
                                       )
-                                    : Circuit2(
+                                    : Circuit2Chm(
                                         deviceid: deviceid,
                                       ),
                             backWidget: (_mqttController.circuitBenable.value &&
                                     _mqttController.dmStatusShow.value)
-                                ? Circuit2(
+                                ? Circuit2Chm(
                                     deviceid: deviceid,
                                   )
                                 : (!_mqttController.circuitBenable.value &&
@@ -568,7 +568,7 @@ class _MainScreenChmMasterState extends State<MainScreenChmMaster> {
                                         ),
                                       )
                                     : Center(
-                                        child: Circuit(
+                                        child: Circuitchm(
                                         deviceid: deviceid,
                                       ))),
                       ),
@@ -682,12 +682,12 @@ class _MainScreenChmMasterState extends State<MainScreenChmMaster> {
   Widget buildBackWidget() {
     if (_mqttController.circuitBenable.value &&
         _mqttController.dmStatusShow.value) {
-      return Center(child: Circuit2(deviceid: deviceid));
+      return Center(child: Circuit2Chm(deviceid: deviceid));
     }
 
     if (_mqttController.circuitAenable.value &&
         !_mqttController.dmStatusShow.value) {
-      return Center(child: Circuit(deviceid: deviceid));
+      return Center(child: Circuitchm(deviceid: deviceid));
     }
 
     return const Center(
@@ -707,12 +707,12 @@ class _MainScreenChmMasterState extends State<MainScreenChmMaster> {
   Widget buildFrontWidget() {
     if (_mqttController.circuitAenable.value &&
         !_mqttController.dmStatusShow.value) {
-      return Center(child: Circuit(deviceid: deviceid));
+      return Center(child: Circuitchm(deviceid: deviceid));
     }
 
     if (_mqttController.circuitBenable.value &&
         _mqttController.dmStatusShow.value) {
-      return Center(child: Circuit2(deviceid: deviceid));
+      return Center(child: Circuit2Chm(deviceid: deviceid));
     }
 
     return const Center(
@@ -747,10 +747,10 @@ class _PasswordDialog1State extends State<PasswordDialog1> {
   void _checkPassword() {
     if (_passwordController.text == '9753') {
       Get.back();
-      Get.to(() => Setting());
+      Get.to(() => SettingChm());
     } else if (_passwordController.text == '1234') {
       Get.back();
-      Get.to(() => UserSetting());
+      Get.to(() => UserSettingChm());
     } else {
       setState(() {
         errorText = 'Incorrect password';

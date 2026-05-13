@@ -25,7 +25,7 @@ class _SettingChmState extends State<SettingChm> {
           backgroundColor: ThemeColor().actual,
           centerTitle: true,
           title: Text(
-            'System SettingChm',
+            'System Setting',
             style: TextStyle(
                 fontSize: Get.width * 0.06,
                 fontWeight: FontWeight.bold,

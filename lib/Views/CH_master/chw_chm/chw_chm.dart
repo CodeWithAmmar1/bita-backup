@@ -41,7 +41,7 @@ class ChwMaster extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Supply",
+                          "CHW IN",
                           style: TextStyle(
                             color: Get.isDarkMode ? Colors.white : Colors.black,
                             fontWeight: FontWeight.bold,
@@ -123,7 +123,7 @@ class ChwMaster extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Return",
+                      "CHW OUT",
                       style: TextStyle(
                         color: Get.isDarkMode ? Colors.white : Colors.black,
                         fontWeight: FontWeight.bold,
