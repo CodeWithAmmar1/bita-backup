@@ -6,6 +6,7 @@ import 'package:testappbita/Views/Device/customWidget/am2444Card.dart';
 import 'package:testappbita/Views/Device/customWidget/am2Card.dart';
 import 'package:testappbita/Views/Device/customWidget/am1444Card.dart';
 import 'package:testappbita/Views/Device/customWidget/aquaCard.dart';
+import 'package:testappbita/Views/Device/customWidget/chmCard.dart';
 import 'package:testappbita/Views/Device/customWidget/cmCard.dart';
 import 'package:testappbita/Views/Device/customWidget/csmCard.dart';
 import 'package:testappbita/Views/Device/customWidget/dmCard.dart';
@@ -194,6 +195,8 @@ class DevicesPageState extends State<DevicesPage> {
                               return Rmscard(device: device);
                             } else if (id.startsWith("DM-")) {
                               return Dmcard(device: device);
+                            } else if (id.startsWith("CHM-")) {
+                              return Chmcard(device: device);
                             }
                             return const SizedBox.shrink();
                           },
