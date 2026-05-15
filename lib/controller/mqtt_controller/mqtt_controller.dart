@@ -5458,10 +5458,7 @@ class MqttController extends GetxController {
     }
   }
 
-
-
 //RMS
-//  RxBool isSummerRms = false.obs;
   RxInt acswitch = 0.obs;
   RxBool damperSw = false.obs;
   RxInt curtainSw = 0.obs;
@@ -5487,9 +5484,6 @@ class MqttController extends GetxController {
       Map<String, dynamic> data = jsonDecode(messages);
 
       // 1. Handle Integers (Direct assignments)
-      
-    
-      //  String seasonsw = data['seasonsw'];
 
       acswitch.value = data['acSwitch'] ?? 0;
       curtainSw.value = data['curtainsw'] ?? 0;
@@ -5500,8 +5494,6 @@ class MqttController extends GetxController {
       roomfan.value = data['roomFan'] ?? 0;
       damperSw.value = data['dampersw'].toString() == "1";
       isSummer.value = data['season'].toString() == "1";
-
-        // isSummerRms.value = seasonsw == "1";
       temperature.value = double.tryParse(data['dmptemp'].toString()) ?? 0.0;
       lastDamperValue.value = int.tryParse(data['dmptempsp'].toString()) ?? 0;
       currentValue.value = double.tryParse(data['cfm'].toString()) ?? 0.0;
@@ -5525,7 +5517,6 @@ class MqttController extends GetxController {
 
   void buildJsonPayloadRms() {
     Map<String, dynamic> jsonPayload = {
-      //  "seasonsw": isSummerRms.value ? 1 : 0,
       "acSwitch": acswitch.value,
       "curtainsw": curtainSw.value,
       "shuttersw": shutterSw.value,
