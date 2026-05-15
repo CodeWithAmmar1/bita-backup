@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/drive_selection/drive_setting.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/exv_setting/exv_setting.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/gas_selection_setting/gasdx.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/pressure_configration/pressure_sensorconfiguration.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/sensorselectionA/sensorselectionDmA.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/setpoint_setting/systemsetpointA.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/drive_selection_chm/drive_setting_chm.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/exv_setting_chm/exv_setting_chm.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/gas_selection_setting_chm/gasdx_chm.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/pressure_configration_chm/pressure_sensorconfiguration_chm.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/sensorselectionA_chm/sensorselection_Chm_A.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/setpoint_setting_chm/systemsetpoint_chm_A.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
@@ -42,7 +42,7 @@ class _CircuitChmAState extends State<CircuitChmA> {
               SizedBox(height: 10),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => DriveASetting());
+                  Get.to(() => DriveSettingChm());
                 },
                 child: ListTile(
                   leading: Icon(
@@ -62,10 +62,10 @@ class _CircuitChmAState extends State<CircuitChmA> {
                   ),
                 ),
               ),
-               SizedBox(height: Get.height * 0.02),
+              SizedBox(height: Get.height * 0.02),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => SensorselectiondmA());
+                  Get.to(() => SensorselectionChmA());
                 },
                 child: ListTile(
                   leading: Icon(
@@ -88,7 +88,7 @@ class _CircuitChmAState extends State<CircuitChmA> {
               SizedBox(height: Get.height * 0.02),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => PressureSensorconfiguration());
+                  Get.to(() => PressureSensorconfigurationChm());
                 },
                 child: ListTile(
                   leading: Icon(
@@ -111,7 +111,7 @@ class _CircuitChmAState extends State<CircuitChmA> {
               SizedBox(height: Get.height * 0.02),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => Systemsetpointa());
+                  Get.to(() => SystemsetpointChmA());
                 },
                 child: ListTile(
                   leading: Icon(
@@ -134,10 +134,10 @@ class _CircuitChmAState extends State<CircuitChmA> {
               SizedBox(height: Get.height * 0.02),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => ExvSetting(
-                    exvcurrentStep: _mqttController.exvCurrentStepA,
-                    exvmaxstep: _mqttController.exvMaxStepA,
-                    exvstepDelay: _mqttController.exvStepDelayA,
+                  Get.to(() => ExvSettingChm(
+                        exvcurrentStep: _mqttController.exvCurrentStepA,
+                        exvmaxstep: _mqttController.exvMaxStepA,
+                        exvstepDelay: _mqttController.exvStepDelayA,
                         min: _mqttController.minValueA,
                         max: _mqttController.maxValueA,
                         derivative: _mqttController.derivativespA,
@@ -173,7 +173,7 @@ class _CircuitChmAState extends State<CircuitChmA> {
               SizedBox(height: Get.height * 0.02),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => Gasdx(
+                  Get.to(() => GasdxChm(
                         permissiongas: true,
                         gas: _mqttController.gasA,
                       ));

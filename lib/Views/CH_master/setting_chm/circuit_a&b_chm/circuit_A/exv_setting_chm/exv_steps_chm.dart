@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/setpoint_setting_chm/setpoint_widget_chm.dart';
 import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/setpoint_setting/setpoint_widget.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
@@ -10,7 +11,7 @@ class ExvStepsChm extends StatefulWidget {
   final RxInt exvmaxstep;
   final bool permissionExv;
 
-  ExvStepsChm(
+  const ExvStepsChm(
       {super.key,
       required this.exvcurrentStep,
       required this.exvstepDelay,
@@ -100,7 +101,7 @@ class _SettingState extends State<ExvStepsChm> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              Get.to(() => SetpointWidget(
+                              Get.to(() => ChmSetpointWidget(
                                     title: "EXV Step Delay",
                                     unit: "%",
                                     minValue: 0,
@@ -159,7 +160,7 @@ class _SettingState extends State<ExvStepsChm> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Get.to(() => SetpointWidget(
+                              Get.to(() => ChmSetpointWidget(
                                     title: "EXV Max Step",
                                     unit: "",
                                     minValue: 0,

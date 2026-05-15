@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/circuit_a.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/circuit_chm_a.dart';
 import 'package:testappbita/Views/DX_master/setting/circuit_b_user/vendorb_settings/circuit_b.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
@@ -46,7 +46,7 @@ class _SettingChmState extends State<SettingChm> {
                     onTap: isDisabled
                         ? null
                         : () {
-                            Get.to(() => const CircuitA());
+                            Get.to(() => const CircuitChmA());
                           },
                     child: ListTile(
                       leading: Icon(

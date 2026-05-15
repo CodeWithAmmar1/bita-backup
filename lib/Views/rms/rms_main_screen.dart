@@ -51,10 +51,9 @@ class _RmsMainScreenState extends State<RmsMainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-           preferredSize: Size.fromHeight(kToolbarHeight),
+        preferredSize: Size.fromHeight(kToolbarHeight),
         child: Obx(
-          ()=> AppBar(
-            
+          () => AppBar(
             automaticallyImplyLeading: false,
             backgroundColor: ThemeColor().actual,
             title: Row(
@@ -97,7 +96,6 @@ class _RmsMainScreenState extends State<RmsMainScreen> {
               ],
             ),
             centerTitle: true,
-      
           ),
         ),
       ),
@@ -107,7 +105,6 @@ class _RmsMainScreenState extends State<RmsMainScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-             
               SizedBox(
                 height: 10,
               ),
@@ -255,7 +252,6 @@ class _RmsMainScreenState extends State<RmsMainScreen> {
                   ),
                 ],
               ),
-             
             ],
           ),
         ),

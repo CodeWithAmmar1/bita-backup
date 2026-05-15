@@ -221,7 +221,7 @@ class SetpointWidgetChm extends StatelessWidget {
   }
 }
 
-class SetpointWidget extends StatelessWidget {
+class ChmSetpointWidget extends StatelessWidget {
   final String title;
   final String unit;
   final int minValue;
@@ -230,7 +230,7 @@ class SetpointWidget extends StatelessWidget {
 
   final VoidCallback onPublish;
 
-  SetpointWidget({
+  ChmSetpointWidget({
     super.key,
     required this.title,
     required this.unit,

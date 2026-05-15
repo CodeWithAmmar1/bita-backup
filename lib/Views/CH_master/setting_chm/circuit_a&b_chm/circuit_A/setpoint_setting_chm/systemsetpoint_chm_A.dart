@@ -1,8 +1,7 @@
 import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/setpoint_setting/setpoint_widget.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/setpoint_setting_chm/setpoint_widget_chm.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
@@ -42,7 +41,7 @@ class _SystemsetpointChmAState extends State<SystemsetpointChmA> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () => Get.to(
-                          () => SetpointWidget(
+                          () => ChmSetpointWidget(
                             title: "Suction Pressure",
                             unit: "PSI",
                             minValue: 0,
@@ -68,7 +67,7 @@ class _SystemsetpointChmAState extends State<SystemsetpointChmA> {
                     Expanded(
                       child: GestureDetector(
                           onTap: () => Get.to(
-                                () => SetpointWidget(
+                                () => ChmSetpointWidget(
                                   title: "Discharge Pressure",
                                   unit: "PSI",
                                   minValue: 150,
@@ -96,7 +95,7 @@ class _SystemsetpointChmAState extends State<SystemsetpointChmA> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () => Get.to(
-                          () => SetpointWidget(
+                          () => ChmSetpointWidget(
                             title: "Suction Temp",
                             unit: "°C",
                             minValue: -2,
@@ -122,7 +121,7 @@ class _SystemsetpointChmAState extends State<SystemsetpointChmA> {
                     Expanded(
                       child: GestureDetector(
                           onTap: () => Get.to(
-                                () => SetpointWidget(
+                                () => ChmSetpointWidget(
                                   title: "Discharge Temp",
                                   unit: "°C",
                                   minValue: 50,
@@ -150,7 +149,7 @@ class _SystemsetpointChmAState extends State<SystemsetpointChmA> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () => Get.to(
-                          () => SetpointWidget(
+                          () => ChmSetpointWidget(
                             title: "Low Spray Temp",
                             unit: "°C",
                             minValue: -10,
@@ -176,7 +175,7 @@ class _SystemsetpointChmAState extends State<SystemsetpointChmA> {
                     Expanded(
                       child: GestureDetector(
                           onTap: () => Get.to(
-                                () => SetpointWidget(
+                                () => ChmSetpointWidget(
                                   title: "Super Heat",
                                   unit: "°F",
                                   minValue: 2,
@@ -204,7 +203,7 @@ class _SystemsetpointChmAState extends State<SystemsetpointChmA> {
                     Expanded(
                       child: GestureDetector(
                           onTap: () => Get.to(
-                                () => SetpointWidget(
+                                () => ChmSetpointWidget(
                                   title: "Current High",
                                   unit: "A",
                                   minValue: 0,
@@ -219,16 +218,17 @@ class _SystemsetpointChmAState extends State<SystemsetpointChmA> {
                             limit: 100,
                             title: "Current High",
                             unit: "A",
-                            setpoint: _mqttController.amperespA.value.toString(),
+                            setpoint:
+                                _mqttController.amperespA.value.toString(),
                             getColorLogic: (pressure) =>
                                 Get.isDarkMode ? Colors.white : Colors.black,
                           )),
                     ),
-                     SizedBox(width: 12),
+                    SizedBox(width: 12),
                     Expanded(
                       child: GestureDetector(
                           onTap: () => Get.to(
-                                () => SetpointWidget(
+                                () => ChmSetpointWidget(
                                   title: "Oil Pressure",
                                   unit: "PSI",
                                   minValue: 0,

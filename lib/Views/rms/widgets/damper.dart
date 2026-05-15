@@ -86,21 +86,21 @@ class _DamperState extends State<Damper> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         widget.season.value
-                            ? Icon(Icons.sunny, color: Colors.orange, size: 20)
-                            : Icon(Icons.ac_unit, color: Colors.blue, size: 20),
+                            ? Icon(Icons.ac_unit, color: Colors.blue, size: 20)
+                            : Icon(Icons.sunny, color: Colors.orange, size: 20),
                         SizedBox(width: 3),
                         Container(
                           height: 15,
                           width: 30,
                           decoration: BoxDecoration(
                             color: widget.season.value
-                                ? Colors.yellow
-                                : Colors.lightBlueAccent,
+                                ? Colors.lightBlueAccent
+                                : Colors.yellow,
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Center(
                             child: Text(
-                              widget.season.value ? "SUMMER" : "WINTER",
+                              widget.season.value ? "WINTER" : "SUMMER",
                               style: TextStyle(
                                 fontSize: 6,
                                 color: Colors.black,

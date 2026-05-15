@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/circuit_setting/circuit_selection_setting.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/condensor_fan_setting/condensor_fan_setting.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/circuit_setting_chm/circuit_selection_setting_chm.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/condensor_fan_setting_chm/condensor_fan_setting_chm.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class CircuitAUserChm extends StatefulWidget {
@@ -37,7 +37,7 @@ class _CircuitAState extends State<CircuitAUserChm> {
               SizedBox(height: 10),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => CircuitSelectionSetting());
+                  Get.to(() => CircuitSelectionSettingChm());
                 },
                 child: ListTile(
                   leading: Icon(
@@ -60,7 +60,7 @@ class _CircuitAState extends State<CircuitAUserChm> {
               SizedBox(height: Get.height * 0.02),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => CondensorFanSetting());
+                  Get.to(() => CondensorFanSettingChm());
                 },
                 child: ListTile(
                   leading: Icon(

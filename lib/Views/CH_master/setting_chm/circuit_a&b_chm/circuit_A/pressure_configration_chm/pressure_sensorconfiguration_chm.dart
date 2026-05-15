@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/pressure_configration/pressure_selectiondx.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/pressure_configration_chm/pressure_selection_chm.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
@@ -31,7 +31,7 @@ class PressureSensorconfigurationChm extends StatelessWidget {
             SizedBox(height: 10),
             GestureDetector(
               onTap: () {
-                Get.to(() => PressureSelectiondx(
+                Get.to(() => PressureSelectionChm(
                       permission: true,
                       offset: _mqttController.suctionOffsetA,
                       title: 'suction'.tr,
@@ -59,7 +59,7 @@ class PressureSensorconfigurationChm extends StatelessWidget {
             SizedBox(height: Get.height * 0.02),
             GestureDetector(
               onTap: () {
-                Get.to(() => PressureSelectiondx(
+                Get.to(() => PressureSelectionChm(
                       permission: true,
                       offset: _mqttController.dischargeOffsetA,
                       title: 'discharge'.tr,
@@ -87,7 +87,7 @@ class PressureSensorconfigurationChm extends StatelessWidget {
             SizedBox(height: Get.height * 0.02),
             GestureDetector(
               onTap: () {
-                Get.to(PressureSelectiondx(
+                Get.to(PressureSelectionChm(
                   permission: true,
                   offset: _mqttController.oilOffsetA,
                   title: 'oil'.tr,

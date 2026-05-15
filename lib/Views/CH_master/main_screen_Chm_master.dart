@@ -8,9 +8,9 @@ import 'package:get/get.dart';
 import 'package:testappbita/Views/CH_master/chw_chm/chw_chm.dart';
 import 'package:testappbita/Views/CH_master/circuits_chm_widget/circuit2_chm.dart';
 import 'package:testappbita/Views/CH_master/circuits_chm_widget/circuit_chm.dart';
+import 'package:testappbita/Views/CH_master/input_output_chm/input_output_chm.dart';
 import 'package:testappbita/Views/CH_master/setting_chm/setting_chm.dart';
 import 'package:testappbita/Views/CH_master/user_setting_chm/user_setting_chm.dart';
-import 'package:testappbita/Views/DX_master/input_output/input_output.dart';
 import 'package:testappbita/Views/DX_master/notification_screen/notification_dm.dart';
 import 'package:testappbita/Views/Device/device.dart';
 import 'package:testappbita/Views/aqua%20master/main_screen/mainpage.dart';
@@ -660,7 +660,7 @@ class _MainScreenChmMasterState extends State<MainScreenChmMaster> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => InputOutput());
+                    Get.to(() => InputOutputChm());
                   },
                   child: buildIconContainer(
                     context,

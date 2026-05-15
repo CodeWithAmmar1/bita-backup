@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/circuit_setting/circuit_selection_setting.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_b_user/circuit_b.dart';
-import 'package:testappbita/Views/DX_master/user_setting/circuit_a_user/circuit_a_user.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/circuit_setting_chm/circuit_selection_setting_chm.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_b_user_chm/circuit_chm_b.dart';
+import 'package:testappbita/Views/CH_master/user_setting_chm/circuit_a_user_chm/circuit_a_user_chm.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/button/custom_toggle.dart';
 import 'package:testappbita/utils/theme/theme.dart';
@@ -65,7 +65,7 @@ class UserSettingChm extends StatelessWidget {
                 height: 20,
               ),
               Obx(
-                () => RestartToggleDX(
+                () => RestartToggleChm(
                   leftText: ' Temp \nSensor'.tr,
                   rightText: 'Beca'.tr,
                   title: 'Return Temp Selection'.tr,
@@ -87,7 +87,7 @@ class UserSettingChm extends StatelessWidget {
               if (_mqttController.circuitAenable.value == true)
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => const CircuitAUser());
+                    Get.to(() => const CircuitAUserChm());
                   },
                   child: ListTile(
                     leading: Icon(
@@ -112,7 +112,7 @@ class UserSettingChm extends StatelessWidget {
               if (_mqttController.circuitBenable.value == true)
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => const CircuitBUser());
+                    Get.to(() => const CircuitChmB());
                   },
                   child: ListTile(
                     leading: Icon(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/setpoint_fan_setting_chm/fanA_setpoint_chm.dart';
 import 'package:testappbita/Views/DX_master/setting/setpoint_fan_setting/fanA_setpoint.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/button/custom_toggle.dart' show CustomToggle;
@@ -147,7 +148,7 @@ class _SystemSetpointState extends State<CondensorFanSettingChm> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => FanaSetpoint(
+                                Get.to(() => FanaSetpointChm(
                                     title: "Fan 1&2 Low Limit",
                                     initialvalue:
                                         _mqttController.fan1and2LowALimit,
@@ -262,7 +263,7 @@ class _SystemSetpointState extends State<CondensorFanSettingChm> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => FanaSetpoint(
+                                Get.to(() => FanaSetpointChm(
                                     title: "Fan 3&4 high Limit",
                                     initialvalue:
                                         _mqttController.fan3and4HighALimit,
@@ -311,7 +312,7 @@ class _SystemSetpointState extends State<CondensorFanSettingChm> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => FanaSetpoint(
+                                Get.to(() => FanaSetpointChm(
                                     title: "Fan 3&4 Low Limit",
                                     initialvalue:
                                         _mqttController.fan3and4LowALimit,
@@ -475,7 +476,7 @@ class _SystemSetpointState extends State<CondensorFanSettingChm> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => FanaSetpoint(
+                                Get.to(() => FanaSetpointChm(
                                     title: "Fan 5&6 Low Limit",
                                     initialvalue:
                                         _mqttController.fan5and6LowALimit,

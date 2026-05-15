@@ -30,7 +30,7 @@ class CircuitSelectionSettingChm extends StatelessWidget {
           children: [
             SizedBox(height: 20),
             Obx(
-              () => RestartToggleDX(
+              () => RestartToggleChm(
                 leftText: 'Lead'.tr,
                 rightText: 'Lag'.tr,
                 title: 'Circuit A'.tr,
@@ -47,7 +47,7 @@ class CircuitSelectionSettingChm extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            DxNumberAdj(
+            DxNumberAdjChm(
               unit: "Sec",
               title: "Start Delay",
               value: _mqttController.dmStartA,
@@ -71,14 +71,14 @@ class CircuitSelectionSettingChm extends StatelessWidget {
   }
 }
 
-class DxNumberAdj extends StatefulWidget {
+class DxNumberAdjChm extends StatefulWidget {
   final String title;
   final RxInt value;
   final int min;
   final int max;
   final String unit;
 
-  const DxNumberAdj({
+  const DxNumberAdjChm({
     super.key,
     required this.title,
     required this.value,
@@ -88,10 +88,10 @@ class DxNumberAdj extends StatefulWidget {
   });
 
   @override
-  State<DxNumberAdj> createState() => _DxNumberAdjState();
+  State<DxNumberAdjChm> createState() => _DxNumberAdjChmState();
 }
 
-class _DxNumberAdjState extends State<DxNumberAdj> {
+class _DxNumberAdjChmState extends State<DxNumberAdjChm> {
   final MqttController _mqttController = Get.find<MqttController>();
   Timer? publishTimer;
   Timer? _holdTimer;
@@ -457,14 +457,14 @@ class _DXNumberAdjusterState extends State<DXNumberAdjuster> {
   }
 }
 
-class RestartToggleDX extends StatelessWidget {
+class RestartToggleChm extends StatelessWidget {
   final bool value;
   final Future<bool> Function()? onTap;
   final String title;
   final String rightText;
   final String leftText;
 
-  const RestartToggleDX({
+  const RestartToggleChm({
     super.key,
     required this.value,
     required this.onTap,

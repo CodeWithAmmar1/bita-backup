@@ -2,9 +2,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:load_switch/load_switch.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/exv_setting/exv_steps.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/exv_setting/min_max_exv.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/setpoint_setting/setpoint_widget.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/exv_setting_chm/exv_steps_chm.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/exv_setting_chm/min_max_exv_chm.dart';
+import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/setpoint_setting_chm/setpoint_widget_chm.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -25,7 +25,7 @@ class ExvSettingChm extends StatelessWidget {
   final RxInt exvcurrentStep;
   final RxInt exvstepDelay;
   final RxInt exvmaxstep;
-   ExvSettingChm({
+  ExvSettingChm({
     super.key,
     required this.selectedEXVMode,
     required this.sucPressure,
@@ -487,11 +487,10 @@ class ExvSettingChm extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() =>
-                                 SetpointWidget(
+                                Get.to(() => ChmSetpointWidget(
                                       title: "Super Heat",
                                       unit: "°C",
-                                      minValue:2,
+                                      minValue: 2,
                                       maxValue: 20,
                                       value: superHeat,
                                       onPublish: () {
@@ -531,7 +530,7 @@ class ExvSettingChm extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => SetpointEXVWidget(
+                                Get.to(() => SetpointWidgetChm(
                                       title: "Proportional",
                                       unit: "°C",
                                       minValue: 0.0,
@@ -574,7 +573,7 @@ class ExvSettingChm extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => SetpointEXVWidget(
+                                Get.to(() => SetpointWidgetChm(
                                       title: "Integral",
                                       unit: "°C",
                                       minValue: 0.0,
@@ -617,7 +616,7 @@ class ExvSettingChm extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => SetpointEXVWidget(
+                                Get.to(() => SetpointWidgetChm(
                                       title: "Deravtive",
                                       unit: "°C",
                                       minValue: 0.0,
@@ -660,7 +659,7 @@ class ExvSettingChm extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => MinMaxExv(
+                                Get.to(() => MinMaxExvChm(
                                       permission: permissionExv,
                                       maxx: max,
                                       minn: min,
@@ -692,11 +691,12 @@ class ExvSettingChm extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => ExvSteps(permissionExv: permissionExv,
+                                Get.to(() => ExvStepsChm(
+                                      permissionExv: permissionExv,
                                       exvcurrentStep: exvcurrentStep,
                                       exvstepDelay: exvstepDelay,
-                                      exvmaxstep: exvmaxstep, 
-                                ));
+                                      exvmaxstep: exvmaxstep,
+                                    ));
                               },
                               child: ListTile(
                                 leading: Icon(
