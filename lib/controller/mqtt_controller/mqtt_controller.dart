@@ -596,12 +596,14 @@ class MqttController extends GetxController {
               log("AM1 device detected: $topiid");
               _handleMessageAm1(payload, topic);
               _handleMessageNotificationAm1(payload, topic);
-            } else if (topicSSIDvalue.value.startsWith("AM2-A")) {
+            } 
+            else if (topicSSIDvalue.value.startsWith("AM2-A")) {
               //AM2
               log("AM2 device detected: $topiid");
               _handleMessageAm2(payload, topic);
               _handleMessageNotification(payload, topic);
-            } else if (topicSSIDvalue.value.startsWith("AM2-4")) {
+            }
+             else if (topicSSIDvalue.value.startsWith("AM2-4")) {
               //AM2
               log("AM2 device detected: $topiid");
               _handleMessageAm2(payload, topic);
@@ -625,11 +627,18 @@ class MqttController extends GetxController {
               log("TEL device detected: $topiid");
               telMessageReceived(payload, topic);
               _handleHumidityMessageNotification(payload, topic);
-            } else if (topicSSIDvalue.value.startsWith("DM-")) {
+            }
+             else if (topicSSIDvalue.value.startsWith("DM-")) {
               //Dx-Master
               log("DX device detected: $topiid");
               _handleMessageDM(payload, topic);
               _handleMessageNotificationDm(payload, topic);
+            }
+             else if (topicSSIDvalue.value.startsWith("CHM-")) {
+              //CHM-Master
+              log("DX device detected: $topiid");
+              _handleMessageChm(payload, topic);
+              // _handleMessageNotificationDm(payload, topic);
             }
           } else if (topic ==
               "/KRC/${topicSSIDvalue.value}/pressure_configRCM") {
@@ -683,7 +692,8 @@ class MqttController extends GetxController {
             _dxhandleMessagePressure(payload, topic);
 
             log("DX pressure config detected /sensor_config");
-          } // DX
+          }
+           // DX
           else if (topic == "/KRC/${topicSSIDvalue.value}/CircuitA") {
             _handleMessageDMCircuitA(payload, topic);
             log("DX pressure config detected /sensor_config");
@@ -702,6 +712,24 @@ class MqttController extends GetxController {
             _handleMessageIO(payload, topic);
             log("DX pressure config detected /sensor_config");
           } //DM-Master
+           else if (topic == "/KRC/${topicSSIDvalue.value}/CircuitA") {
+            _handleMessageChmCircuitA(payload, topic);
+            log("DX pressure config detected /sensor_config");
+          } //CHM-Master
+          else if (topic == "/KRC/${topicSSIDvalue.value}/CircuitB") {
+            _handleMessageChmCircuitB(payload, topic);
+            log("DX pressure config detected /sensor_config");
+          }//CHM-Master
+          else if (topic == "/KRC/${topicSSIDvalue.value}/SensorA") {
+            _handleMessageChmSensorA(payload, topic);
+            log("DX pressure config detected /sensor_config");
+          } //CHM-Master
+          else if (topic == "/KRC/${topicSSIDvalue.value}/SensorB") {
+            _handleMessageChmSensorB(payload, topic);
+            log("DX pressure config detected /sensor_config");
+          } //CHM-Master
+         
+
         } else {
           //for IP & MAC update
           if (topiid.startsWith("ZMB-")) {
@@ -3670,6 +3698,778 @@ class MqttController extends GetxController {
     };
     String jsonString = jsonEncode(jsonPayload);
     publishMessagepressure(jsonString); //3
+  }
+
+//chm-master handlemessage
+  RxDouble chmSupply = 0.0.obs;
+  RxInt chmSetpoint = 0.obs;
+  RxDouble chmReturn = 0.0.obs;
+  RxInt chmStatusA = 0.obs;
+  RxInt chmStatusB = 0.obs;
+  RxBool chmStatusShow = false.obs;
+  RxInt chmPower = 0.obs;
+  RxInt chmResetValues = 0.obs;
+  
+  RxInt    chmvfdMinFrequencyA = 0.obs;
+  RxInt    chmvfdMaxFrequencyA = 0.obs;
+  RxInt    chmvfdDelayA = 0.obs;
+  RxInt    chmvfdMinFrequencyB = 0.obs;
+  RxInt    chmvfdMaxFrequencyB = 0.obs;
+  RxInt    chmvfdDelayB = 0.obs;
+  RxInt    chmStartA = 0.obs;
+  RxDouble chmStepSizeA = 0.0.obs;
+  RxInt    chmStartB = 0.obs;
+  RxDouble chmStepSizeB = 0.0.obs;
+  RxInt  chmoilswA = 0.obs;
+  RxInt chmoilpsiA = 0.obs;
+  RxInt chmsuctionA = 0.obs;
+  RxInt chmdischargeA = 0.obs;
+  RxInt chmoilswB = 0.obs;
+  RxInt chmoilpsiB = 0.obs;
+  RxInt chmsuctionB = 0.obs;
+  RxInt chmdischargeB = 0.obs;
+  RxInt chmstarA = 0.obs;
+  RxInt chmdeltaA = 0.obs;
+  RxInt chmfan1A = 0.obs;
+  RxInt chmfan3A = 0.obs;
+  RxInt chmstarB = 0.obs;
+  RxInt chmdeltaB = 0.obs;
+  RxInt chmfan1B = 0.obs;
+  RxInt chmfan3B = 0.obs;
+//circuit A
+  RxInt chmexvCurrentStepA = 0.obs;
+  RxInt chmexvMaxStepA = 0.obs;
+  RxInt chmexvStepDelayA = 0.obs;
+  RxDouble chmSuctionTempA = 0.0.obs;
+  RxInt chmSuctionPressureA = 0.obs;
+  //Azam chm
+
+  RxInt chmOilPressureA = 0.obs;
+  RxInt chmOilPressureB = 0.obs;
+
+  //setpoints Circuit A&B
+  RxInt chmoilPressurespA = 0.obs;
+  RxInt chmoilPressurespB = 0.obs;
+
+  //Azam dm
+  RxDouble chmdischargeTempA = 0.0.obs;
+  RxInt chmdischargePressureA = 0.obs;
+  RxDouble chmSubCoolingA = 0.0.obs;
+  RxDouble chmSprayA = 0.0.obs;
+  RxInt chmExvA = 0.obs;
+  RxDouble chmShtA = 0.0.obs;
+  RxInt chmRunHoursA = 0.obs;
+
+  //9753
+  var chmselection1A = "".obs;
+  var chmselection2A = "".obs;
+  var chmselection3A = "".obs;
+  var chmselection4A = "".obs;
+  var chmaddress1A = "".obs;
+  var chmaddress2A = "".obs;
+  var chmaddress3A = "".obs;
+  var chmaddress4A = "".obs;
+  var chmsensorTemp1A = "0.0".obs;
+  var chmsensorTemp2A = "0.0".obs;
+  var chmsensorTemp3A = "0.0".obs;
+  var chmsensorTemp4A = "0.0".obs;
+  var chmoffsett1A = "".obs;
+  var chmoffsett2A = "".obs;
+  var chmoffsett3A = "".obs;
+  var chmoffsett4A = "".obs;
+  RxBool chmsucPressureUnitA = false.obs;
+  RxString chmsucPressureTypeA = "".obs;
+  RxString chmampereA = "".obs;
+  RxString chmsucPressureRangeA = "0".obs;
+  RxInt chmsuctionOffsetA = 0.obs;
+  RxBool chmdisPressureUnitA = false.obs;
+  RxString chmdisPressureTypeA = "".obs;
+  RxString chmdisPressureRangeA = "0".obs;
+  RxInt chmdischargeOffsetA = 0.obs;
+
+  RxBool chmoilPressureUnitA = false.obs;
+  RxString chmoilPressureTypeA = "".obs;
+  RxString chmoilPressureRangeA = "0".obs;
+  RxInt chmoilOffsetA = 0.obs;
+
+  //setpoints Circuit A
+
+  RxInt chmsucPressurespA = 0.obs;
+  RxInt chmamperespA = 0.obs;
+  RxInt chmdisPressurespA = 0.obs;
+  RxInt chmsucTempspA = 0.obs;
+  RxInt chmdisTempspA = 0.obs;
+  RxInt chmlowSprayTempspA = 0.obs;
+
+  //EXV Settings
+  RxInt chmsuperHeatspA = 2.obs;
+  RxInt chmselectedEXVModeA = 0.obs;
+  RxDouble chmintegralspA = 0.0.obs;
+  RxDouble chmpropostionalspA = 0.0.obs;
+  RxDouble chmderivativespA = 0.0.obs;
+  RxInt chmminValueA = 20.obs;
+  RxInt chmmaxValueA = 80.obs;
+  RxInt chmgasA = 0.obs;
+
+  //EXV SettingB
+  RxString chmampereB = "".obs;
+  RxInt chmamperespB = 0.obs;
+  RxInt chmsuperHeatspB = 2.obs;
+  RxDouble chmintegralspB = 0.0.obs;
+  RxDouble chmpropostionalspB = 0.0.obs;
+  RxDouble chmderivativespB = 0.0.obs;
+  RxInt chmselectedEXVModeB = 0.obs;
+  RxInt chmminValueB = 20.obs;
+  RxInt chmmaxValueB = 80.obs;
+  RxInt chmgasB = 0.obs;
+  RxBool chmsucPressureUnitB = false.obs;
+  RxString chmsucPressureTypeB = "".obs;
+  RxString chmsucPressureRangeB = "0".obs;
+  RxInt chmsuctionOffsetB = 0.obs;
+  RxBool chmdisPressureUnitB = false.obs;
+  RxString chmdisPressureTypeB = "".obs;
+  RxString chmdisPressureRangeB = "0".obs;
+  RxInt chmdischargeOffsetB = 0.obs;
+
+  RxBool chmoilPressureUnitB = false.obs;
+  RxString chmoilPressureTypeB = "".obs;
+  RxString chmoilPressureRangeB = "0".obs;
+  RxInt chmoilOffsetB = 0.obs;
+  RxDouble chmSuctionTempB = 0.0.obs;
+  RxInt chmSuctionPressureB = 0.obs;
+  RxDouble chmdischargeTempB = 0.0.obs;
+  RxInt chmdischargePressureB = 0.obs;
+  RxInt chmexvCurrentStepB = 0.obs;
+  RxInt chmexvMaxStepB = 0.obs;
+  RxInt chmexvStepDelayB = 0.obs;
+  RxInt chmsucPressurespB = 0.obs;
+  RxInt chmdisPressurespB = 0.obs;
+  RxInt chmsucTempspB = 0.obs;
+  RxInt chmdisTempspB = 0.obs;
+  RxInt chmlowSprayTempspB = 0.obs;
+  RxDouble chmSubCoolingB = 0.0.obs;
+  RxDouble chmSprayB = 0.0.obs;
+  RxInt chmExvB = 0.obs;
+  RxDouble chmShtB = 0.0.obs;
+  RxInt chmRunHoursB = 0.obs;
+
+  RxInt chmselectedModeA = 0.obs;
+  RxInt chmselectedModeB = 0.obs;
+  RxBool chmcircuitAenable = false.obs;
+  RxBool chmcircuitALoading = false.obs;
+  RxBool chmtempSelectionSwitch = false.obs;
+  RxBool chmleadlagASwitch = false.obs;
+  RxBool chmleadlagBSwitch = false.obs;
+  RxBool chmfan1and2ASwitch = false.obs;
+  RxBool chmfan3and4ASwitch = false.obs;
+  RxBool chmfan5and6ASwitch = false.obs;
+  RxBool chmfan1and2BSwitch = false.obs;
+  RxBool chmfan3and4BSwitch = false.obs;
+  RxBool chmfan5and6BSwitch = false.obs;
+  RxInt chmfan1and2HighALimit = 80.obs;
+  RxInt chmfan3and4HighALimit = 80.obs;
+  RxInt chmfan5and6HighALimit = 80.obs;
+  RxInt chmfan1and2HighBLimit = 80.obs;
+  RxInt chmfan3and4HighBLimit = 80.obs;
+  RxInt chmfan5and6HighBLimit = 80.obs;
+  RxInt chmfan1and2LowALimit = 60.obs;
+  RxInt chmfan3and4LowALimit = 60.obs;
+  RxInt chmfan5and6LowALimit = 60.obs;
+  RxInt chmfan1and2LowBLimit = 60.obs;
+  RxInt chmfan3and4LowBLimit = 60.obs;
+  RxInt chmfan5and6LowBLimit = 60.obs;
+  RxBool chmcircuitBenable = false.obs;
+  RxBool chmcircuitBLoading = false.obs;
+  var chmselection1B = "".obs;
+  var chmselection2B = "".obs;
+  var chmselection3B = "".obs;
+  var chmselection4B = "".obs;
+  var chmselection5 = "".obs; //m1
+  var chmselection6 = "".obs; //m2
+  var chmaddress1B = "".obs;
+  var chmaddress2B = "".obs;
+  var chmaddress3B = "".obs;
+  var chmaddress4B = "".obs;
+  var chmaddress5 = "".obs; //m1
+  var chmaddress6 = "".obs; //m2
+  var chmsensorTemp1B = "0.0".obs;
+  var chmsensorTemp2B = "0.0".obs;
+  var chmsensorTemp3B = "0.0".obs;
+  var chmsensorTemp4B = "0.0".obs;
+  var chmsensorTemp5 = "0.0".obs; //m1
+  var chmsensorTemp6 = "0.0".obs; //m2
+  var chmoffsett1B = "".obs;
+  var chmoffsett2B = "".obs;
+  var chmoffsett3B = "".obs;
+  var chmoffsett4B = "".obs;
+  var chmoffsett5 = "".obs; //m1
+  var chmoffsett6 = "".obs; //m2
+  final chmflipController =
+      GestureFlipCardController(); // Add this to your MqttController
+  void chmtoggleCircuitView() {
+    dmStatusShow.value = !dmStatusShow.value;
+    flipController.flipcard();
+  }
+
+  void chmupdateRangeB(RangeValues values) {
+    minValueB.value = values.start.round();
+    maxValueB.value = values.end.round();
+  }
+
+  void chmupdateRangeA(RangeValues values) {
+    minValueA.value = values.start.round();
+    maxValueA.value = values.end.round();
+  }
+
+  Future<void> chmenableCircuitA(bool value) async {
+    circuitALoading.value = true;
+    circuitAenable.value = value;
+    buildJsonPayloadCiruitA();
+    await Future.delayed(Duration(seconds: 2));
+    circuitALoading.value = false;
+  }
+
+//gas Selection DX-Master
+  void gasstypeChm(String sp, bool permgas) {
+    if (permgas) {
+      gasA.value = int.tryParse(sp) ?? 0;
+      buildJsonPayloadCiruitA();
+    } else {
+      gasB.value = int.tryParse(sp) ?? 0;
+      buildJsonPayloadCiruitB();
+    }
+  }
+
+  Future<void> chmenableCircuitB(bool value) async {
+    circuitBLoading.value = true;
+    circuitBenable.value = value;
+    buildJsonPayloadCiruitB();
+    await Future.delayed(Duration(seconds: 2));
+    circuitBLoading.value = false;
+  }
+
+  void chmupdateSetpointMain(double value) {
+    dmSetpoint.value = value.toInt();
+    update();
+  }
+
+  RxBool chmtempselectionSwLoading = false.obs;
+  Future<void> chmtempSelectSwitch(bool value) async {
+    tempselectionSwLoading.value = true;
+    tempSelectionSwitch.value = value;
+    buildJsonPayloadDXMaster();
+    await Future.delayed(Duration(seconds: 2));
+    tempselectionSwLoading.value = false;
+  }
+
+  RxBool chmleadLagASwLoading = false.obs;
+  Future<void> chmleadLagA(bool value) async {
+    leadLagASwLoading.value = true;
+    leadlagASwitch.value = value;
+    buildJsonPayloadCiruitA();
+    await Future.delayed(Duration(seconds: 2));
+    leadLagASwLoading.value = false;
+  }
+
+  RxBool chmleadLagBSwLoading = false.obs;
+  Future<void> chmleadLagB(bool value) async {
+    leadLagBSwLoading.value = true;
+    leadlagBSwitch.value = value;
+    buildJsonPayloadCiruitB();
+    await Future.delayed(Duration(seconds: 4));
+    leadLagBSwLoading.value = false;
+  }
+
+  RxBool chmfan1and2BSwLoading = false.obs;
+  Future<void> chmfan1and2B(bool value) async {
+    fan1and2BSwLoading.value = true;
+    fan1and2BSwitch.value = value;
+    buildJsonPayloadCiruitB();
+    await Future.delayed(Duration(seconds: 4));
+    fan1and2BSwLoading.value = false;
+  }
+
+  RxBool chmfan3and4BSwLoading = false.obs;
+  Future<void> chmfan3and4B(bool value) async {
+    fan3and4BSwLoading.value = true;
+    fan3and4BSwitch.value = value;
+    buildJsonPayloadCiruitB();
+    await Future.delayed(Duration(seconds: 4));
+    fan3and4BSwLoading.value = false;
+  }
+
+  RxBool chmfan5and6BSwLoading = false.obs;
+  Future<void> chmfan5and6B(bool value) async {
+    fan5and6BSwLoading.value = true;
+    fan5and6BSwitch.value = value;
+    buildJsonPayloadCiruitB();
+    await Future.delayed(Duration(seconds: 4));
+    fan5and6BSwLoading.value = false;
+  }
+
+  RxBool chmfan1and2ASwLoading = false.obs;
+  Future<void> chmfan1and2A(bool value) async {
+    fan1and2ASwLoading.value = true;
+    fan1and2ASwitch.value = value;
+    buildJsonPayloadCiruitA();
+    await Future.delayed(Duration(seconds: 4));
+    fan1and2ASwLoading.value = false;
+  }
+
+  RxBool chmfan3and4ASwLoading = false.obs;
+  Future<void> chmfan3and4A(bool value) async {
+    fan3and4ASwLoading.value = true;
+    fan3and4ASwitch.value = value;
+    buildJsonPayloadCiruitA();
+    await Future.delayed(Duration(seconds: 4));
+    fan3and4ASwLoading.value = false;
+  }
+
+  RxBool chmfan5and6ASwLoading = false.obs;
+  Future<void> chmfan5and6A(bool value) async {
+    fan5and6ASwLoading.value = true;
+    fan5and6ASwitch.value = value;
+    buildJsonPayloadCiruitA();
+    await Future.delayed(Duration(seconds: 4));
+    fan5and6ASwLoading.value = false;
+  }
+
+  void chmupdateFanSetpointB(double value) {
+    buildJsonPayloadCiruitB();
+    update();
+  }
+
+  void chmupdateFanSetpointA(double value) {
+    buildJsonPayloadCiruitA();
+    update();
+  }
+
+  RxBool chmexvPosiSwLoadingA = false.obs;
+  RxBool chmexvPosiSwLoadingB = false.obs;
+  RxBool chmexvPosiSwA = false.obs;
+  RxBool chmexvPosiSwB = false.obs;
+  Future<void> chmexvPosiSwitchA(bool value) async {
+    exvPosiSwLoadingA.value = true;
+    exvPosiSwA.value = value;
+    buildJsonPayloadCiruitA();
+    await Future.delayed(Duration(seconds: 2));
+    exvPosiSwLoadingA.value = false;
+  }
+
+  Future<void> chmexvPosiSwitchB(bool value) async {
+    exvPosiSwLoadingB.value = true;
+    exvPosiSwB.value = value;
+    buildJsonPayloadCiruitB();
+    await Future.delayed(Duration(seconds: 2));
+    exvPosiSwLoadingB.value = false;
+  }
+
+  //Circuit A
+  void _handleMessageChmCircuitA(String message, topics) async {
+    try {
+      Map<String, dynamic> jsonMap = jsonDecode(message);
+      int leadlagA = jsonMap['leadlagA'] ?? 0;
+      int enableA = jsonMap['enableA'] ?? 0;
+      int fansw12A = jsonMap['fan1EA'] ?? 0;
+      int fansw34A = jsonMap['fan3EA'] ?? 0;
+      int fansw56A = jsonMap['fan5EA'] ?? 0;
+      //EXV setting
+      exvCurrentStepA.value =
+          int.tryParse(jsonMap['exvCstepA']?.toString() ?? '') ?? 0;
+      exvMaxStepA.value =
+          int.tryParse(jsonMap['exvMstepA']?.toString() ?? '') ?? 0;
+      exvStepDelayA.value =
+          int.tryParse(jsonMap['exvStepDA']?.toString() ?? '') ?? 0;
+      //Setpoints A
+      int oilPrespA = int.tryParse(jsonMap['oilPsiSpA'].toString()) ?? 0;
+      int suctionPressureA = int.tryParse(jsonMap['SucPsiSpA'].toString()) ?? 0;
+      int ampSpA = int.tryParse(jsonMap['ampSpA'].toString()) ?? 0;
+      int dischargePressureA =
+          int.tryParse(jsonMap['DisPsiSpA'].toString()) ?? 0;
+      int suctionTempA = int.tryParse(jsonMap['SucTempSpA'].toString()) ?? 0;
+      int dischargeTempA = int.tryParse(jsonMap['DisTempSpA'].toString()) ?? 0;
+      int lowSprayA = int.tryParse(jsonMap['SprayTempSpA'].toString()) ?? 0;
+      int superheatA = int.tryParse(jsonMap['superheatspA'].toString()) ?? 0;
+      //Exv
+      double proportionalA =
+          double.tryParse(jsonMap['PidPA'].toString()) ?? 0.0;
+      double derivativeA = double.tryParse(jsonMap['PidDA'].toString()) ?? 0.0;
+      double integralA = double.tryParse(jsonMap['PidIA'].toString()) ?? 0.0;
+
+      //pressure Sensors
+      String ampA = jsonMap['ampA']?.toString() ?? "0";
+      String sucpressuretype = jsonMap['sucPreTypeA']?.toString() ?? "0";
+      String sucpressurerange = jsonMap['sucPreRangeA']?.toString() ?? "0";
+      int sucpressureunit = jsonMap['sucPreUnitA'] ?? 0;
+      int sucoffsettA =
+          int.tryParse(jsonMap['sucoffsetA']?.toString() ?? "0") ?? 0;
+      String dispressuretype = jsonMap['disPreTypeA']?.toString() ?? "0";
+      String dispressurerange = jsonMap['disPreRangeA']?.toString() ?? "0";
+      int dispressureunit = jsonMap['disPreUnitA'] ?? 0;
+      int disOffsetA =
+          int.tryParse(jsonMap['disoffsetA']?.toString() ?? "0") ?? 0;
+      String oilpressuretype = jsonMap['oilPreTypeA']?.toString() ?? "0";
+      String oilpressurerange = jsonMap['oilPreRangeA']?.toString() ?? "0";
+      int oilpressureunit = jsonMap['oilPreUnitA'] ?? 0;
+      int oiloffsetA =
+          int.tryParse(jsonMap['oiloffsetA']?.toString() ?? "0") ?? 0;
+      int exvPosiA = jsonMap['modeA'] ?? 0;
+      //pressure sensor
+      dmOilPressureA.value =
+          int.tryParse(jsonMap['oilPsiA']?.toString() ?? '') ?? 0;
+      dmSuctionTempA.value = double.tryParse(jsonMap['SucTempA']) ?? 0.0;
+      dmSuctionPressureA.value =
+          int.tryParse(jsonMap['SucPsiA']?.toString() ?? '') ?? 0;
+      dmdischargeTempA.value =
+          double.tryParse(jsonMap['DisTempA']?.toString() ?? '') ?? 0.0;
+      dmdischargePressureA.value =
+          int.tryParse(jsonMap['DisPsiA']?.toString() ?? '') ?? 0;
+      dmSubCoolingA.value =
+          double.tryParse(jsonMap['subCoolingA']?.toString() ?? '') ?? 0.0;
+      dmSprayA.value =
+          double.tryParse(jsonMap['sprayA']?.toString() ?? '') ?? 0.0;
+      dmExvA.value = int.tryParse(jsonMap['exvA']?.toString() ?? '') ?? 0;
+      dmShtA.value = double.tryParse(jsonMap['shtA']?.toString() ?? '') ?? 0.0;
+      dmRunHoursA.value =
+          int.tryParse(jsonMap['runHoursA']?.toString() ?? '') ?? 0;
+      dmStartA.value =
+          int.tryParse(jsonMap['startdelayA']?.toString() ?? '') ?? 0;
+      dmStepSizeA.value =
+          double.tryParse(jsonMap['stepsizeA']?.toString() ?? '') ?? 0.0;
+      fan1and2HighALimit.value =
+          int.tryParse(jsonMap['fan1HA']?.toString() ?? '') ?? 0;
+      fan3and4HighALimit.value =
+          int.tryParse(jsonMap['fan3HA']?.toString() ?? '') ?? 0;
+      fan5and6HighALimit.value =
+          int.tryParse(jsonMap['fan5HA']?.toString() ?? '') ?? 0;
+      fan1and2LowALimit.value =
+          int.tryParse(jsonMap['fan1LA']?.toString() ?? '') ?? 0;
+      fan3and4LowALimit.value =
+          int.tryParse(jsonMap['fan3LA']?.toString() ?? '') ?? 0;
+      fan5and6LowALimit.value =
+          int.tryParse(jsonMap['fan5LA']?.toString() ?? '') ?? 0;
+      vfdMinFrequencyA.value =
+          int.tryParse(jsonMap['vfdMinFreA']?.toString() ?? '') ?? 0;
+      vfdMaxFrequencyA.value =
+          int.tryParse(jsonMap['vfdMaxFreA']?.toString() ?? '') ?? 0;
+      selectedModeA.value =
+          int.tryParse(jsonMap['driveA']?.toString() ?? '') ?? 0;
+      vfdDelayA.value =
+          int.tryParse(jsonMap['vfdDelayA']?.toString() ?? '') ?? 0;
+      selectedEXVModeA.value =
+          int.tryParse(jsonMap['ExvselA']?.toString() ?? '') ?? 0;
+      minValueA.value = int.tryParse(jsonMap['minA']?.toString() ?? '') ?? 0;
+      maxValueA.value = int.tryParse(jsonMap['maxA']?.toString() ?? '') ?? 0;
+      gasA.value = int.tryParse(jsonMap['gasA']?.toString() ?? '') ?? 0;
+
+//pressure Sensors
+      sucPressureUnitA.value = sucpressureunit == 1;
+      sucPressureTypeA.value = sucpressuretype;
+      ampereA.value = ampA;
+      sucPressureRangeA.value = sucpressurerange;
+      disPressureUnitA.value = dispressureunit == 1;
+      disPressureTypeA.value = dispressuretype;
+      disPressureRangeA.value = dispressurerange;
+      dischargeOffsetA.value = disOffsetA;
+      oilPressureUnitA.value = oilpressureunit == 1;
+      oilPressureTypeA.value = oilpressuretype;
+      oilPressureRangeA.value = oilpressurerange;
+      oilOffsetA.value = oiloffsetA;
+      suctionOffsetA.value = sucoffsettA;
+      //Setpoints A
+      oilPressurespA.value = oilPrespA;
+      amperespA.value = ampSpA;
+      sucPressurespA.value = suctionPressureA;
+      disPressurespA.value = dischargePressureA;
+      sucTempspA.value = suctionTempA;
+      disTempspA.value = dischargeTempA;
+      lowSprayTempspA.value = lowSprayA;
+      superHeatspA.value = superheatA;
+      integralspA.value = integralA;
+      derivativespA.value = derivativeA;
+      propostionalspA.value = proportionalA;
+      exvPosiSwA.value = exvPosiA == 1;
+      leadlagASwitch.value = leadlagA == 1;
+      circuitAenable.value = enableA == 1;
+      fan1and2ASwitch.value = fansw12A == 1;
+      fan3and4ASwitch.value = fansw34A == 1;
+      fan5and6ASwitch.value = fansw56A == 1;
+      log("Updated connection List: $deviceConnections");
+      log("Received MQTT Data:");
+    } catch (e) {
+      log("Error parsing JSON: DM $e");
+    }
+  }
+
+  void _handleMessageChmSensorA(String message, topics) async {
+    try {
+      Map<String, dynamic> jsonMap = jsonDecode(message);
+      String temp1 = jsonMap['temp1']?.toString() ?? "0";
+      String temp2 = jsonMap['temp2']?.toString() ?? "0";
+      String temp3 = jsonMap['temp3']?.toString() ?? "0";
+      String temp4 = jsonMap['temp4']?.toString() ?? "0";
+      String temp5 = jsonMap['temp5']?.toString() ?? "0";
+      String temp6 = jsonMap['temp6']?.toString() ?? "0";
+      String offset1 = jsonMap['offset1']?.toString() ?? "0";
+      String offset2 = jsonMap['offset2']?.toString() ?? "0";
+      String offset3 = jsonMap['offset3']?.toString() ?? "0";
+      String offset4 = jsonMap['offset4']?.toString() ?? "0";
+      String offset5 = jsonMap['offset5']?.toString() ?? "0";
+      String offset6 = jsonMap['offset6']?.toString() ?? "0";
+      String aaddress1 = jsonMap['address1']?.toString() ?? "0";
+      String aaddress2 = jsonMap['address2']?.toString() ?? "0";
+      String aaddress3 = jsonMap['address3']?.toString() ?? "0";
+      String aaddress4 = jsonMap['address4']?.toString() ?? "0";
+      String aaddress5 = jsonMap['address5']?.toString() ?? "0";
+      String aaddress6 = jsonMap['address6']?.toString() ?? "0";
+      String address1select = jsonMap[aaddress1]?.toString() ?? "0";
+      String address2select = jsonMap[aaddress2]?.toString() ?? "0";
+      String address3select = jsonMap[aaddress3]?.toString() ?? "0";
+      String address4select = jsonMap[aaddress4]?.toString() ?? "0";
+      String address5select = jsonMap[aaddress5]?.toString() ?? "0";
+      String address6select = jsonMap[aaddress6]?.toString() ?? "0";
+      sensorTemp1A.value = temp1;
+      sensorTemp2A.value = temp2;
+      sensorTemp3A.value = temp3;
+      sensorTemp4A.value = temp4;
+      sensorTemp5.value = temp5;
+      sensorTemp6.value = temp6;
+      offsett1A.value = offset1;
+      offsett2A.value = offset2;
+      offsett3A.value = offset3;
+      offsett4A.value = offset4;
+      offsett5.value = offset5;
+      offsett6.value = offset6;
+      selection1A.value = address1select;
+      selection2A.value = address2select;
+      selection3A.value = address3select;
+      selection4A.value = address4select;
+      selection5.value = address5select;
+      selection6.value = address6select;
+      address1A.value = aaddress1;
+      address2A.value = aaddress2;
+      address3A.value = aaddress3;
+      address4A.value = aaddress4;
+      address5.value = aaddress5;
+      address6.value = aaddress6;
+    } catch (e) {
+      log("Error parsing message: ZM $e");
+    }
+  }
+
+//Circuit B
+  void _handleMessageChmCircuitB(String message, topics) async {
+    try {
+      Map<String, dynamic> jsonMap = jsonDecode(message);
+      int leadlagB = jsonMap['leadlagB'] ?? 0;
+      int enableB = jsonMap['enableB'] ?? 0;
+      int fansw12B = jsonMap['fan1EB'] ?? 0;
+      int fansw34B = jsonMap['fan3EB'] ?? 0;
+      int fansw56B = jsonMap['fan5EB'] ?? 0;
+      //EXV setting
+      String ampB = jsonMap['ampB']?.toString() ?? "0";
+      exvCurrentStepB.value =
+          int.tryParse(jsonMap['exvCstepB']?.toString() ?? '') ?? 0;
+      exvMaxStepB.value =
+          int.tryParse(jsonMap['exvMstepB']?.toString() ?? '') ?? 0;
+      exvStepDelayB.value =
+          int.tryParse(jsonMap['exvStepDB']?.toString() ?? '') ?? 0;
+      String sucpressuretype = jsonMap['sucPreTypeB']?.toString() ?? "0";
+      String sucpressurerange = jsonMap['sucPreRangeB']?.toString() ?? "0";
+      int sucpressureunit = jsonMap['sucPreUnitB'] ?? false;
+      int sucoffsettB =
+          int.tryParse(jsonMap['sucoffsetB']?.toString() ?? "0") ?? 0;
+      String dispressuretype = jsonMap['disPreTypeB']?.toString() ?? "0";
+      String dispressurerange = jsonMap['disPreRangeB']?.toString() ?? "0";
+      int dispressureunit = jsonMap['disPreUnitB'] ?? false;
+      int disOffsetB =
+          int.tryParse(jsonMap['disoffsetB']?.toString() ?? "0") ?? 0;
+      String oilpressuretype = jsonMap['oilPreTypeB']?.toString() ?? "0";
+      String oilpressurerange = jsonMap['oilPreRangeB']?.toString() ?? "0";
+      int oilpressureunit = jsonMap['oilPreUnitB'] ?? false;
+      int oiloffsetB =
+          int.tryParse(jsonMap['oiloffsetB']?.toString() ?? "0") ?? 0;
+      //Exv
+      double proportionalB =
+          double.tryParse(jsonMap['PidPB'].toString()) ?? 0.0;
+      double derivativeB = double.tryParse(jsonMap['PidDB'].toString()) ?? 0.0;
+      double integralB = double.tryParse(jsonMap['PidIB'].toString()) ?? 0.0;
+      int exvPosiB = jsonMap['modeB'] ?? 0;
+      //setpoints B
+      int oilPrespB = int.tryParse(jsonMap['oilPsiSpB'].toString()) ?? 0;
+      int ampSpB = int.tryParse(jsonMap['ampSpB'].toString()) ?? 0;
+      int suctionPressureB = int.tryParse(jsonMap['SucPsiSpB'].toString()) ?? 0;
+      int dischargePressureB =
+          int.tryParse(jsonMap['DisPsiSpB'].toString()) ?? 0;
+      int suctionTempB = int.tryParse(jsonMap['SucTempSpB'].toString()) ?? 0;
+      int dischargeTempB = int.tryParse(jsonMap['DisTempSpB'].toString()) ?? 0;
+      int lowSprayB = int.tryParse(jsonMap['SprayTempSpB'].toString()) ?? 0;
+      int superheatB = int.tryParse(jsonMap['superheatspB'].toString()) ?? 0;
+      dmOilPressureB.value =
+          int.tryParse(jsonMap['oilPsiB']?.toString() ?? '') ?? 0;
+      dmSuctionTempB.value = double.tryParse(jsonMap['SucTempB']) ?? 0.0;
+      dmSuctionPressureB.value =
+          int.tryParse(jsonMap['SucPsiB']?.toString() ?? '') ?? 0;
+      dmdischargeTempB.value =
+          double.tryParse(jsonMap['DisTempB']?.toString() ?? '') ?? 0.0;
+      dmdischargePressureB.value =
+          int.tryParse(jsonMap['DisPsiB']?.toString() ?? '') ?? 0;
+      dmSubCoolingB.value =
+          double.tryParse(jsonMap['subCoolingB']?.toString() ?? '') ?? 0.0;
+      dmSprayB.value =
+          double.tryParse(jsonMap['sprayB']?.toString() ?? '') ?? 0.0;
+      dmExvB.value = int.tryParse(jsonMap['exvB']?.toString() ?? '') ?? 0;
+      dmShtB.value = double.tryParse(jsonMap['shtB']?.toString() ?? '') ?? 0.0;
+      dmRunHoursB.value =
+          int.tryParse(jsonMap['runHoursB']?.toString() ?? '') ?? 0;
+      dmStartB.value =
+          int.tryParse(jsonMap['startdelayB']?.toString() ?? '') ?? 0;
+      dmStepSizeB.value =
+          double.tryParse(jsonMap['stepsizeB']?.toString() ?? '') ?? 0.0;
+      fan1and2HighBLimit.value =
+          int.tryParse(jsonMap['fan1HB']?.toString() ?? '') ?? 0;
+      fan3and4HighBLimit.value =
+          int.tryParse(jsonMap['fan3HB']?.toString() ?? '') ?? 0;
+      fan5and6HighBLimit.value =
+          int.tryParse(jsonMap['fan5HB']?.toString() ?? '') ?? 0;
+      fan1and2LowBLimit.value =
+          int.tryParse(jsonMap['fan1LB']?.toString() ?? '') ?? 0;
+      fan3and4LowBLimit.value =
+          int.tryParse(jsonMap['fan3LB']?.toString() ?? '') ?? 0;
+      fan5and6LowBLimit.value =
+          int.tryParse(jsonMap['fan5LB']?.toString() ?? '') ?? 0;
+      vfdMinFrequencyB.value =
+          int.tryParse(jsonMap['vfdMinFreB']?.toString() ?? '') ?? 0;
+      vfdMaxFrequencyB.value =
+          int.tryParse(jsonMap['vfdMaxFreB']?.toString() ?? '') ?? 0;
+      selectedModeB.value =
+          int.tryParse(jsonMap['driveB']?.toString() ?? '') ?? 0;
+      vfdDelayB.value =
+          int.tryParse(jsonMap['vfdDelayB']?.toString() ?? '') ?? 0;
+      selectedEXVModeB.value =
+          int.tryParse(jsonMap['ExvselB']?.toString() ?? '') ?? 0;
+      minValueB.value = int.tryParse(jsonMap['minB']?.toString() ?? '') ?? 0;
+      maxValueB.value = int.tryParse(jsonMap['maxB']?.toString() ?? '') ?? 0;
+      gasB.value = int.tryParse(jsonMap['gasB']?.toString() ?? '') ?? 0;
+      //pressure configuration
+      ampereB.value = ampB;
+      sucPressureUnitB.value = sucpressureunit == 1;
+      sucPressureTypeB.value = sucpressuretype;
+      sucPressureRangeB.value = sucpressurerange;
+      disPressureUnitB.value = dispressureunit == 1;
+      disPressureTypeB.value = dispressuretype;
+      disPressureRangeB.value = dispressurerange;
+      dischargeOffsetB.value = disOffsetB;
+      oilPressureUnitB.value = oilpressureunit == 1;
+      oilPressureTypeB.value = oilpressuretype;
+      oilPressureRangeB.value = oilpressurerange;
+      oilOffsetB.value = oiloffsetB;
+      suctionOffsetB.value = sucoffsettB;
+      integralspB.value = integralB;
+      derivativespB.value = derivativeB;
+      propostionalspB.value = proportionalB;
+      exvPosiSwB.value = exvPosiB == 1;
+      //setpoints B
+      oilPressurespB.value = oilPrespB;
+      amperespB.value = ampSpB;
+      sucPressurespB.value = suctionPressureB;
+      disPressurespB.value = dischargePressureB;
+      sucTempspB.value = suctionTempB;
+      disTempspB.value = dischargeTempB;
+      lowSprayTempspB.value = lowSprayB;
+      superHeatspB.value = superheatB;
+      //pressure configuration
+      circuitBenable.value = enableB == 1;
+      leadlagBSwitch.value = leadlagB == 1;
+      fan1and2BSwitch.value = fansw12B == 1;
+      fan3and4BSwitch.value = fansw34B == 1;
+      fan5and6BSwitch.value = fansw56B == 1;
+      log("Updated connection List: $deviceConnections");
+      log("Received MQTT Data:");
+    } catch (e) {
+      log("Error parsing JSON: DM $e");
+    }
+  }
+
+  void _handleMessageChmSensorB(String message, topics) async {
+    try {
+      Map<String, dynamic> jsonMap = jsonDecode(message);
+      String temp1 = jsonMap['temp1']?.toString() ?? "0";
+      String temp2 = jsonMap['temp2']?.toString() ?? "0";
+      String temp3 = jsonMap['temp3']?.toString() ?? "0";
+      String temp4 = jsonMap['temp4']?.toString() ?? "0";
+      String temp5 = jsonMap['temp5']?.toString() ?? "0";
+      String temp6 = jsonMap['temp6']?.toString() ?? "0";
+      String offset1 = jsonMap['offset1']?.toString() ?? "0";
+      String offset2 = jsonMap['offset2']?.toString() ?? "0";
+      String offset3 = jsonMap['offset3']?.toString() ?? "0";
+      String offset4 = jsonMap['offset4']?.toString() ?? "0";
+      String offset5 = jsonMap['offset5']?.toString() ?? "0";
+      String offset6 = jsonMap['offset6']?.toString() ?? "0";
+      String aaddress1 = jsonMap['address1']?.toString() ?? "0";
+      String aaddress2 = jsonMap['address2']?.toString() ?? "0";
+      String aaddress3 = jsonMap['address3']?.toString() ?? "0";
+      String aaddress4 = jsonMap['address4']?.toString() ?? "0";
+      String aaddress5 = jsonMap['address5']?.toString() ?? "0";
+      String aaddress6 = jsonMap['address6']?.toString() ?? "0";
+      String address1select = jsonMap[aaddress1]?.toString() ?? "0";
+      String address2select = jsonMap[aaddress2]?.toString() ?? "0";
+      String address3select = jsonMap[aaddress3]?.toString() ?? "0";
+      String address4select = jsonMap[aaddress4]?.toString() ?? "0";
+      String address5select = jsonMap[aaddress5]?.toString() ?? "0";
+      String address6select = jsonMap[aaddress6]?.toString() ?? "0";
+      sensorTemp1B.value = temp1;
+      sensorTemp2B.value = temp2;
+      sensorTemp3B.value = temp3;
+      sensorTemp4B.value = temp4;
+      sensorTemp5.value = temp5;
+      sensorTemp6.value = temp6;
+      offsett1B.value = offset1;
+      offsett2B.value = offset2;
+      offsett3B.value = offset3;
+      offsett4B.value = offset4;
+      offsett5.value = offset5;
+      offsett6.value = offset6;
+      selection1B.value = address1select;
+      selection2B.value = address2select;
+      selection3B.value = address3select;
+      selection4B.value = address4select;
+      selection5.value = address5select;
+      selection6.value = address6select;
+      address1B.value = aaddress1;
+      address2B.value = aaddress2;
+      address3B.value = aaddress3;
+      address4B.value = aaddress4;
+      address5.value = aaddress5;
+      address6.value = aaddress6;
+    } catch (e) {
+      log("Error parsing message: ZM $e");
+    }
+  }
+
+//main DX-Master
+  void _handleMessageChm(String message, topics) async {
+    try {
+      Map<String, dynamic> jsonMap = jsonDecode(message);
+      int tempSelect = jsonMap['tempSelect'] ?? 0;
+      dmStatusA.value = int.tryParse(jsonMap['statusA']?.toString() ?? '') ?? 0;
+      dmStatusB.value = int.tryParse(jsonMap['statusB']?.toString() ?? '') ?? 0;
+      dmSupply.value =
+          double.tryParse(jsonMap['supplyTemp']?.toString() ?? '') ?? 0.0;
+      dmSetpoint.value =
+          int.tryParse(jsonMap['setPoint']?.toString() ?? '') ?? 0;
+      dmReturn.value =
+          double.tryParse(jsonMap['return']?.toString() ?? '') ?? 0.0;
+      dmPower.value =
+          int.tryParse(jsonMap['powerSwitch']?.toString() ?? '') ?? 0;
+      dmResetValues.value =
+          int.tryParse(jsonMap['resetValues']?.toString() ?? '') ?? 0;
+      tempSelectionSwitch.value = tempSelect == 1;
+      log("Updated connection List: $deviceConnections");
+      log("Received MQTT Data:");
+    } catch (e) {
+      log("Error parsing JSON: DM $e");
+    }
   }
 
 //DX(Mini)
