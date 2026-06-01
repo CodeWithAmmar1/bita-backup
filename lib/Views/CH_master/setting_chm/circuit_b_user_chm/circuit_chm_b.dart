@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:testappbita/Views/CH_master/setting_chm/circuit_b_user_chm/circuit_b_setting_chm/circuit_b_selection_setting_chm.dart';
 import 'package:testappbita/Views/CH_master/setting_chm/circuit_b_user_chm/condensor_b_fan_setting_chm.dart/condensor_b_fan_setting_chm.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_b_user/circuit_b_setting/circuit_b_selection_setting.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_b_user/condensor_b_fan_setting.dart/condensor_b_fan_setting.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class CircuitChmB extends StatefulWidget {
