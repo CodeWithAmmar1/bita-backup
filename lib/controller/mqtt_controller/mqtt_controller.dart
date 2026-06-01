@@ -4447,7 +4447,7 @@ class MqttController extends GetxController {
     }
   }
 
-//main DX-Master
+//main CH-Master
   void _handleMessageChm(String message, topics) async {
     try {
       Map<String, dynamic> jsonMap = jsonDecode(message);
