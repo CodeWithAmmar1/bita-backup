@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:testappbita/Views/DX_master/main_screen_DX_master.dart';
 import 'package:testappbita/Views/Device/customWidget/am1Card.dart';
 import 'package:testappbita/Views/Device/customWidget/am2444Card.dart';
 import 'package:testappbita/Views/Device/customWidget/am2Card.dart';
