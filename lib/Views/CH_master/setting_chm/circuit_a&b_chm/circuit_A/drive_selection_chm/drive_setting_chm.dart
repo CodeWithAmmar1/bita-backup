@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:testappbita/Views/CH_master/setting_chm/circuit_a&b_chm/circuit_A/circuit_setting_chm/circuit_selection_setting_chm.dart';
-import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/circuit_setting/circuit_selection_setting.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
