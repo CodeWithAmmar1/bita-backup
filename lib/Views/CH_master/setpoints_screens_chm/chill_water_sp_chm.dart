@@ -68,7 +68,7 @@ class ChillWaterSpChm extends StatelessWidget {
                     min: 0,
                     max: 30,
                     initialValue:
-                        _mqttController.dmSetpoint.value.toDouble().clamp(
+                        _mqttController.chmSetpoint.value.toDouble().clamp(
                               0,
                               30,
                             ),
@@ -76,12 +76,12 @@ class ChillWaterSpChm extends StatelessWidget {
                         _mqttController.isUserInteracting.value = true,
                     onChange: (value) {
                       _mqttController.isUserInteracting.value = true;
-                      _mqttController.updateSetpointMain(value);
+                      _mqttController.chmupdateSetpointMain(value);
                     },
                     onChangeEnd: (_) {
                       publishTimer?.cancel();
                       publishTimer = Timer(Duration(seconds: 1), () {
-                        _mqttController.buildJsonPayloadDXMaster();
+                        _mqttController.buildJsonPayloadCHMaster();
                         publishTimer = Timer(Duration(seconds: 1), () {
                           _mqttController.isUserInteracting.value = false;
                         });
@@ -111,7 +111,7 @@ class ChillWaterSpChm extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "${_mqttController.dmSetpoint.value.toDouble().toStringAsFixed(0)}°C",
+                              "${_mqttController.chmSetpoint.value.toDouble().toStringAsFixed(0)}°C",
                               style: TextStyle(
                                 fontFamily: 'DS-Digital',
                                 fontSize:
@@ -137,13 +137,13 @@ class ChillWaterSpChm extends StatelessWidget {
                           onPressed: () {
                             _mqttController.isUserInteracting.value = true;
 
-                            if (_mqttController.dmSetpoint.value > 0) {
-                              _mqttController.dmSetpoint.value -= 1;
-                              _mqttController.updateSetpointMain(
-                                  _mqttController.dmSetpoint.value.toDouble());
+                            if (_mqttController.chmSetpoint.value > 0) {
+                              _mqttController.chmSetpoint.value -= 1;
+                              _mqttController.chmupdateSetpointMain(
+                                  _mqttController.chmSetpoint.value.toDouble());
                               publishTimer?.cancel();
                               publishTimer = Timer(Duration(seconds: 1), () {
-                                _mqttController.buildJsonPayloadDXMaster();
+                                _mqttController.buildJsonPayloadCHMaster();
                                 _mqttController.isUserInteracting.value = false;
                               });
                             }
@@ -185,14 +185,14 @@ class ChillWaterSpChm extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () {
                             _mqttController.isUserInteracting.value = true;
-                            if (_mqttController.dmSetpoint.value < 30) {
-                              _mqttController.dmSetpoint.value += 1;
-                              _mqttController.updateSetpointMain(
-                                  _mqttController.dmSetpoint.value.toDouble());
+                            if (_mqttController.chmSetpoint.value < 30) {
+                              _mqttController.chmSetpoint.value += 1;
+                              _mqttController.chmupdateSetpointMain(
+                                  _mqttController.chmSetpoint.value.toDouble());
 
                               publishTimer?.cancel();
                               publishTimer = Timer(Duration(seconds: 1), () {
-                                _mqttController.buildJsonPayloadDXMaster();
+                                _mqttController.buildJsonPayloadCHMaster();
                                 _mqttController.isUserInteracting.value = false;
                               });
                             }

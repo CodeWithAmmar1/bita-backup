@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:testappbita/Views/CH_master/setpoints_screens_chm/chill_water_sp_chm.dart';
 import 'package:testappbita/Views/DX_master/setpoints_screens/chill_water_sp.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
@@ -53,10 +54,10 @@ class ChwMaster extends StatelessWidget {
                     Obx(
                       () => Text(
                         _mqttController.deviceConnections[deviceid] ?? false
-                            ? "${_mqttController.dmSupply.value}°C"
+                            ? "${_mqttController.chmSupply.value}°C"
                             : "--°C",
                         style: TextStyle(
-                          color: _mqttController.dmSupply.value == 888.0
+                          color: _mqttController.chmSupply.value == 888.0
                               ? Colors.redAccent
                               : Get.isDarkMode
                                   ? Colors.white
@@ -71,7 +72,7 @@ class ChwMaster extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Get.to(() => ChillWaterSp());
+                Get.to(() => ChillWaterSpChm());
               },
               child: Container(
                 height: baseSize * 0.08,
@@ -97,7 +98,7 @@ class ChwMaster extends StatelessWidget {
                       Obx(
                         () => Text(
                           _mqttController.deviceConnections[deviceid] ?? false
-                              ? "${_mqttController.dmSetpoint.value}°C"
+                              ? "${_mqttController.chmSetpoint.value}°C"
                               : "--°C",
                           style: TextStyle(
                             color: Get.isDarkMode ? Colors.white : Colors.black,
@@ -133,12 +134,12 @@ class ChwMaster extends StatelessWidget {
                     Obx(
                       () => Text(
                         _mqttController.deviceConnections[deviceid] ?? false
-                            ? "${_mqttController.dmReturn.value}°C"
+                            ? "${_mqttController.chmReturn.value}°C"
                             : "--°C",
                         style: TextStyle(
-                          color: (_mqttController.dmReturn.value <
-                                      _mqttController.dmSetpoint.value ||
-                                  _mqttController.dmReturn.value == 888.0)
+                          color: (_mqttController.chmReturn.value <
+                                      _mqttController.chmSetpoint.value ||
+                                  _mqttController.chmReturn.value == 888.0)
                               ? Colors.redAccent
                               : Get.isDarkMode
                                   ? Colors.white

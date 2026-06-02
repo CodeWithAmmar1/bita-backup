@@ -589,24 +589,24 @@ class _MainScreenChmMasterState extends State<MainScreenChmMaster> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    if (_mqttController.dmPower.value == 1) {
+                    if (_mqttController.chmPower.value == 1) {
                       _mqttController.isUserInteracting.value = true;
-                      _mqttController.dmPower.value = 0;
-                      log("DM Power Off${_mqttController.dmPower.value}");
+                      _mqttController.chmPower.value = 0;
+                      log("DM Power Off${_mqttController.chmPower.value}");
                       _mqttController.buildJsonPayloadDXMaster();
                       publishTimer?.cancel();
                       publishTimer = Timer(Duration(seconds: 1), () {
-                        log("DM Power Payload Published--${_mqttController.dmPower.value}");
+                        log("DM Power Payload Published--${_mqttController.chmPower.value}");
                         _mqttController.isUserInteracting.value = false;
                       });
                     } else {
-                      _mqttController.dmPower.value = 1;
+                      _mqttController.chmPower.value = 1;
                       _mqttController.isUserInteracting.value = true;
-                      log("DM Power On${_mqttController.dmPower.value}");
+                      log("DM Power On${_mqttController.chmPower.value}");
                       _mqttController.buildJsonPayloadDXMaster();
                       publishTimer?.cancel();
                       publishTimer = Timer(Duration(seconds: 1), () {
-                        log("DM Power Payload Published--${_mqttController.dmPower.value}");
+                        log("DM Power Payload Published--${_mqttController.chmPower.value}");
                         _mqttController.isUserInteracting.value = false;
                       });
                     }
@@ -615,11 +615,11 @@ class _MainScreenChmMasterState extends State<MainScreenChmMaster> {
                     () => buildIconContainer(
                       context,
                       Icons.power_settings_new,
-                      _mqttController.dmPower.value == 0
+                      _mqttController.chmPower.value == 0
                           ? Color(0xFF24C48E)
                           : Colors.red,
                       Colors.grey.shade200,
-                      _mqttController.dmPower.value == 0
+                      _mqttController.chmPower.value == 0
                           ? 'start'.tr
                           : 'stop'.tr,
                       Get.isDarkMode ? Colors.white : Colors.black,

@@ -3700,14 +3700,16 @@ class MqttController extends GetxController {
     publishMessagepressure(jsonString); //3
   }
 
-//chm-master handlemessage
+//chm-master 
   RxDouble chmSupply = 0.0.obs;
   RxInt chmSetpoint = 0.obs;
   RxDouble chmReturn = 0.0.obs;
+  RxInt chmPower = 0.obs;
+
+
   RxInt chmStatusA = 0.obs;
   RxInt chmStatusB = 0.obs;
   RxBool chmStatusShow = false.obs;
-  RxInt chmPower = 0.obs;
   RxInt chmResetValues = 0.obs;
   
   RxInt    chmvfdMinFrequencyA = 0.obs;
@@ -3751,7 +3753,7 @@ class MqttController extends GetxController {
   RxInt chmoilPressurespA = 0.obs;
   RxInt chmoilPressurespB = 0.obs;
 
-  //Azam dm
+  //Azam chm
   RxDouble chmdischargeTempA = 0.0.obs;
   RxInt chmdischargePressureA = 0.obs;
   RxDouble chmSubCoolingA = 0.0.obs;
@@ -3949,7 +3951,7 @@ class MqttController extends GetxController {
   }
 
   void chmupdateSetpointMain(double value) {
-    dmSetpoint.value = value.toInt();
+    chmSetpoint.value = value.toInt();
     update();
   }
 
@@ -4454,13 +4456,13 @@ class MqttController extends GetxController {
       int tempSelect = jsonMap['tempSelect'] ?? 0;
       dmStatusA.value = int.tryParse(jsonMap['statusA']?.toString() ?? '') ?? 0;
       dmStatusB.value = int.tryParse(jsonMap['statusB']?.toString() ?? '') ?? 0;
-      dmSupply.value =
-          double.tryParse(jsonMap['supplyTemp']?.toString() ?? '') ?? 0.0;
-      dmSetpoint.value =
+      chmSupply.value =
+          double.tryParse(jsonMap['chillTemp']?.toString() ?? '') ?? 0.0;
+      chmSetpoint.value =
           int.tryParse(jsonMap['setPoint']?.toString() ?? '') ?? 0;
-      dmReturn.value =
+      chmReturn.value =
           double.tryParse(jsonMap['return']?.toString() ?? '') ?? 0.0;
-      dmPower.value =
+      chmPower.value =
           int.tryParse(jsonMap['powerSwitch']?.toString() ?? '') ?? 0;
       dmResetValues.value =
           int.tryParse(jsonMap['resetValues']?.toString() ?? '') ?? 0;
@@ -4470,6 +4472,19 @@ class MqttController extends GetxController {
     } catch (e) {
       log("Error parsing JSON: DM $e");
     }
+  }
+
+  //  RxBool dmResetload = false.obs;
+  void buildJsonPayloadCHMaster() {
+    Map<String, dynamic> jsonPayload = {
+      "setPoint": chmSetpoint.value,
+      "powerSwitch": chmPower.value,
+
+      "resetValues": dmResetValues.value,
+      "tempSelect": tempSelectionSwitch.value ? 1 : 0,
+    };
+    String jsonString = jsonEncode(jsonPayload);
+    publishMessage(jsonString);
   }
 
 //DX(Mini)
