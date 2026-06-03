@@ -371,6 +371,7 @@ class _DashboardState extends State<Dashboardam2> {
                           return newValue;
                         },
                       ),
+                      const SizedBox(height: 10),
                       ResetToggle(
                           resetload: _mqttController.am2Resetload,
                           title: 'Reset'.tr,
