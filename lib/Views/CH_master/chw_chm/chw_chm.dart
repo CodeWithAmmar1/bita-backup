@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:testappbita/Views/CH_master/setpoints_screens_chm/chill_water_sp_chm.dart';
-import 'package:testappbita/Views/DX_master/setpoints_screens/chill_water_sp.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 

@@ -593,7 +593,7 @@ class _MainScreenChmMasterState extends State<MainScreenChmMaster> {
                       _mqttController.isUserInteracting.value = true;
                       _mqttController.chmPower.value = 0;
                       log("DM Power Off${_mqttController.chmPower.value}");
-                      _mqttController.buildJsonPayloadDXMaster();
+                      _mqttController.buildJsonPayloadCHMaster();
                       publishTimer?.cancel();
                       publishTimer = Timer(Duration(seconds: 1), () {
                         log("DM Power Payload Published--${_mqttController.chmPower.value}");
@@ -603,7 +603,7 @@ class _MainScreenChmMasterState extends State<MainScreenChmMaster> {
                       _mqttController.chmPower.value = 1;
                       _mqttController.isUserInteracting.value = true;
                       log("DM Power On${_mqttController.chmPower.value}");
-                      _mqttController.buildJsonPayloadDXMaster();
+                      _mqttController.buildJsonPayloadCHMaster();
                       publishTimer?.cancel();
                       publishTimer = Timer(Duration(seconds: 1), () {
                         log("DM Power Payload Published--${_mqttController.chmPower.value}");
@@ -629,19 +629,19 @@ class _MainScreenChmMasterState extends State<MainScreenChmMaster> {
                 Obx(
                   () => GestureDetector(
                     onTap: () {
-                      _mqttController.dmResetload.value = true;
-                      _mqttController.dmResetValues.value = 1;
-                      _mqttController.buildJsonPayloadDXMaster();
+                      _mqttController.chmResetload.value = true;
+                      _mqttController.chmResetValues.value = 1;
+                      _mqttController.buildJsonPayloadCHMaster();
                       publishTimer?.cancel();
                       publishTimer = Timer(Duration(seconds: 5), () {
-                        _mqttController.dmResetload.value = false;
+                        _mqttController.chmResetload.value = false;
                         _mqttController.isUserInteracting.value = false;
                       });
-                      log("DM Reset Pressed${_mqttController.dmResetValues.value}");
+                      log("DM Reset Pressed${_mqttController.chmResetValues.value}");
                     },
                     child: buildIconContainer(
                       context,
-                      _mqttController.dmResetload.value
+                      _mqttController.chmResetload.value
                           ? SizedBox(
                               width: 15,
                               height: 15,

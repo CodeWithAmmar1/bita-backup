@@ -3699,11 +3699,11 @@ class MqttController extends GetxController {
   RxInt chmSetpoint = 0.obs;
   RxDouble chmReturn = 0.0.obs;
   RxInt chmPower = 0.obs;
+  RxInt chmResetValues = 0.obs;
 
   RxInt chmStatusA = 0.obs;
   RxInt chmStatusB = 0.obs;
   RxBool chmStatusShow = false.obs;
-  RxInt chmResetValues = 0.obs;
 
   RxInt chmvfdMinFrequencyA = 0.obs;
   RxInt chmvfdMaxFrequencyA = 0.obs;
@@ -4457,7 +4457,7 @@ class MqttController extends GetxController {
           double.tryParse(jsonMap['return']?.toString() ?? '') ?? 0.0;
       chmPower.value =
           int.tryParse(jsonMap['powerSwitch']?.toString() ?? '') ?? 0;
-      dmResetValues.value =
+      chmResetValues.value =
           int.tryParse(jsonMap['resetValues']?.toString() ?? '') ?? 0;
       tempSelectionSwitch.value = tempSelect == 1;
       log("Updated connection List: $deviceConnections");
@@ -4467,12 +4467,12 @@ class MqttController extends GetxController {
     }
   }
 
-  //  RxBool dmResetload = false.obs;
+  RxBool chmResetload = false.obs;
   void buildJsonPayloadCHMaster() {
     Map<String, dynamic> jsonPayload = {
       "setPoint": chmSetpoint.value,
       "powerSwitch": chmPower.value,
-      "resetValues": dmResetValues.value,
+      "resetValues": chmResetValues.value,
       "tempSelect": tempSelectionSwitch.value ? 1 : 0,
     };
     String jsonString = jsonEncode(jsonPayload);
@@ -7578,6 +7578,10 @@ class MqttController extends GetxController {
       int returnTempSelection = jsonMap['returnTempSelection'] ?? 0;
       am1restartdelay.value =
           int.tryParse(jsonMap['restartdelay']?.toString() ?? '') ?? 0;
+      am1startdelay.value =
+          int.tryParse(jsonMap['startdelay']?.toString() ?? '') ?? 0;
+      am1ResetValues.value =
+          int.tryParse(jsonMap['resetsw']?.toString() ?? '') ?? 0;
       isReturnTempam1.value = returnTempSelection == 1;
       isModeSwitchAm1.value = mode == 1;
       isAutoSwitchAm1.value = autoSwitch == 1;
