@@ -355,22 +355,22 @@ class _DashboardState extends State<Dashboardam1> {
                         return const SizedBox.shrink();
                       }
                     }),
+                    const SizedBox(height: 10),
                     ResetToggle(
-                      resetload: _mqttController.am1Resetload,
-                      title: 'Reset'.tr,
-                      onTap: 
-                         () async {
-                      _mqttController.am1Resetload.value = true;
-                      _mqttController.am1ResetValues.value = 1;
-                      _mqttController.buildJsonPayloadAm1Sensor();
-                      publishTimer?.cancel();
-                      publishTimer = Timer(Duration(seconds: 5), () {
-                        _mqttController.am1Resetload.value = false;
-                        _mqttController.isUserInteracting.value = false;
-                      });
-                      log("DM Reset Pressed${_mqttController.am1ResetValues.value}");
-                   return true;}
-                    )
+                        resetload: _mqttController.am1Resetload,
+                        title: 'Reset'.tr,
+                        onTap: () async {
+                          _mqttController.am1Resetload.value = true;
+                          _mqttController.am1ResetValues.value = 1;
+                          _mqttController.buildJsonPayloadAm1Sensor();
+                          publishTimer?.cancel();
+                          publishTimer = Timer(Duration(seconds: 5), () {
+                            _mqttController.am1Resetload.value = false;
+                            _mqttController.isUserInteracting.value = false;
+                          });
+                          log("DM Reset Pressed${_mqttController.am1ResetValues.value}");
+                          return true;
+                        })
                   ],
                 ),
               ),
@@ -621,7 +621,8 @@ class ResetToggle extends StatefulWidget {
   const ResetToggle({
     super.key,
     required this.onTap,
-    required this.title, required this.resetload,
+    required this.title,
+    required this.resetload,
   });
 
   @override
@@ -655,14 +656,13 @@ class _ResetToggleState extends State<ResetToggle> {
                   color: Get.isDarkMode ? Colors.white : Colors.black,
                 ),
               ),
-           
               Container(
                 padding: EdgeInsets.symmetric(
                   vertical: Get.height * 0.03,
                   horizontal: Get.width * 0.03,
                 ),
                 decoration: BoxDecoration(
-                shape: BoxShape.circle,
+                  shape: BoxShape.circle,
                   // borderRadius: BorderRadius.circular(Get.width * 0.02),
                   color:
                       Get.isDarkMode ? ThemeColor().mode2 : ThemeColor().mode1,
@@ -670,7 +670,6 @@ class _ResetToggleState extends State<ResetToggle> {
                 child: Obx(
                   () => GestureDetector(
                     onTap: widget.onTap,
-                  
                     child: widget.resetload.value
                         ? const SizedBox(
                             width: 24,
@@ -680,12 +679,12 @@ class _ResetToggleState extends State<ResetToggle> {
                               color: Color(0xFF24C48E),
                             ),
                           )
-                        : const Icon(
-                            Icons.restart_alt_outlined,
+                        : const Icon(Icons.restart_alt_outlined,
                             size:
                                 24, // Adjust the size as needed to match your layout
-                            color: Color(0xFF24C48E)// Optional: Add a color for your icon
-                          ),
+                            color: Color(
+                                0xFF24C48E) // Optional: Add a color for your icon
+                            ),
                   ),
                 ),
               ),
