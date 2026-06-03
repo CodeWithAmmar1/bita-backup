@@ -596,14 +596,12 @@ class MqttController extends GetxController {
               log("AM1 device detected: $topiid");
               _handleMessageAm1(payload, topic);
               _handleMessageNotificationAm1(payload, topic);
-            } 
-            else if (topicSSIDvalue.value.startsWith("AM2-A")) {
+            } else if (topicSSIDvalue.value.startsWith("AM2-A")) {
               //AM2
               log("AM2 device detected: $topiid");
               _handleMessageAm2(payload, topic);
               _handleMessageNotification(payload, topic);
-            }
-             else if (topicSSIDvalue.value.startsWith("AM2-4")) {
+            } else if (topicSSIDvalue.value.startsWith("AM2-4")) {
               //AM2
               log("AM2 device detected: $topiid");
               _handleMessageAm2(payload, topic);
@@ -627,14 +625,12 @@ class MqttController extends GetxController {
               log("TEL device detected: $topiid");
               telMessageReceived(payload, topic);
               _handleHumidityMessageNotification(payload, topic);
-            }
-             else if (topicSSIDvalue.value.startsWith("DM-")) {
+            } else if (topicSSIDvalue.value.startsWith("DM-")) {
               //Dx-Master
               log("DX device detected: $topiid");
               _handleMessageDM(payload, topic);
               _handleMessageNotificationDm(payload, topic);
-            }
-             else if (topicSSIDvalue.value.startsWith("CHM-")) {
+            } else if (topicSSIDvalue.value.startsWith("CHM-")) {
               //CHM-Master
               log("DX device detected: $topiid");
               _handleMessageChm(payload, topic);
@@ -693,7 +689,7 @@ class MqttController extends GetxController {
 
             log("DX pressure config detected /sensor_config");
           }
-           // DX
+          // DX
           else if (topic == "/KRC/${topicSSIDvalue.value}/CircuitA") {
             _handleMessageDMCircuitA(payload, topic);
             log("DX pressure config detected /sensor_config");
@@ -712,14 +708,14 @@ class MqttController extends GetxController {
             _handleMessageIO(payload, topic);
             log("DX pressure config detected /sensor_config");
           } //DM-Master
-           else if (topic == "/KRC/${topicSSIDvalue.value}/CircuitA") {
+          else if (topic == "/KRC/${topicSSIDvalue.value}/CircuitA") {
             _handleMessageChmCircuitA(payload, topic);
             log("DX pressure config detected /sensor_config");
           } //CHM-Master
           else if (topic == "/KRC/${topicSSIDvalue.value}/CircuitB") {
             _handleMessageChmCircuitB(payload, topic);
             log("DX pressure config detected /sensor_config");
-          }//CHM-Master
+          } //CHM-Master
           else if (topic == "/KRC/${topicSSIDvalue.value}/SensorA") {
             _handleMessageChmSensorA(payload, topic);
             log("DX pressure config detected /sensor_config");
@@ -728,8 +724,6 @@ class MqttController extends GetxController {
             _handleMessageChmSensorB(payload, topic);
             log("DX pressure config detected /sensor_config");
           } //CHM-Master
-         
-
         } else {
           //for IP & MAC update
           if (topiid.startsWith("ZMB-")) {
@@ -3700,29 +3694,28 @@ class MqttController extends GetxController {
     publishMessagepressure(jsonString); //3
   }
 
-//chm-master 
+//chm-master
   RxDouble chmSupply = 0.0.obs;
   RxInt chmSetpoint = 0.obs;
   RxDouble chmReturn = 0.0.obs;
   RxInt chmPower = 0.obs;
 
-
   RxInt chmStatusA = 0.obs;
   RxInt chmStatusB = 0.obs;
   RxBool chmStatusShow = false.obs;
   RxInt chmResetValues = 0.obs;
-  
-  RxInt    chmvfdMinFrequencyA = 0.obs;
-  RxInt    chmvfdMaxFrequencyA = 0.obs;
-  RxInt    chmvfdDelayA = 0.obs;
-  RxInt    chmvfdMinFrequencyB = 0.obs;
-  RxInt    chmvfdMaxFrequencyB = 0.obs;
-  RxInt    chmvfdDelayB = 0.obs;
-  RxInt    chmStartA = 0.obs;
+
+  RxInt chmvfdMinFrequencyA = 0.obs;
+  RxInt chmvfdMaxFrequencyA = 0.obs;
+  RxInt chmvfdDelayA = 0.obs;
+  RxInt chmvfdMinFrequencyB = 0.obs;
+  RxInt chmvfdMaxFrequencyB = 0.obs;
+  RxInt chmvfdDelayB = 0.obs;
+  RxInt chmStartA = 0.obs;
   RxDouble chmStepSizeA = 0.0.obs;
-  RxInt    chmStartB = 0.obs;
+  RxInt chmStartB = 0.obs;
   RxDouble chmStepSizeB = 0.0.obs;
-  RxInt  chmoilswA = 0.obs;
+  RxInt chmoilswA = 0.obs;
   RxInt chmoilpsiA = 0.obs;
   RxInt chmsuctionA = 0.obs;
   RxInt chmdischargeA = 0.obs;
@@ -4479,7 +4472,6 @@ class MqttController extends GetxController {
     Map<String, dynamic> jsonPayload = {
       "setPoint": chmSetpoint.value,
       "powerSwitch": chmPower.value,
-
       "resetValues": dmResetValues.value,
       "tempSelect": tempSelectionSwitch.value ? 1 : 0,
     };
@@ -5742,16 +5734,18 @@ class MqttController extends GetxController {
   RxBool isOilPressureVisible = false.obs;
   RxBool isSuctionPressureVisible = false.obs;
   RxBool isDischargePressureVisible = false.obs;
-
+  RxBool systemSwitchAm2 = false.obs;
   RxBool isSwitchBoxVisible = false.obs;
   RxBool isSuctionSwitchVisible = false.obs;
   RxBool isDischargeSwitchVisible = false.obs;
   RxBool isAutoSwitch = false.obs;
   RxBool isModeSwitch = false.obs;
   RxBool isReturnTemp = false.obs;
-
+  RxBool systemSwitchAm2Loading = false.obs;
   RxInt am2restartdelay = 0.obs;
-
+  RxInt am2ResetValues = 0.obs;
+  RxBool am2Resetload = false.obs;
+  RxInt am2startdelay = 0.obs;
   void _handleMessageAm2(String message, topics) async {
     try {
       Map<String, dynamic> jsonMap = jsonDecode(message);
@@ -5911,6 +5905,14 @@ class MqttController extends GetxController {
     publishMessage(jsonString);
   }
 
+  Future<void> switchAm2(bool value) async {
+    systemSwitchAm2Loading.value = true;
+    systemSwitchAm2.value = value;
+    buildJsonPayloadPressure();
+    await Future.delayed(Duration(seconds: 2));
+    systemSwitchAm2Loading.value = false;
+  }
+
 //return sp
   void updateChillInlp(double value) {
     temp1sethigh.value = value.toInt();
@@ -6049,6 +6051,7 @@ class MqttController extends GetxController {
       int oilpressure = jsonMap['oilpressure'] ?? 0;
       int dispressure = jsonMap['dispressure'] ?? 0;
       int sucpressure = jsonMap['sucpressure'] ?? 0;
+      int sw = jsonMap['switch'] ?? 0;
       int oilsw = jsonMap['oilsw'] ?? 0;
       int suctionsw = jsonMap['suctionsw'] ?? 0;
       int dischargesw = jsonMap['dischargesw'] ?? 0;
@@ -6058,6 +6061,11 @@ class MqttController extends GetxController {
       int returnTempSelection = jsonMap['returnTempSelection'] ?? 0;
       am2restartdelay.value =
           int.tryParse(jsonMap['restartdelay']?.toString() ?? '') ?? 0;
+      am2startdelay.value =
+          int.tryParse(jsonMap['startdelay']?.toString() ?? '') ?? 0;
+      am2ResetValues.value =
+          int.tryParse(jsonMap['resetsw']?.toString() ?? '') ?? 0;
+      systemSwitchAm2.value = sw == 1;
       isOilPressureVisible.value = oilpressure == 1;
       isDischargePressureVisible.value = dispressure == 1;
       isSuctionPressureVisible.value = sucpressure == 1;
@@ -6140,6 +6148,9 @@ class MqttController extends GetxController {
       "mode": isModeSwitch.value ? 1 : 0,
       "returnTempSelection": isReturnTemp.value ? 1 : 0,
       "restartdelay": am2restartdelay.value,
+      "switch": systemSwitchAm2.value ? 1 : 0,
+      "startdelay": am2startdelay.value,
+      "resetsw": am2ResetValues.value,
     };
 
     String jsonString = jsonEncode(jsonPayload);
@@ -7508,6 +7519,10 @@ class MqttController extends GetxController {
       int returnTempSelection = jsonMap['returnTempSelection'] ?? 0;
       am1restartdelay.value =
           int.tryParse(jsonMap['restartdelay']?.toString() ?? '') ?? 0;
+      am1startdelay.value =
+          int.tryParse(jsonMap['startdelay']?.toString() ?? '') ?? 0;
+      am1ResetValues.value =
+          int.tryParse(jsonMap['resetsw']?.toString() ?? '') ?? 0;
       isReturnTempam1.value = returnTempSelection == 1;
       isModeSwitchAm1.value = mode == 1;
       isAutoSwitchAm1.value = autoSwitch == 1;
@@ -7607,6 +7622,8 @@ class MqttController extends GetxController {
       "mode": isModeSwitchAm1.value ? 1 : 0,
       "returnTempSelection": isReturnTempam1.value ? 1 : 0,
       "restartdelay": am1restartdelay.value,
+      "startdelay": am1startdelay.value,
+      "resetsw": am1ResetValues.value,
     };
 
     String jsonString = jsonEncode(jsonPayload);
@@ -7647,10 +7664,12 @@ class MqttController extends GetxController {
   RxBool showSuctionPressure = false.obs;
   RxBool showDischargePressure = false.obs;
   RxInt am1restartdelay = 0.obs;
+  RxInt am1startdelay = 0.obs;
+  RxInt am1ResetValues = 0.obs;
   RxBool isAutoSwitchAm1 = false.obs;
   RxBool isReturnTempam1 = false.obs;
   RxBool isModeSwitchAm1 = false.obs;
-
+  RxBool am1Resetload = false.obs;
   RxBool systemSwitchAm1 = false.obs;
   RxBool systemSwitchAm1Loading = false.obs;
   Future<void> switchAm1(bool value) async {

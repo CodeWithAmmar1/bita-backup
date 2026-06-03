@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:testappbita/Views/Device/device.dart';
+import 'package:testappbita/Views/am_1/dashboard_view.dart';
 import 'package:testappbita/Views/am_2/custom_widget/amperes/ampere_container.dart';
 import 'package:testappbita/Views/am_2/custom_widget/pressure/pressure_container.dart';
 import 'package:testappbita/Views/am_2/custom_widget/setting_screen/setting_screen.dart';
@@ -23,6 +27,7 @@ class Dashboardam2 extends StatefulWidget {
 
 late String deviceName;
 late String deviceid;
+Timer? publishTimer;
 
 class _DashboardState extends State<Dashboardam2> {
   final ThemeController themeController = Get.find<ThemeController>();
@@ -351,6 +356,36 @@ class _DashboardState extends State<Dashboardam2> {
                       SwitchPage(
                         deviceId: deviceid,
                       ),
+                      const SizedBox(height: 10),
+                      MainRestartToggle(
+                        LeftText: 'Stop'.tr,
+                        rightText: 'Start'.tr,
+                        title: 'system'.tr,
+                        value: _mqttController.systemSwitchAm2.value,
+                        onTap: () async {
+                          _mqttController.systemSwitchAm2Loading.value = true;
+                          final newValue =
+                              !_mqttController.systemSwitchAm2.value;
+                          await _mqttController.switchAm2(newValue);
+                          _mqttController.systemSwitchAm2Loading.value = false;
+                          return newValue;
+                        },
+                      ),
+                      ResetToggle(
+                          resetload: _mqttController.am2Resetload,
+                          title: 'Reset'.tr,
+                          onTap: () async {
+                            _mqttController.am2Resetload.value = true;
+                            _mqttController.am2ResetValues.value = 1;
+                            _mqttController.buildJsonPayloadPressure();
+                            publishTimer?.cancel();
+                            publishTimer = Timer(Duration(seconds: 5), () {
+                              _mqttController.am2Resetload.value = false;
+                              _mqttController.isUserInteracting.value = false;
+                            });
+                            log("DM Reset Pressed${_mqttController.am2ResetValues.value}");
+                            return true;
+                          })
                     ],
                   ),
                 ),

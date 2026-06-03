@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +11,7 @@ import 'package:testappbita/Views/am_1/custom_widget/setting/settingAm1.dart';
 import 'package:testappbita/Views/am_1/custom_widget/setting/userSettingAm1.dart';
 import 'package:testappbita/Views/am_1/custom_widget/switch_page/switch_page.dart';
 import 'package:testappbita/Views/am_1/custom_widget/temperature/temperature_container.dart';
+import 'package:testappbita/Views/aqua%20master/main_screen/mainpage.dart';
 import 'package:testappbita/Views/notification/notificaion_am1.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/controller/notification_controller/am1_notificatio_controller/am1_notificatio_controller.dart';
@@ -99,7 +103,10 @@ class _DashboardState extends State<Dashboardam1> {
                             onPressed: () {
                               Get.defaultDialog(
                                 title: 'Enter Password'.tr,
-                                content: PasswordDialog1(deviceId: deviceid, isFromDevicePage: widget.isFromDevicePage,),
+                                content: PasswordDialog1(
+                                  deviceId: deviceid,
+                                  isFromDevicePage: widget.isFromDevicePage,
+                                ),
                               );
                             },
                             icon: Icon(Icons.settings, color: Colors.black),
@@ -348,6 +355,22 @@ class _DashboardState extends State<Dashboardam1> {
                         return const SizedBox.shrink();
                       }
                     }),
+                    ResetToggle(
+                      resetload: _mqttController.am1Resetload,
+                      title: 'Reset'.tr,
+                      onTap: 
+                         () async {
+                      _mqttController.am1Resetload.value = true;
+                      _mqttController.am1ResetValues.value = 1;
+                      _mqttController.buildJsonPayloadAm1Sensor();
+                      publishTimer?.cancel();
+                      publishTimer = Timer(Duration(seconds: 5), () {
+                        _mqttController.am1Resetload.value = false;
+                        _mqttController.isUserInteracting.value = false;
+                      });
+                      log("DM Reset Pressed${_mqttController.am1ResetValues.value}");
+                   return true;}
+                    )
                   ],
                 ),
               ),
@@ -362,7 +385,8 @@ class _DashboardState extends State<Dashboardam1> {
 class PasswordDialog1 extends StatefulWidget {
   final bool isFromDevicePage;
   final String deviceId;
-  const PasswordDialog1({super.key, required this.deviceId, required this.isFromDevicePage});
+  const PasswordDialog1(
+      {super.key, required this.deviceId, required this.isFromDevicePage});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -379,7 +403,9 @@ class _PasswordDialog1State extends State<PasswordDialog1> {
   void _checkPassword() {
     if (_passwordController.text == '9753') {
       Get.back();
-      Get.to(() => SettingAm1(isFromDevicePage: widget.isFromDevicePage,));
+      Get.to(() => SettingAm1(
+            isFromDevicePage: widget.isFromDevicePage,
+          ));
     } else if (_passwordController.text == '1234' &&
         _mqttController.isModeSwitchAm1.value) {
       Get.back();
@@ -577,6 +603,90 @@ class MainRestartToggle extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ResetToggle extends StatefulWidget {
+  final Future<bool> Function()? onTap;
+  final String title;
+  final RxBool resetload;
+
+  const ResetToggle({
+    super.key,
+    required this.onTap,
+    required this.title, required this.resetload,
+  });
+
+  @override
+  State<ResetToggle> createState() => _ResetToggleState();
+}
+
+class _ResetToggleState extends State<ResetToggle> {
+  Timer? publishTimer;
+
+  @override
+  Widget build(BuildContext context) {
+    final boxWidth = Get.width * 0.97;
+    return Padding(
+      padding: EdgeInsets.all(Get.width * 0.01),
+      child: Center(
+        child: Container(
+          width: boxWidth,
+          padding: EdgeInsets.all(Get.width * 0.02),
+          decoration: BoxDecoration(
+            color:
+                Get.isDarkMode ? ThemeColor().mode2Sec : ThemeColor().mode1Sec,
+            borderRadius: BorderRadius.circular(Get.width * 0.03),
+          ),
+          child: Column(
+            children: [
+              Text(
+                widget.title,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Get.isDarkMode ? Colors.white : Colors.black,
+                ),
+              ),
+           
+              Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: Get.height * 0.03,
+                  horizontal: Get.width * 0.03,
+                ),
+                decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                  // borderRadius: BorderRadius.circular(Get.width * 0.02),
+                  color:
+                      Get.isDarkMode ? ThemeColor().mode2 : ThemeColor().mode1,
+                ),
+                child: Obx(
+                  () => GestureDetector(
+                    onTap: widget.onTap,
+                  
+                    child: widget.resetload.value
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Color(0xFF24C48E),
+                            ),
+                          )
+                        : const Icon(
+                            Icons.restart_alt_outlined,
+                            size:
+                                24, // Adjust the size as needed to match your layout
+                            color: Color(0xFF24C48E)// Optional: Add a color for your icon
+                          ),
+                  ),
                 ),
               ),
             ],

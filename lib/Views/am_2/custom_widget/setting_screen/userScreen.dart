@@ -76,6 +76,13 @@ class _OilselectionState extends State<Userscreen> {
               min: 1,
               max: 600,
             ),
+            SizedBox(height: 10),
+            AM2NumberAdjuster(
+              title: "System Start Delay",
+              value: _mqttController.am2startdelay,
+              min: 0,
+              max: 10,
+            ),
           ],
         ),
       ),
@@ -284,24 +291,6 @@ class _AM2NumberAdjusterState extends State<AM2NumberAdjuster> {
                   () => Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // ➖ Decrement Button
-                      // IconButton(
-                      //   icon: const Icon(Icons.remove_circle,
-                      //       color: Colors.red, size: 30),
-                      //   onPressed: () {
-                      //     _mqttController.isUserInteracting.value = true;
-                      //     if (widget.value.value > widget.min)
-                      //       widget.value.value--;
-
-                      //     publishTimer?.cancel();
-                      //     publishTimer = Timer(const Duration(seconds: 1), () {
-                      //       _mqttController.buildJsonPayloadPressure();
-                      //       publishTimer = Timer(const Duration(seconds: 1), () {
-                      //         _mqttController.isUserInteracting.value = false;
-                      //       });
-                      //     });
-                      //   },
-                      // ),
                       GestureDetector(
                         onLongPressStart: (_) {
                           _mqttController.isUserInteracting.value = true;
