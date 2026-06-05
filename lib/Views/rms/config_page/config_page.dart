@@ -67,12 +67,15 @@ class ConfigPage extends StatelessWidget {
                 baseColor:
                     Get.isDarkMode ? const Color(0xFF202020) : Colors.white,
                 onTap: () {
-                _mqttcontroller.isUserInteracting.value = true;
+                  publishTimer?.cancel();
+                  _mqttcontroller.isUserInteracting.value = true;
+                  publishTimer = Timer(Duration(seconds: 1), () {
+                    power.value = power.value == 1 ? 0 : 1;
+                    _mqttcontroller.buildJsonPayloadRms();
                     publishTimer = Timer(Duration(seconds: 1), () {
-                      power.value = power.value == 1 ? 0 : 1;
-                      _mqttcontroller.buildJsonPayloadRms();
                       _mqttcontroller.isUserInteracting.value = false;
                     });
+                  });
                 },
               ),
             ),

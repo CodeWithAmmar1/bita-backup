@@ -86,11 +86,15 @@ class _ConfigPageState extends State<ConfigPageSlider> {
                           ? const Color(0xFF202020)
                           : Colors.white,
                       onTap: () {
+                          publishTimer?.cancel();
                          _mqttcontroller.isUserInteracting.value = true;
                     publishTimer = Timer(Duration(seconds: 1), () {
                       widget.power.value = widget.power.value == 1 ? 0 : 1;
                       _mqttcontroller.buildJsonPayloadRms();
-                      _mqttcontroller.isUserInteracting.value = false;
+                      publishTimer = Timer(Duration(seconds: 1), () {
+                                  _mqttcontroller.isUserInteracting.value =
+                                      false;
+                                });
                     });
                       },
                     ),
@@ -218,12 +222,12 @@ class SimpleSunkenButton extends StatefulWidget {
   final Color baseColor; // e.g., Colors.black or Colors.white
 
   const SimpleSunkenButton({
-    Key? key,
+    super.key,
     required this.isOn,
     required this.onTap,
     this.size = 120,
     this.baseColor = Colors.black87,
-  }) : super(key: key);
+  });
 
   @override
   State<SimpleSunkenButton> createState() => _SimpleSunkenButtonState();
