@@ -357,19 +357,21 @@ class _DashboardState extends State<Dashboardam2> {
                         deviceId: deviceid,
                       ),
                       const SizedBox(height: 10),
-                      MainRestartToggle(
-                        LeftText: 'Stop'.tr,
-                        rightText: 'Start'.tr,
-                        title: 'system'.tr,
-                        value: _mqttController.systemSwitchAm2.value,
-                        onTap: () async {
-                          _mqttController.systemSwitchAm2Loading.value = true;
-                          final newValue =
-                              !_mqttController.systemSwitchAm2.value;
-                          await _mqttController.switchAm2(newValue);
-                          _mqttController.systemSwitchAm2Loading.value = false;
-                          return newValue;
-                        },
+                      Obx(
+                        ()=> MainRestartToggle(
+                          LeftText: 'Stop'.tr,
+                          rightText: 'Start'.tr,
+                          title: 'system'.tr,
+                          value: _mqttController.systemSwitchAm2.value,
+                          onTap: () async {
+                            _mqttController.systemSwitchAm2Loading.value = true;
+                            final newValue =
+                                !_mqttController.systemSwitchAm2.value;
+                            await _mqttController.switchAm2(newValue);
+                            _mqttController.systemSwitchAm2Loading.value = false;
+                            return newValue;
+                          },
+                        ),
                       ),
                       const SizedBox(height: 10),
                       ResetToggle(

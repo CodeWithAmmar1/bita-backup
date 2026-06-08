@@ -5,6 +5,7 @@ import 'package:testappbita/Views/rms/config_page_slider/config_page_slider.dart
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
+// ignore: must_be_immutable
 class ConfigPage extends StatelessWidget {
   final RxInt power;
   final String title;
