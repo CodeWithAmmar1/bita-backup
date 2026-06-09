@@ -19,7 +19,17 @@ import 'package:testappbita/controller/notification_controller/dm_notification_c
 import 'package:testappbita/utils/theme/theme.dart';
 
 class MainScreenDxMaster extends StatefulWidget {
-  const MainScreenDxMaster({super.key});
+  final String val1A;
+   final String val2A;
+     final String val1B;
+   final String val2B;
+   final String mainhead;
+  final String lefthead;
+  final String righthead;
+  final String title;
+    final String lefttitle;
+  final String righttitle; final bool permission;
+  const MainScreenDxMaster({super.key, required this.title, required this.lefttitle, required this.righttitle, required this.val1A, required this.val2A, required this.val1B, required this.val2B, required this.mainhead, required this.lefthead, required this.righthead, required this.permission});
   @override
   State<MainScreenDxMaster> createState() => _MainScreenDxMasterState();
 }
@@ -101,6 +111,10 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
                               title: 'Enter Password'.tr,
                               content: PasswordDialog1(
                                 deviceId: deviceid,
+                                mainhead: widget.mainhead,
+                                lefthead: widget.lefthead,
+                                righthead: widget.righthead,
+                                permission: widget.permission,
                               ),
                             );
                           },
@@ -177,7 +191,7 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
                                 !_mqttController.dmStatusShow.value;
                           },
                           child: Text(
-                            "DX-MASTER",
+                            widget.title,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -507,7 +521,8 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
                       ),
                     ),
                   ),
-                  Chw(deviceid: deviceid),
+                  Chw(lefttitle: widget.lefttitle,righttitle: widget.righttitle
+                    ,deviceid: deviceid),
                   Obx(
                     () => GestureDetector(
                       behavior: HitTestBehavior.opaque,
@@ -528,7 +543,9 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
                                         .circuitAenable.value &&
                                     !_mqttController.dmStatusShow.value)
                                 ? Center(
-                                    child: Circuit(
+                                    child: Circuit(val1:widget. val1A,
+                                    val2: widget.val2A,
+                                    
                                     deviceid: deviceid,
                                   ))
                                 : (!_mqttController.circuitBenable.value &&
@@ -545,12 +562,15 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
                                           ),
                                         ),
                                       )
-                                    : Circuit2(
+                                    : Circuit2(    val1: widget.val1B,
+                                    val2: widget.val2B,
                                         deviceid: deviceid,
                                       ),
                             backWidget: (_mqttController.circuitBenable.value &&
                                     _mqttController.dmStatusShow.value)
                                 ? Circuit2(
+                                    val1: widget.val1B,
+                                    val2: widget.val2B,
                                     deviceid: deviceid,
                                   )
                                 : (!_mqttController.circuitBenable.value &&
@@ -569,6 +589,8 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
                                       )
                                     : Center(
                                         child: Circuit(
+                                          val1:widget. val1A,
+                                    val2: widget.val2A,
                                         deviceid: deviceid,
                                       ))),
                       ),
@@ -682,12 +704,16 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
   Widget buildBackWidget() {
     if (_mqttController.circuitBenable.value &&
         _mqttController.dmStatusShow.value) {
-      return Center(child: Circuit2(deviceid: deviceid));
+      return Center(child: Circuit2(deviceid: deviceid,
+      val1: widget.val1B,
+      val2: widget.val2B,));
     }
 
     if (_mqttController.circuitAenable.value &&
         !_mqttController.dmStatusShow.value) {
-      return Center(child: Circuit(deviceid: deviceid));
+      return Center(child: Circuit(deviceid: deviceid,
+      val1: widget.val1A,
+      val2: widget.val2A,));
     }
 
     return const Center(
@@ -707,12 +733,15 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
   Widget buildFrontWidget() {
     if (_mqttController.circuitAenable.value &&
         !_mqttController.dmStatusShow.value) {
-      return Center(child: Circuit(deviceid: deviceid));
+      return Center(child: Circuit(deviceid: deviceid,
+      val1: widget.val1A,
+      val2: widget.val2A,));
     }
 
     if (_mqttController.circuitBenable.value &&
         _mqttController.dmStatusShow.value) {
-      return Center(child: Circuit2(deviceid: deviceid));
+      return Center(child: Circuit2(deviceid: deviceid
+      ,val1: widget.val1B, val2: widget.val2B,));
     }
 
     return const Center(
@@ -732,7 +761,10 @@ class _MainScreenDxMasterState extends State<MainScreenDxMaster> {
 
 class PasswordDialog1 extends StatefulWidget {
   final String deviceId;
-  const PasswordDialog1({super.key, required this.deviceId});
+   final String mainhead;
+  final String lefthead;
+  final String righthead; final bool permission;
+  const PasswordDialog1({super.key, required this.deviceId, required this.mainhead, required this.lefthead, required this.righthead, required this.permission});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -740,6 +772,8 @@ class PasswordDialog1 extends StatefulWidget {
 }
 
 class _PasswordDialog1State extends State<PasswordDialog1> {
+   
+
   final TextEditingController _passwordController = TextEditingController();
   String errorText = '';
   bool _obscureText = true;
@@ -750,7 +784,7 @@ class _PasswordDialog1State extends State<PasswordDialog1> {
       Get.to(() => Setting());
     } else if (_passwordController.text == '1234') {
       Get.back();
-      Get.to(() => UserSetting());
+      Get.to(() => UserSetting( permission:widget.permission ,   mainhead: widget.mainhead, lefthead: widget.lefthead, righthead: widget.righthead));
     } else {
       setState(() {
         errorText = 'Incorrect password';

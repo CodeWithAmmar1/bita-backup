@@ -5,8 +5,14 @@ import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class Chw extends StatelessWidget {
+  final String lefttitle;
+  final String righttitle;
   final String deviceid;
-  Chw({super.key, required this.deviceid});
+  Chw(
+      {super.key,
+      required this.deviceid,
+      required this.lefttitle,
+      required this.righttitle});
   final MqttController _mqttController = Get.find<MqttController>();
   @override
   Widget build(BuildContext context) {
@@ -41,7 +47,8 @@ class Chw extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Supply",
+                          lefttitle,
+                          // "Supply",
                           style: TextStyle(
                             color: Get.isDarkMode ? Colors.white : Colors.black,
                             fontWeight: FontWeight.bold,
@@ -123,7 +130,7 @@ class Chw extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Return",
+                      righttitle, // "Return",
                       style: TextStyle(
                         color: Get.isDarkMode ? Colors.white : Colors.black,
                         fontWeight: FontWeight.bold,

@@ -632,8 +632,10 @@ class MqttController extends GetxController {
               _handleMessageNotificationDm(payload, topic);
             } else if (topicSSIDvalue.value.startsWith("CHM-")) {
               //CHM-Master
-              log("DX device detected: $topiid");
-              _handleMessageChm(payload, topic);
+              log("CHM device detected: $topiid");
+               _handleMessageDM(payload, topic);
+              _handleMessageNotificationDm(payload, topic);
+              // _handleMessageChm(payload, topic);
               // _handleMessageNotificationDm(payload, topic);
             }
           } else if (topic ==
@@ -3700,6 +3702,10 @@ class MqttController extends GetxController {
   RxDouble chmReturn = 0.0.obs;
   RxInt chmPower = 0.obs;
   RxInt chmResetValues = 0.obs;
+  //chm main page circuit A
+   RxDouble chmSuctionTempA = 0.0.obs;
+   //chm setpoint circuit A
+     RxInt chmsucTempspA = 0.obs;
 
   RxInt chmStatusA = 0.obs;
   RxInt chmStatusB = 0.obs;
@@ -3735,7 +3741,7 @@ class MqttController extends GetxController {
   RxInt chmexvCurrentStepA = 0.obs;
   RxInt chmexvMaxStepA = 0.obs;
   RxInt chmexvStepDelayA = 0.obs;
-  RxDouble chmSuctionTempA = 0.0.obs;
+ 
   RxInt chmSuctionPressureA = 0.obs;
   //Azam chm
 
@@ -3792,7 +3798,7 @@ class MqttController extends GetxController {
   RxInt chmsucPressurespA = 0.obs;
   RxInt chmamperespA = 0.obs;
   RxInt chmdisPressurespA = 0.obs;
-  RxInt chmsucTempspA = 0.obs;
+
   RxInt chmdisTempspA = 0.obs;
   RxInt chmlowSprayTempspA = 0.obs;
 
@@ -4081,7 +4087,8 @@ class MqttController extends GetxController {
       int ampSpA = int.tryParse(jsonMap['ampSpA'].toString()) ?? 0;
       int dischargePressureA =
           int.tryParse(jsonMap['DisPsiSpA'].toString()) ?? 0;
-      int suctionTempA = int.tryParse(jsonMap['SucTempSpA'].toString()) ?? 0;
+          //chm circuit A setpoints
+      chmsucTempspA.value = int.tryParse(jsonMap['SucTempSpA'].toString()) ?? 0;
       int dischargeTempA = int.tryParse(jsonMap['DisTempSpA'].toString()) ?? 0;
       int lowSprayA = int.tryParse(jsonMap['SprayTempSpA'].toString()) ?? 0;
       int superheatA = int.tryParse(jsonMap['superheatspA'].toString()) ?? 0;
@@ -4112,7 +4119,8 @@ class MqttController extends GetxController {
       //pressure sensor
       dmOilPressureA.value =
           int.tryParse(jsonMap['oilPsiA']?.toString() ?? '') ?? 0;
-      dmSuctionTempA.value = double.tryParse(jsonMap['SucTempA']) ?? 0.0;
+          //chm circuit A
+      chmSuctionTempA.value = double.tryParse(jsonMap['SucTempA']) ?? 0.0;
       dmSuctionPressureA.value =
           int.tryParse(jsonMap['SucPsiA']?.toString() ?? '') ?? 0;
       dmdischargeTempA.value =
@@ -4176,7 +4184,8 @@ class MqttController extends GetxController {
       amperespA.value = ampSpA;
       sucPressurespA.value = suctionPressureA;
       disPressurespA.value = dischargePressureA;
-      sucTempspA.value = suctionTempA;
+   
+      
       disTempspA.value = dischargeTempA;
       lowSprayTempspA.value = lowSprayA;
       superHeatspA.value = superheatA;
@@ -4194,7 +4203,67 @@ class MqttController extends GetxController {
     } catch (e) {
       log("Error parsing JSON: DM $e");
     }
+
   }
+
+    void buildJsonPayloadCHMCiruitA(){
+    Map<String, dynamic> jsonPayload = {
+      //gas
+      "gasA": gasA.value,
+      //EXV Settings
+      "exvMstepA": exvMaxStepA.value,
+      "ampSpA": amperespA.value,
+      "exvStepDA": exvStepDelayA.value,
+      "ExvselA": selectedEXVModeA.value,
+      "PidIA": integralspA.value,
+      "PidDA": derivativespA.value,
+      "PidPA": propostionalspA.value,
+      "minA": minValueA.value,
+      "maxA": maxValueA.value,
+      "modeA": exvPosiSwA.value ? 1 : 0,
+      "fan1EA": fan1and2ASwitch.value ? 1 : 0,
+      "fan3EA": fan3and4ASwitch.value ? 1 : 0,
+      "fan5EA": fan5and6ASwitch.value ? 1 : 0,
+      //chm setpoints A
+      "oilPsiSpA": oilPressurespA.value,
+      "SucPsiSpA": sucPressurespA.value,
+      "DisPsiSpA": disPressurespA.value,
+      "SucTempSpA": chmsucTempspA.value,
+      "DisTempSpA": disTempspA.value,
+      "SprayTempSpA": lowSprayTempspA.value,
+      "superheatspA": superHeatspA.value,
+      "disPreTypeA": disPressureTypeA.value,
+      "disPreRangeA": disPressureRangeA.value,
+      "disPreUnitA": disPressureUnitA.value ? 1 : 0,
+      "disoffsetA": dischargeOffsetA.value,
+      "sucPreTypeA": sucPressureTypeA.value,
+      "sucPreRangeA": sucPressureRangeA.value,
+      "sucPreUnitA": sucPressureUnitA.value ? 1 : 0,
+      "sucoffsetA": suctionOffsetA.value,
+      "oilPreTypeA": oilPressureTypeA.value,
+      "oilPreRangeA": oilPressureRangeA.value,
+      "oilPreUnitA": oilPressureUnitA.value ? 1 : 0,
+      "oiloffsetA": oilOffsetA.value,
+      "driveA": selectedModeA.value,
+      "vfdMinFreA": vfdMinFrequencyA.value,
+      "vfdMaxFreA": vfdMaxFrequencyA.value,
+      "vfdDelayA": vfdDelayA.value,
+      "enableA": circuitAenable.value ? 1 : 0,
+      "leadlagA": leadlagASwitch.value ? 1 : 0,
+      "startdelayA": dmStartA.value,
+      "stepsizeA": dmStepSizeA.value,
+      "fan1HA": fan1and2HighALimit.value,
+      "fan3HA": fan3and4HighALimit.value,
+      "fan5HA": fan5and6HighALimit.value,
+      "fan1LA": fan1and2LowALimit.value,
+      "fan3LA": fan3and4LowALimit.value,
+      "fan5LA": fan5and6LowALimit.value,
+    };
+    String jsonString = jsonEncode(jsonPayload);
+    publishMessageSensor(jsonString); //2
+  }
+
+ 
 
   void _handleMessageChmSensorA(String message, topics) async {
     try {

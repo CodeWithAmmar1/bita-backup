@@ -8,7 +8,17 @@ import 'package:testappbita/utils/button/custom_toggle.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class UserSetting extends StatelessWidget {
-  UserSetting({super.key});
+  final String mainhead;
+  final String lefthead;
+  final String righthead;
+  final bool permission;
+
+  UserSetting(
+      {super.key,
+      required this.mainhead,
+      required this.lefthead,
+      required this.righthead,
+      required this.permission});
   final MqttController _mqttController = Get.find<MqttController>();
 
   @override
@@ -48,27 +58,31 @@ class UserSetting extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
-              Obx(
-                () => CustomToggle(
-                  title: 'Circuit B'.tr,
-                  value: _mqttController.circuitBenable.value,
-                  onTap: () async {
-                    _mqttController.circuitBLoading.value = true;
-                    final newValue = !_mqttController.circuitBenable.value;
-                    await _mqttController.enableCircuitB(newValue);
-                    _mqttController.circuitBLoading.value = false;
-                    return newValue;
-                  },
+              if (permission)
+                Obx(
+                  () => CustomToggle(
+                    title: 'Circuit B'.tr,
+                    value: _mqttController.circuitBenable.value,
+                    onTap: () async {
+                      _mqttController.circuitBLoading.value = true;
+                      final newValue = !_mqttController.circuitBenable.value;
+                      await _mqttController.enableCircuitB(newValue);
+                      _mqttController.circuitBLoading.value = false;
+                      return newValue;
+                    },
+                  ),
                 ),
-              ),
               SizedBox(
                 height: 20,
               ),
               Obx(
                 () => RestartToggleDX(
-                  leftText: ' Temp \nSensor'.tr,
-                  rightText: 'Beca'.tr,
-                  title: 'Return Temp Selection'.tr,
+                  // leftText: ' Temp \nSensor'.tr,
+                  // rightText: 'Beca'.tr,
+                  // title: 'Return Temp Selection'.tr,
+                  title: mainhead,
+                  leftText: lefthead,
+                  rightText: righthead,
                   value: _mqttController.tempSelectionSwitch.value,
                   onTap: () async {
                     _mqttController.tempselectionSwLoading.value = true;

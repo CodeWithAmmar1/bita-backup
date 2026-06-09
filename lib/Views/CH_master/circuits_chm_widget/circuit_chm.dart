@@ -82,16 +82,16 @@ class Circuitchm extends StatelessWidget {
                                 () => Text(
                                   _mqttController.deviceConnections[deviceid] ??
                                           false
-                                      ? "${_mqttController.dmSuctionTempA.value}°C"
+                                      ? "${_mqttController.chmSuctionTempA.value}°C"
                                       : "--°C",
                                   style: TextStyle(
                                     fontSize: 14,
                                     color:
-                                        (_mqttController.dmSuctionTempA.value <
+                                        (_mqttController.chmSuctionTempA.value <
                                                     _mqttController
-                                                        .sucTempspA.value ||
+                                                        .chmsucTempspA.value ||
                                                 _mqttController
-                                                        .dmSuctionTempA.value ==
+                                                        .chmSuctionTempA.value ==
                                                     888.0)
                                             ? Colors.redAccent
                                             : Get.isDarkMode

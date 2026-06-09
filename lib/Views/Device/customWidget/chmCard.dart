@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:testappbita/Views/CH_master/main_screen_Chm_master.dart';
+import 'package:testappbita/Views/DX_master/main_screen_DX_master.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/model/user_device_model.dart';
 import 'package:testappbita/services/firebase_service.dart';
@@ -36,10 +37,24 @@ class Chmcard extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () {
-              Get.to(() =>   MainScreenChmMaster(), arguments: {
-                "name": "${device.deviceName}",
-                "id": "${device.deviceId}"
-              });
+              Get.to(
+                  () => MainScreenDxMaster(
+                    permission: false,
+                        lefthead: "Super heat",
+                        mainhead: "EXV Selection",
+                        righthead: "Suc PSI",
+                        val1A: "Oil",
+                        val2A: "Ambiant",
+                        val1B: "Oil",
+                        val2B: "Ambiant",
+                        lefttitle: "Entering",
+                        righttitle: "Leaving",
+                        title: "CH-MASTER",
+                      ), // MainScreenChmMaster(),
+                  arguments: {
+                    "name": "${device.deviceName}",
+                    "id": "${device.deviceId}"
+                  });
               _mqttcontroller.updatetopicSSIDvalue(device.deviceId ?? "");
             },
             onLongPress: () {
@@ -91,15 +106,15 @@ class Chmcard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 5, top: 5),
                         child: Container(
-                          width: 40, 
+                          width: 40,
                           height: 40,
                           decoration: BoxDecoration(
                             color: Colors.blue.shade100,
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.blue, 
-                                blurRadius: 10, 
+                                color: Colors.blue,
+                                blurRadius: 10,
                                 spreadRadius: 2,
                               ),
                             ],

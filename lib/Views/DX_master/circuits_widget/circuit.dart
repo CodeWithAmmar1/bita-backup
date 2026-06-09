@@ -4,8 +4,10 @@ import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class Circuit extends StatelessWidget {
+  final String val1;
+   final String val2;
   final String deviceid;
-  Circuit({super.key, required this.deviceid});
+  Circuit({super.key, required this.deviceid, required this.val1, required this.val2});
   final MqttController _mqttController = Get.find<MqttController>();
 
   @override
@@ -278,7 +280,8 @@ class Circuit extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Sub Cooling",
+                                val1,
+                                // "Sub Cooling",
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Get.isDarkMode
@@ -374,7 +377,8 @@ class Circuit extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Spray",
+                                val2,
+                                // "Spray",
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Get.isDarkMode

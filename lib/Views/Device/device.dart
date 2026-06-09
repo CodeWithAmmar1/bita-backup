@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:testappbita/Views/CH_master/main_screen_Chm_master.dart';
 import 'package:testappbita/Views/Device/customWidget/am1Card.dart';
 import 'package:testappbita/Views/Device/customWidget/am2444Card.dart';
 import 'package:testappbita/Views/Device/customWidget/am2Card.dart';
@@ -72,12 +73,17 @@ class DevicesPageState extends State<DevicesPage> {
         appBar: AppBar(
           title: FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text(
-              'home_pages'.tr,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: isDarkMode ? Colors.white : Colors.black,
+            child: GestureDetector(
+              onTap: () {
+               Get.to(() => MainScreenChmMaster());
+              },
+              child: Text(
+                'home_pages'.tr,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: isDarkMode ? Colors.white : Colors.black,
+                ),
               ),
             ),
           ),
