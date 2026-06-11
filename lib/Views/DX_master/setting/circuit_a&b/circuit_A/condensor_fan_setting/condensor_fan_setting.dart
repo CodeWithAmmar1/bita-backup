@@ -6,7 +6,8 @@ import 'package:testappbita/utils/button/custom_toggle.dart' show CustomToggle;
 import 'package:testappbita/utils/theme/theme.dart';
 
 class CondensorFanSetting extends StatefulWidget {
-  const CondensorFanSetting({super.key});
+  final bool permission;
+  const CondensorFanSetting({super.key, required this.permission});
 
   @override
   State<CondensorFanSetting> createState() => _SystemSetpointState();
@@ -40,7 +41,7 @@ class _SystemSetpointState extends State<CondensorFanSetting> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  height: 170,
+                  height: widget.permission ? 170 : 50,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -79,7 +80,7 @@ class _SystemSetpointState extends State<CondensorFanSetting> {
                                         true;
                                     final newValue =
                                         !_mqttController.fan1and2ASwitch.value;
-                                    await _mqttController.fan1and2A(newValue);
+                                    await _mqttController.fan1and2A(newValue,permission: widget.permission);
                                     _mqttController.fan1and2ASwLoading.value =
                                         false;
                                     return newValue;
@@ -90,113 +91,116 @@ class _SystemSetpointState extends State<CondensorFanSetting> {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 10, right: 10, bottom: 10, top: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(() => FanaSetpoint(
-                                    title: "Fan 1&2 high Limit",
-                                    initialvalue:
-                                        _mqttController.fan1and2HighALimit,
-                                    min: 80,
-                                    max: 350));
-                              },
-                              child: Container(
-                                height: 100,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                    color: Get.isDarkMode
-                                        ? ThemeColor().mode2
-                                        : ThemeColor().mode1,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    border:
-                                        Border.all(color: ThemeColor().actual)),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "High Limit",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Get.isDarkMode
-                                              ? Colors.white
-                                              : Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Obx(
-                                      () => Text(
-                                        "${_mqttController.fan1and2HighALimit.value}",
+                      if (widget.permission)
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 10, bottom: 10, top: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(() => FanaSetpoint(permission: widget.permission,
+
+                                      title: "Fan 1&2 high Limit",
+                                      initialvalue:
+                                          _mqttController.fan1and2HighALimit,
+                                      min: 80,
+                                      max: 350));
+                                },
+                                child: Container(
+                                  height: 100,
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                      color: Get.isDarkMode
+                                          ? ThemeColor().mode2
+                                          : ThemeColor().mode1,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      border: Border.all(
+                                          color: ThemeColor().actual)),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "High Limit",
                                         style: TextStyle(
-                                          fontFamily: 'DS-Digital',
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold,
-                                          color: Get.isDarkMode
-                                              ? Colors.white
-                                              : Colors.black,
-                                        ),
+                                            fontSize: 16,
+                                            color: Get.isDarkMode
+                                                ? Colors.white
+                                                : Colors.black,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                    )
-                                  ],
+                                      Obx(
+                                        () => Text(
+                                          "${_mqttController.fan1and2HighALimit.value}",
+                                          style: TextStyle(
+                                            fontFamily: 'DS-Digital',
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                            color: Get.isDarkMode
+                                                ? Colors.white
+                                                : Colors.black,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(() => FanaSetpoint(
-                                    title: "Fan 1&2 Low Limit",
-                                    initialvalue:
-                                        _mqttController.fan1and2LowALimit,
-                                    min: 60,
-                                    max: 250));
-                              },
-                              child: Container(
-                                height: 100,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                    color: Get.isDarkMode
-                                        ? ThemeColor().mode2
-                                        : ThemeColor().mode1,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    border:
-                                        Border.all(color: ThemeColor().actual)),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Low Limit",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Get.isDarkMode
-                                              ? Colors.white
-                                              : Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Obx(
-                                      () => Text(
-                                        "${_mqttController.fan1and2LowALimit.value}",
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(() => FanaSetpoint(permission: widget.permission,
+
+                                      title: "Fan 1&2 Low Limit",
+                                      initialvalue:
+                                          _mqttController.fan1and2LowALimit,
+                                      min: 60,
+                                      max: 250));
+                                },
+                                child: Container(
+                                  height: 100,
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                      color: Get.isDarkMode
+                                          ? ThemeColor().mode2
+                                          : ThemeColor().mode1,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      border: Border.all(
+                                          color: ThemeColor().actual)),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Low Limit",
                                         style: TextStyle(
-                                          fontFamily: 'DS-Digital',
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold,
-                                          color: Get.isDarkMode
-                                              ? Colors.white
-                                              : Colors.black,
-                                        ),
+                                            fontSize: 16,
+                                            color: Get.isDarkMode
+                                                ? Colors.white
+                                                : Colors.black,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                    )
-                                  ],
+                                      Obx(
+                                        () => Text(
+                                          "${_mqttController.fan1and2LowALimit.value}",
+                                          style: TextStyle(
+                                            fontFamily: 'DS-Digital',
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                            color: Get.isDarkMode
+                                                ? Colors.white
+                                                : Colors.black,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
+                              )
+                            ],
+                          ),
+                        )
                     ],
                   ),
                 ),
@@ -204,7 +208,7 @@ class _SystemSetpointState extends State<CondensorFanSetting> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  height: 170,
+                  height: widget.permission ? 170 : 50,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -243,7 +247,7 @@ class _SystemSetpointState extends State<CondensorFanSetting> {
                                         true;
                                     final newValue =
                                         !_mqttController.fan3and4ASwitch.value;
-                                    await _mqttController.fan3and4A(newValue);
+                                    await _mqttController.fan3and4A(newValue,permission: widget.permission);
                                     _mqttController.fan3and4ASwLoading.value =
                                         false;
                                     return newValue;
@@ -254,6 +258,7 @@ class _SystemSetpointState extends State<CondensorFanSetting> {
                           ],
                         ),
                       ),
+                        if (widget.permission)
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, bottom: 10, top: 10),
@@ -263,6 +268,7 @@ class _SystemSetpointState extends State<CondensorFanSetting> {
                             GestureDetector(
                               onTap: () {
                                 Get.to(() => FanaSetpoint(
+                                  permission: widget.permission,
                                     title: "Fan 3&4 high Limit",
                                     initialvalue:
                                         _mqttController.fan3and4HighALimit,
@@ -311,7 +317,8 @@ class _SystemSetpointState extends State<CondensorFanSetting> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => FanaSetpoint(
+                                Get.to(() => FanaSetpoint(permission: widget.permission,
+
                                     title: "Fan 3&4 Low Limit",
                                     initialvalue:
                                         _mqttController.fan3and4LowALimit,
@@ -368,7 +375,7 @@ class _SystemSetpointState extends State<CondensorFanSetting> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  height: 170,
+                           height: widget.permission? 170:50,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -407,7 +414,7 @@ class _SystemSetpointState extends State<CondensorFanSetting> {
                                         true;
                                     final newValue =
                                         !_mqttController.fan5and6ASwitch.value;
-                                    await _mqttController.fan5and6A(newValue);
+                                    await _mqttController.fan5and6A(newValue,permission: widget.permission);
                                     _mqttController.fan5and6ASwLoading.value =
                                         false;
                                     return newValue;
@@ -418,6 +425,7 @@ class _SystemSetpointState extends State<CondensorFanSetting> {
                           ],
                         ),
                       ),
+                        if (widget.permission)
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 10, right: 10, bottom: 10, top: 10),
@@ -426,7 +434,8 @@ class _SystemSetpointState extends State<CondensorFanSetting> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => FanaSetpoint(
+                                Get.to(() => FanaSetpoint(permission: widget.permission,
+
                                     title: "Fan 5&6 high Limit",
                                     initialvalue:
                                         _mqttController.fan5and6HighALimit,
@@ -475,7 +484,8 @@ class _SystemSetpointState extends State<CondensorFanSetting> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => FanaSetpoint(
+                                Get.to(() => FanaSetpoint(permission: widget.permission,
+
                                     title: "Fan 5&6 Low Limit",
                                     initialvalue:
                                         _mqttController.fan5and6LowALimit,

@@ -6,6 +6,7 @@ import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class PressureSelectiondx extends StatefulWidget {
+  final bool permission1;
   final bool permission;
   final String title;
   final RxBool pressureUnit;
@@ -19,7 +20,7 @@ class PressureSelectiondx extends StatefulWidget {
       required this.pressureType,
       required this.pressureRange,
       required this.offset,
-      required this.permission});
+      required this.permission, required this.permission1});
 
   @override
   State<PressureSelectiondx> createState() => _PressureselectionState();
@@ -286,7 +287,11 @@ class _PressureselectionState extends State<PressureSelectiondx> {
                             publishTimer?.cancel();
                             publishTimer = Timer(Duration(seconds: 1), () {
                               if (widget.permission) {
+                                 if (widget.permission1) {
                                 _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                               } else {
                                 _mqttController.buildJsonPayloadCiruitB();
                               }
@@ -325,7 +330,11 @@ class _PressureselectionState extends State<PressureSelectiondx> {
                             publishTimer?.cancel();
                             publishTimer = Timer(Duration(seconds: 1), () {
                               if (widget.permission) {
+                                if (widget.permission1) {
                                 _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                               } else {
                                 _mqttController.buildJsonPayloadCiruitB();
                               }
@@ -440,7 +449,11 @@ class _PressureselectionState extends State<PressureSelectiondx> {
 
                     // Build MQTT message or update UI
                     if (widget.permission) {
-                      _mqttController.buildJsonPayloadCiruitA();
+                      if (widget.permission1) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                     } else {
                       _mqttController.buildJsonPayloadCiruitB();
                     }
@@ -486,7 +499,11 @@ class _PressureselectionState extends State<PressureSelectiondx> {
                 log('Selected: $param ($paramValue)');
               }
               if (widget.permission) {
-                _mqttController.buildJsonPayloadCiruitA();
+                if (widget.permission1) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
               } else {
                 _mqttController.buildJsonPayloadCiruitB();
               }
@@ -540,7 +557,11 @@ class _PressureselectionState extends State<PressureSelectiondx> {
                 publishTimer?.cancel();
                 publishTimer = Timer(Duration(seconds: 1), () {
                   if (widget.permission) {
-                    _mqttController.buildJsonPayloadCiruitA();
+                    if (widget.permission1) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                   } else {
                     _mqttController.buildJsonPayloadCiruitB();
                   }

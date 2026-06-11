@@ -6,7 +6,20 @@ import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class Setting extends StatefulWidget {
-  const Setting({super.key});
+  final String sub;
+  final String sup;
+  final String ret;
+  final String val1A;
+  final bool permission;
+  final String exvtitle;
+  final String exvleft;
+  final String exvright;
+  const Setting(
+      {super.key,
+      required this.permission,
+      required this.exvtitle,
+      required this.exvleft,
+      required this.exvright, required this.val1A, required this.sub, required this.sup, required this.ret});
 
   @override
   State<Setting> createState() => _SettingState();
@@ -46,7 +59,16 @@ class _SettingState extends State<Setting> {
                     onTap: isDisabled
                         ? null
                         : () {
-                            Get.to(() => const CircuitA());
+                            Get.to(() => CircuitA(
+                                  sub: widget.sub,
+                                  sup: widget.sup,
+                                  ret: widget.ret,
+                               val1A: widget.val1A,
+                                  permission: widget.permission,
+                                  exvtitle: widget.exvtitle,
+                                  exvleft: widget.exvleft,
+                                  exvright: widget.exvright,
+                                ));
                           },
                     child: ListTile(
                       leading: Icon(
@@ -73,7 +95,11 @@ class _SettingState extends State<Setting> {
                     onTap: isDisabled
                         ? null
                         : () {
-                            Get.to(() => const CircuitB());
+                            Get.to(() =>  CircuitB(
+                                  exvtitle: widget.exvtitle ,
+                                  exvleft: widget.exvleft,
+                                  exvright: widget.exvright,
+                                ));
                           },
                     child: ListTile(
                       leading: Icon(

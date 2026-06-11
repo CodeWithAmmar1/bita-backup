@@ -4,10 +4,10 @@ import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/gas_se
 import 'package:testappbita/controller/sensor_switch_controller/sensor_switch_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
-class Gasdx extends StatefulWidget {
+class Gasdx extends StatefulWidget { final bool permission;
   final bool permissiongas;
   final RxInt gas;
-  const Gasdx({super.key, required this.gas, required this.permissiongas});
+  const Gasdx({super.key, required this.gas, required this.permissiongas, required this.permission});
 
   @override
   State<Gasdx> createState() => _SettingPageState();
@@ -39,7 +39,7 @@ class _SettingPageState extends State<Gasdx> {
               SizedBox(height: 10),
               GestureDetector(
                 onTap: () {
-                  gasSheet(context, widget.gas, widget.permissiongas);
+                  gasSheet(context, widget.gas, widget.permissiongas,widget.permission);
                 },
                 child: ListTile(
                   leading: Icon(

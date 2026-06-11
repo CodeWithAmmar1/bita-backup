@@ -10,7 +10,7 @@ class ExvSteps extends StatefulWidget {
   final RxInt exvmaxstep;
   final bool permissionExv;
 
-  ExvSteps(
+  const ExvSteps(
       {super.key,
       required this.exvcurrentStep,
       required this.exvstepDelay,

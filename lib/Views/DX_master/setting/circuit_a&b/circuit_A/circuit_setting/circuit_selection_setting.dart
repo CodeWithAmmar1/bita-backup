@@ -6,7 +6,8 @@ import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class CircuitSelectionSetting extends StatelessWidget {
-  CircuitSelectionSetting({super.key});
+  final bool permission;
+  CircuitSelectionSetting({super.key, required this.permission});
   final MqttController _mqttController = Get.find<MqttController>();
 
   @override
@@ -28,7 +29,9 @@ class CircuitSelectionSetting extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+              if (permission)
             SizedBox(height: 20),
+              if (permission)
             Obx(
               () => RestartToggleDX(
                 leftText: 'Lead'.tr,
@@ -47,7 +50,7 @@ class CircuitSelectionSetting extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            DxNumberAdj(
+            DxNumberAdj(permission: permission,
               unit: "Sec",
               title: "Start Delay",
               value: _mqttController.dmStartA,
@@ -57,6 +60,7 @@ class CircuitSelectionSetting extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
+                     if (permission)
             DXNumberAdjuster(
               unit: "°C",
               title: "Step Size",
@@ -72,6 +76,7 @@ class CircuitSelectionSetting extends StatelessWidget {
 }
 
 class DxNumberAdj extends StatefulWidget {
+  final bool permission;
   final String title;
   final RxInt value;
   final int min;
@@ -84,7 +89,7 @@ class DxNumberAdj extends StatefulWidget {
     required this.value,
     required this.min,
     required this.max,
-    required this.unit,
+    required this.unit, required this.permission,
   });
 
   @override
@@ -154,7 +159,12 @@ class _DxNumberAdjState extends State<DxNumberAdj> {
                           _holdTimer?.cancel();
                           publishTimer?.cancel();
                           publishTimer = Timer(const Duration(seconds: 1), () {
-                            _mqttController.buildJsonPayloadCiruitA();
+                            if (widget.permission) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
+                          
                             publishTimer =
                                 Timer(const Duration(seconds: 1), () {
                               _mqttController.isUserInteracting.value = false;
@@ -167,7 +177,11 @@ class _DxNumberAdjState extends State<DxNumberAdj> {
                             widget.value.value--;
                           publishTimer?.cancel();
                           publishTimer = Timer(const Duration(seconds: 1), () {
-                            _mqttController.buildJsonPayloadCiruitA();
+                          if (widget.permission) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                             publishTimer =
                                 Timer(const Duration(seconds: 1), () {
                               _mqttController.isUserInteracting.value = false;
@@ -216,7 +230,11 @@ class _DxNumberAdjState extends State<DxNumberAdj> {
                           _holdTimer?.cancel();
                           publishTimer?.cancel();
                           publishTimer = Timer(const Duration(seconds: 1), () {
-                            _mqttController.buildJsonPayloadCiruitA();
+                           if (widget.permission) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                             publishTimer =
                                 Timer(const Duration(seconds: 1), () {
                               _mqttController.isUserInteracting.value = false;
@@ -229,7 +247,11 @@ class _DxNumberAdjState extends State<DxNumberAdj> {
                             widget.value.value++;
                           publishTimer?.cancel();
                           publishTimer = Timer(const Duration(seconds: 1), () {
-                            _mqttController.buildJsonPayloadCiruitA();
+                          if (widget.permission) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                             publishTimer =
                                 Timer(const Duration(seconds: 1), () {
                               _mqttController.isUserInteracting.value = false;
@@ -297,7 +319,11 @@ class _DxNumberAdjState extends State<DxNumberAdj> {
                     input >= widget.min &&
                     input <= widget.max) {
                   widget.value.value = input;
-                  _mqttController.buildJsonPayloadCiruitA();
+               if (widget.permission) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                   Get.back();
                 } else {
                   Get.snackbar(
@@ -396,7 +422,9 @@ class _DXNumberAdjusterState extends State<DXNumberAdjuster> {
                                 .clamp(widget.min, widget.max);
                           publishTimer?.cancel();
                           publishTimer = Timer(const Duration(seconds: 1), () {
-                            _mqttController.buildJsonPayloadCiruitA();
+                      
+                                _mqttController.buildJsonPayloadCiruitA();
+                          
                             publishTimer =
                                 Timer(const Duration(seconds: 1), () {
                               _mqttController.isUserInteracting.value = false;
@@ -432,7 +460,9 @@ class _DXNumberAdjusterState extends State<DXNumberAdjuster> {
                                 .clamp(widget.min, widget.max);
                           publishTimer?.cancel();
                           publishTimer = Timer(const Duration(seconds: 1), () {
-                            _mqttController.buildJsonPayloadCiruitA();
+                        
+                                _mqttController.buildJsonPayloadCiruitA();
+                           
                             publishTimer =
                                 Timer(const Duration(seconds: 1), () {
                               _mqttController.isUserInteracting.value = false;

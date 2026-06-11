@@ -379,10 +379,10 @@ class ExvSettingChm extends StatelessWidget {
                                                 final newValue =
                                                     !_mqttController
                                                         .exvPosiSwA.value;
-                                                await _mqttController
-                                                    .exvPosiSwitchA(
-                                                  newValue,
-                                                );
+                                                // await _mqttController
+                                                //     .exvPosiSwitchA(
+                                                //   newValue,
+                                                // );
                                                 _mqttController
                                                     .exvPosiSwLoadingA
                                                     .value = false;

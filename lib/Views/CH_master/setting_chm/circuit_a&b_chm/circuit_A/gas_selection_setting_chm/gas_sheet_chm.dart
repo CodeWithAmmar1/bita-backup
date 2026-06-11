@@ -41,8 +41,8 @@ void gasSheetChm(BuildContext context, RxInt gas, bool permissiongas) {
                         : null,
                     onTap: () {
                       gas.value = index;
-                      mqttController.gasstypeDm(
-                          index.toString(), permissiongas);
+                      // mqttController.gasstypeDm(
+                      //     index.toString(), permissiongas);
                       log('Selected gas index: ${gas.value}');
                       // Navigator.of(context).pop();
                     },

@@ -73,7 +73,11 @@ class _SettingChmState extends State<SettingChm> {
                     onTap: isDisabled
                         ? null
                         : () {
-                            Get.to(() => const CircuitB());
+                            Get.to(() => const CircuitB(
+                              exvleft: "SHT",
+                              exvright: "PSI",
+                              exvtitle: "EXV Working",
+                            ));
                           },
                     child: ListTile(
                       leading: Icon(

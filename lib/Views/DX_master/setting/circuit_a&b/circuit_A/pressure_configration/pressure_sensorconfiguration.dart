@@ -5,7 +5,8 @@ import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class PressureSensorconfiguration extends StatelessWidget {
-  PressureSensorconfiguration({super.key});
+  final bool permission;
+  PressureSensorconfiguration({super.key, required this.permission});
   final MqttController _mqttController = Get.find<MqttController>();
 
   @override
@@ -31,7 +32,7 @@ class PressureSensorconfiguration extends StatelessWidget {
             SizedBox(height: 10),
             GestureDetector(
               onTap: () {
-                Get.to(() => PressureSelectiondx(
+                Get.to(() => PressureSelectiondx(permission1: permission,
                       permission: true,
                       offset: _mqttController.suctionOffsetA,
                       title: 'suction'.tr,
@@ -60,6 +61,7 @@ class PressureSensorconfiguration extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 Get.to(() => PressureSelectiondx(
+                  permission1: permission,
                       permission: true,
                       offset: _mqttController.dischargeOffsetA,
                       title: 'discharge'.tr,
@@ -88,6 +90,7 @@ class PressureSensorconfiguration extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 Get.to(PressureSelectiondx(
+                   permission1: permission,
                   permission: true,
                   offset: _mqttController.oilOffsetA,
                   title: 'oil'.tr,

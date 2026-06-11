@@ -39,7 +39,7 @@ class _SettingPageState extends State<GasdxChm> {
               SizedBox(height: 10),
               GestureDetector(
                 onTap: () {
-                  gasSheet(context, widget.gas, widget.permissiongas);
+                  // gasSheet(context, widget.gas, widget.permissiongas);
                 },
                 child: ListTile(
                   leading: Icon(

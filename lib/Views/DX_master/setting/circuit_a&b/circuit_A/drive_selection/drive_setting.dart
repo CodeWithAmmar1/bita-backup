@@ -5,13 +5,31 @@ import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/circui
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
-class DriveASetting extends StatelessWidget {
-  DriveASetting({super.key});
-  final MqttController _mqttController = Get.find<MqttController>();
-  final List<String> modes = ['S/D', 'DD', 'PW', 'VFD'];
+class DriveASetting extends StatefulWidget {
+  final bool permission;
+  const DriveASetting({super.key, required this.permission});
 
   @override
+  State<DriveASetting> createState() => _DriveASettingState();
+}
+
+class _DriveASettingState extends State<DriveASetting> {
+  final MqttController _mqttController = Get.find<MqttController>();
+
+  final List<String> modes = ['S/D', 'DD', 'PW', 'VFD'];
+@override
+void initState() {
+  super.initState();
+  if (!widget.permission) {
+    modes.remove('VFD');
+    if (_mqttController.selectedModeA.value >= modes.length) {
+      _mqttController.selectedModeA.value = 0;
+    }
+  }
+}
+  @override
   Widget build(BuildContext context) {
+  
     return Scaffold(
       backgroundColor: Get.isDarkMode ? ThemeColor().mode2 : ThemeColor().mode1,
       appBar: AppBar(
@@ -136,7 +154,11 @@ class DriveASetting extends StatelessWidget {
                             if (index != null) {
                               log('switched to: $index');
                               _mqttController.selectedModeA.value = index;
-                              _mqttController.buildJsonPayloadCiruitA();
+                             if (widget.permission) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                             }
                           },
                         ),
@@ -160,6 +182,7 @@ class DriveASetting extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     DxNumberAdj(
+                      permission: widget.permission,
                       unit: "Hz",
                       title: "VFD frequency Min",
                       value: _mqttController.vfdMinFrequencyA,
@@ -170,6 +193,7 @@ class DriveASetting extends StatelessWidget {
                       height: 10,
                     ),
                     DxNumberAdj(
+                      permission: widget.permission,
                       unit: "Hz",
                       title: "VFD frequency Max",
                       value: _mqttController.vfdMaxFrequencyA,
@@ -180,6 +204,7 @@ class DriveASetting extends StatelessWidget {
                       height: 10,
                     ),
                     DxNumberAdj(
+                      permission: widget.permission,
                       unit: "Sec",
                       title: "VFD Delay",
                       value: _mqttController.vfdDelayA,

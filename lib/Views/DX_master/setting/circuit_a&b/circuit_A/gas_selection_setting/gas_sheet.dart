@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'dart:developer';
 
-void gasSheet(BuildContext context, RxInt gas, bool permissiongas) {
+void gasSheet(BuildContext context, RxInt gas, bool permissiongas,bool permission) {
   final MqttController mqttController = Get.find<MqttController>();
   final gases = ['R-22', 'R-32', 'R-407C', 'R-410A'];
   showModalBottomSheet(
@@ -41,7 +41,7 @@ void gasSheet(BuildContext context, RxInt gas, bool permissiongas) {
                         : null,
                     onTap: () {
                       gas.value = index;
-                      mqttController.gasstypeDm(
+                      mqttController.gasstypeDm(permission: permission,
                           index.toString(), permissiongas);
                       log('Selected gas index: ${gas.value}');
                       // Navigator.of(context).pop();

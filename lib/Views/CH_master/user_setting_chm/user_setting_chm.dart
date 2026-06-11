@@ -39,7 +39,7 @@ class UserSettingChm extends StatelessWidget {
                   onTap: () async {
                     _mqttController.circuitALoading.value = true;
                     final newValue = !_mqttController.circuitAenable.value;
-                    await _mqttController.enableCircuitA(newValue);
+                    // await _mqttController.enableCircuitA(newValue);
                     _mqttController.circuitALoading.value = false;
                     return newValue;
                   },
@@ -73,7 +73,7 @@ class UserSettingChm extends StatelessWidget {
                   onTap: () async {
                     _mqttController.tempselectionSwLoading.value = true;
                     final newValue = !_mqttController.tempSelectionSwitch.value;
-                    await _mqttController.tempSelectSwitch(newValue);
+                    // await _mqttController.tempSelectSwitch(newValue);
                     _mqttController.tempselectionSwLoading.value = false;
                     return newValue;
                   },

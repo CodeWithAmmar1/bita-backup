@@ -6,7 +6,8 @@ import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class ChillWaterSp extends StatelessWidget {
-  ChillWaterSp({super.key});
+  final bool permission;
+  ChillWaterSp({super.key, required this.permission});
   final MqttController _mqttController = Get.find<MqttController>();
 
   double getResponsiveFontSize(double screenWidth, double baseSize) {
@@ -81,7 +82,11 @@ class ChillWaterSp extends StatelessWidget {
                     onChangeEnd: (_) {
                       publishTimer?.cancel();
                       publishTimer = Timer(Duration(seconds: 1), () {
-                        _mqttController.buildJsonPayloadDXMaster();
+                        if (permission) {
+                          _mqttController.buildJsonPayloadDXMaster();
+                        } else {
+                          _mqttController.buildJsonPayloadCHMMaster();
+                        }
                         publishTimer = Timer(Duration(seconds: 1), () {
                           _mqttController.isUserInteracting.value = false;
                         });
@@ -143,7 +148,11 @@ class ChillWaterSp extends StatelessWidget {
                                   _mqttController.dmSetpoint.value.toDouble());
                               publishTimer?.cancel();
                               publishTimer = Timer(Duration(seconds: 1), () {
-                                _mqttController.buildJsonPayloadDXMaster();
+                                if (permission) {
+                                  _mqttController.buildJsonPayloadDXMaster();
+                                } else {
+                                  _mqttController.buildJsonPayloadCHMMaster();
+                                }
                                 _mqttController.isUserInteracting.value = false;
                               });
                             }
@@ -192,7 +201,11 @@ class ChillWaterSp extends StatelessWidget {
 
                               publishTimer?.cancel();
                               publishTimer = Timer(Duration(seconds: 1), () {
-                                _mqttController.buildJsonPayloadDXMaster();
+                                if (permission) {
+                                  _mqttController.buildJsonPayloadDXMaster();
+                                } else {
+                                  _mqttController.buildJsonPayloadCHMMaster();
+                                }
                                 _mqttController.isUserInteracting.value = false;
                               });
                             }

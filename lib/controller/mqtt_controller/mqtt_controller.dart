@@ -695,7 +695,11 @@ class MqttController extends GetxController {
           else if (topic == "/KRC/${topicSSIDvalue.value}/CircuitA") {
             _handleMessageDMCircuitA(payload, topic);
             log("DX pressure config detected /sensor_config");
-          } //DM-Master
+          }
+           else if (topic == "/KRC/${topicSSIDvalue.value}/CHM") {
+            _handleMessageCHMCircuitA(payload, topic);
+            log("DX pressure config detected /sensor_config");
+          } //CHM
           else if (topic == "/KRC/${topicSSIDvalue.value}/CircuitB") {
             _handleMessageDMCircuitB(payload, topic);
             log("DX pressure config detected /sensor_config");
@@ -710,22 +714,7 @@ class MqttController extends GetxController {
             _handleMessageIO(payload, topic);
             log("DX pressure config detected /sensor_config");
           } //DM-Master
-          else if (topic == "/KRC/${topicSSIDvalue.value}/CircuitA") {
-            _handleMessageChmCircuitA(payload, topic);
-            log("DX pressure config detected /sensor_config");
-          } //CHM-Master
-          else if (topic == "/KRC/${topicSSIDvalue.value}/CircuitB") {
-            _handleMessageChmCircuitB(payload, topic);
-            log("DX pressure config detected /sensor_config");
-          } //CHM-Master
-          else if (topic == "/KRC/${topicSSIDvalue.value}/SensorA") {
-            _handleMessageChmSensorA(payload, topic);
-            log("DX pressure config detected /sensor_config");
-          } //CHM-Master
-          else if (topic == "/KRC/${topicSSIDvalue.value}/SensorB") {
-            _handleMessageChmSensorB(payload, topic);
-            log("DX pressure config detected /sensor_config");
-          } //CHM-Master
+        
         } else {
           //for IP & MAC update
           if (topiid.startsWith("ZMB-")) {
@@ -2493,11 +2482,13 @@ class MqttController extends GetxController {
   RxInt fan1B = 0.obs;
   RxInt fan3B = 0.obs;
 //circuit A
-  RxInt exvCurrentStepA = 0.obs;
+  RxInt exvCurrentStepA = 0.obs;  RxInt exvMaxStepecoA = 0.obs;  RxInt exvCurrentStepecoA = 0.obs;  RxInt exvStepDelayecoA = 0.obs;
   RxInt exvMaxStepA = 0.obs;
   RxInt exvStepDelayA = 0.obs;
   RxDouble dmSuctionTempA = 0.0.obs;
+   RxDouble dmSuctionTempecoA = 0.0.obs;
   RxInt dmSuctionPressureA = 0.obs;
+  RxInt dmSuctionPressureecoA = 0.obs;
   //Azam dm
 
   RxInt dmOilPressureA = 0.obs;
@@ -2560,11 +2551,14 @@ class MqttController extends GetxController {
   //EXV Settings
   RxInt superHeatspA = 2.obs;
   RxInt selectedEXVModeA = 0.obs;
+  RxInt selectedEXVModeecoA = 0.obs;
   RxDouble integralspA = 0.0.obs;
   RxDouble propostionalspA = 0.0.obs;
   RxDouble derivativespA = 0.0.obs;
   RxInt minValueA = 20.obs;
   RxInt maxValueA = 80.obs;
+    RxInt minValueecoA = 20.obs;
+  RxInt maxValueecoA = 80.obs;
   RxInt gasA = 0.obs;
 
   //EXV SettingB
@@ -2676,19 +2670,34 @@ class MqttController extends GetxController {
     maxValueA.value = values.end.round();
   }
 
-  Future<void> enableCircuitA(bool value) async {
+  void updateRangeecoA(RangeValues values) {
+    minValueecoA.value = values.start.round();
+    maxValueecoA.value = values.end.round();
+  }
+
+  Future<void> enableCircuitA(bool value , {required bool permission}) async {
     circuitALoading.value = true;
     circuitAenable.value = value;
+     if (permission) {
     buildJsonPayloadCiruitA();
+      
+    } else {
+      buildJsonPayloadCHMCiruitA();
+    }
     await Future.delayed(Duration(seconds: 2));
     circuitALoading.value = false;
   }
 
 //gas Selection DX-Master
-  void gasstypeDm(String sp, bool permgas) {
+  void gasstypeDm(String sp, bool permgas,{required bool permission}) {
     if (permgas) {
       gasA.value = int.tryParse(sp) ?? 0;
-      buildJsonPayloadCiruitA();
+      if (permission) {
+    buildJsonPayloadCiruitA();
+      
+    } else {
+      buildJsonPayloadCHMCiruitA();
+    }
     } else {
       gasB.value = int.tryParse(sp) ?? 0;
       buildJsonPayloadCiruitB();
@@ -2709,10 +2718,15 @@ class MqttController extends GetxController {
   }
 
   RxBool tempselectionSwLoading = false.obs;
-  Future<void> tempSelectSwitch(bool value) async {
+  Future<void> tempSelectSwitch(bool value,{required bool permission}) async {
     tempselectionSwLoading.value = true;
     tempSelectionSwitch.value = value;
+    if (permission) {
     buildJsonPayloadDXMaster();
+      
+    } else {
+      buildJsonPayloadCHMMaster();
+    }
     await Future.delayed(Duration(seconds: 2));
     tempselectionSwLoading.value = false;
   }
@@ -2763,28 +2777,43 @@ class MqttController extends GetxController {
   }
 
   RxBool fan1and2ASwLoading = false.obs;
-  Future<void> fan1and2A(bool value) async {
+  Future<void> fan1and2A(bool value,{required bool permission}) async {
     fan1and2ASwLoading.value = true;
     fan1and2ASwitch.value = value;
+    if (permission) {
     buildJsonPayloadCiruitA();
+      
+    } else {
+      buildJsonPayloadCHMCiruitA();
+    }
     await Future.delayed(Duration(seconds: 4));
     fan1and2ASwLoading.value = false;
   }
 
   RxBool fan3and4ASwLoading = false.obs;
-  Future<void> fan3and4A(bool value) async {
+  Future<void> fan3and4A(bool value,{required bool permission}) async {
     fan3and4ASwLoading.value = true;
     fan3and4ASwitch.value = value;
+    if (permission) {
     buildJsonPayloadCiruitA();
+      
+    } else {
+      buildJsonPayloadCHMCiruitA();
+    }
     await Future.delayed(Duration(seconds: 4));
     fan3and4ASwLoading.value = false;
   }
 
   RxBool fan5and6ASwLoading = false.obs;
-  Future<void> fan5and6A(bool value) async {
+  Future<void> fan5and6A(bool value,{required bool permission}) async {
     fan5and6ASwLoading.value = true;
     fan5and6ASwitch.value = value;
+    if (permission) {
     buildJsonPayloadCiruitA();
+      
+    } else {
+      buildJsonPayloadCHMCiruitA();
+    }
     await Future.delayed(Duration(seconds: 4));
     fan5and6ASwLoading.value = false;
   }
@@ -2800,23 +2829,188 @@ class MqttController extends GetxController {
   }
 
   RxBool exvPosiSwLoadingA = false.obs;
+    RxBool exvPosiSwLoadingecoA = false.obs;
   RxBool exvPosiSwLoadingB = false.obs;
   RxBool exvPosiSwA = false.obs;
+    RxBool exvPosiSwecoA = false.obs;
   RxBool exvPosiSwB = false.obs;
-  Future<void> exvPosiSwitchA(bool value) async {
+  Future<void> exvPosiSwitchA(bool value,{required bool permission}) async {
     exvPosiSwLoadingA.value = true;
     exvPosiSwA.value = value;
+    if (permission) {
+      
     buildJsonPayloadCiruitA();
+    } else {
+      buildJsonPayloadCHMCiruitA();
+    }
     await Future.delayed(Duration(seconds: 2));
     exvPosiSwLoadingA.value = false;
   }
-
+ Future<void> exvPosiSwitchEcoA(bool value) async {
+    exvPosiSwLoadingecoA.value = true;
+    exvPosiSwecoA.value = value;
+   
+      buildJsonPayloadCHMCiruitA();
+    
+    await Future.delayed(Duration(seconds: 2));
+    exvPosiSwLoadingecoA.value = false;
+  }
   Future<void> exvPosiSwitchB(bool value) async {
     exvPosiSwLoadingB.value = true;
     exvPosiSwB.value = value;
     buildJsonPayloadCiruitB();
     await Future.delayed(Duration(seconds: 2));
     exvPosiSwLoadingB.value = false;
+  }
+  void _handleMessageCHMCircuitA(String message, topics) async {
+    try {
+      Map<String, dynamic> jsonMap = jsonDecode(message);
+      int leadlagA = jsonMap['leadlagA'] ?? 0;
+      int enableA = jsonMap['enableA'] ?? 0;
+      int fansw12A = jsonMap['fan1EA'] ?? 0;
+      int fansw34A = jsonMap['fan3EA'] ?? 0;
+      int fansw56A = jsonMap['fan5EA'] ?? 0;
+      //EXV setting
+      exvCurrentStepA.value =
+          int.tryParse(jsonMap['exvCstepA']?.toString() ?? '') ?? 0;
+           exvCurrentStepecoA.value =
+          int.tryParse(jsonMap['exvCstepecoA']?.toString() ?? '') ?? 0;
+           exvMaxStepecoA.value =
+          int.tryParse(jsonMap['exvMstepecoA']?.toString() ?? '') ?? 0;
+      exvStepDelayecoA.value =
+          int.tryParse(jsonMap['exvStepDecoA']?.toString() ?? '') ?? 0;
+      exvMaxStepA.value =
+          int.tryParse(jsonMap['exvMstepA']?.toString() ?? '') ?? 0;
+      exvStepDelayA.value =
+          int.tryParse(jsonMap['exvStepDA']?.toString() ?? '') ?? 0;
+      //Setpoints A
+      int oilPrespA = int.tryParse(jsonMap['oilPsiSpA'].toString()) ?? 0;
+      int suctionPressureA = int.tryParse(jsonMap['SucPsiSpA'].toString()) ?? 0;
+      int ampSpA = int.tryParse(jsonMap['ampSpA'].toString()) ?? 0;
+      int dischargePressureA =
+          int.tryParse(jsonMap['DisPsiSpA'].toString()) ?? 0;
+      int suctionTempA = int.tryParse(jsonMap['SucTempSpA'].toString()) ?? 0;
+      int dischargeTempA = int.tryParse(jsonMap['DisTempSpA'].toString()) ?? 0;
+      int lowSprayA = int.tryParse(jsonMap['SprayTempSpA'].toString()) ?? 0;
+      int superheatA = int.tryParse(jsonMap['superheatspA'].toString()) ?? 0;
+      //Exv
+      // double proportionalA =
+      //     double.tryParse(jsonMap['PidPA'].toString()) ?? 0.0;
+      // double derivativeA = double.tryParse(jsonMap['PidDA'].toString()) ?? 0.0;
+      // double integralA = double.tryParse(jsonMap['PidIA'].toString()) ?? 0.0;
+
+      //pressure Sensors
+      String ampA = jsonMap['ampA']?.toString() ?? "0";
+      String sucpressuretype = jsonMap['sucPreTypeA']?.toString() ?? "0";
+      String sucpressurerange = jsonMap['sucPreRangeA']?.toString() ?? "0";
+      int sucpressureunit = jsonMap['sucPreUnitA'] ?? 0;
+      int sucoffsettA =
+          int.tryParse(jsonMap['sucoffsetA']?.toString() ?? "0") ?? 0;
+      String dispressuretype = jsonMap['disPreTypeA']?.toString() ?? "0";
+      String dispressurerange = jsonMap['disPreRangeA']?.toString() ?? "0";
+      int dispressureunit = jsonMap['disPreUnitA'] ?? 0;
+      int disOffsetA =
+          int.tryParse(jsonMap['disoffsetA']?.toString() ?? "0") ?? 0;
+      String oilpressuretype = jsonMap['oilPreTypeA']?.toString() ?? "0";
+      String oilpressurerange = jsonMap['oilPreRangeA']?.toString() ?? "0";
+      int oilpressureunit = jsonMap['oilPreUnitA'] ?? 0;
+      int oiloffsetA =
+          int.tryParse(jsonMap['oiloffsetA']?.toString() ?? "0") ?? 0;
+      int exvPosiA = jsonMap['modeA'] ?? 0;
+       int exvPosiecoA = jsonMap['modeecoA'] ?? 0;
+      //pressure sensor
+      dmOilPressureA.value =
+          int.tryParse(jsonMap['oilPsiA']?.toString() ?? '') ?? 0;
+      dmSuctionTempA.value = double.tryParse(jsonMap['SucTempA']) ?? 0.0;
+         dmSuctionTempecoA.value = double.tryParse(jsonMap['SucTempecoA']) ?? 0.0;
+      dmSuctionPressureA.value =
+          int.tryParse(jsonMap['SucPsiA']?.toString() ?? '') ?? 0;
+            dmSuctionPressureecoA.value =
+          int.tryParse(jsonMap['SucPsiecoA']?.toString() ?? '') ?? 0;
+      // dmdischargeTempA.value =
+      //     double.tryParse(jsonMap['DisTempA']?.toString() ?? '') ?? 0.0;
+      // dmdischargePressureA.value =
+      //     int.tryParse(jsonMap['DisPsiA']?.toString() ?? '') ?? 0;
+      dmSubCoolingA.value =
+          double.tryParse(jsonMap['subCoolingA']?.toString() ?? '') ?? 0.0;
+      dmSprayA.value =
+          double.tryParse(jsonMap['sprayA']?.toString() ?? '') ?? 0.0;
+      dmExvA.value = int.tryParse(jsonMap['exvA']?.toString() ?? '') ?? 0;
+      dmShtA.value = double.tryParse(jsonMap['shtA']?.toString() ?? '') ?? 0.0;
+      dmRunHoursA.value =
+          int.tryParse(jsonMap['runHoursA']?.toString() ?? '') ?? 0;
+      dmStartA.value =
+          int.tryParse(jsonMap['startdelayA']?.toString() ?? '') ?? 0;
+      // dmStepSizeA.value =
+      //     double.tryParse(jsonMap['stepsizeA']?.toString() ?? '') ?? 0.0;
+      // fan1and2HighALimit.value =
+      //     int.tryParse(jsonMap['fan1HA']?.toString() ?? '') ?? 0;
+      // fan3and4HighALimit.value =
+      //     int.tryParse(jsonMap['fan3HA']?.toString() ?? '') ?? 0;
+      // fan5and6HighALimit.value =
+      //     int.tryParse(jsonMap['fan5HA']?.toString() ?? '') ?? 0;
+      // fan1and2LowALimit.value =
+      //     int.tryParse(jsonMap['fan1LA']?.toString() ?? '') ?? 0;
+      // fan3and4LowALimit.value =
+      //     int.tryParse(jsonMap['fan3LA']?.toString() ?? '') ?? 0;
+      // fan5and6LowALimit.value =
+      //     int.tryParse(jsonMap['fan5LA']?.toString() ?? '') ?? 0;
+      // vfdMinFrequencyA.value =
+      //     int.tryParse(jsonMap['vfdMinFreA']?.toString() ?? '') ?? 0;
+      // vfdMaxFrequencyA.value =
+      //     int.tryParse(jsonMap['vfdMaxFreA']?.toString() ?? '') ?? 0;
+      selectedModeA.value =
+          int.tryParse(jsonMap['driveA']?.toString() ?? '') ?? 0;
+      // vfdDelayA.value =
+      //     int.tryParse(jsonMap['vfdDelayA']?.toString() ?? '') ?? 0;
+      selectedEXVModeA.value =
+          int.tryParse(jsonMap['ExvselA']?.toString() ?? '') ?? 0;
+             selectedEXVModeecoA.value =
+          int.tryParse(jsonMap['ExvselecoA']?.toString() ?? '') ?? 0;
+      minValueA.value = int.tryParse(jsonMap['minA']?.toString() ?? '') ?? 0;
+      maxValueA.value = int.tryParse(jsonMap['maxA']?.toString() ?? '') ?? 0;
+       minValueecoA.value = int.tryParse(jsonMap['minecoA']?.toString() ?? '') ?? 0;
+      maxValueecoA.value = int.tryParse(jsonMap['maxecoA']?.toString() ?? '') ?? 0;
+      gasA.value = int.tryParse(jsonMap['gasA']?.toString() ?? '') ?? 0;
+
+//pressure Sensors
+      sucPressureUnitA.value = sucpressureunit == 1;
+      sucPressureTypeA.value = sucpressuretype;
+      ampereA.value = ampA;
+      sucPressureRangeA.value = sucpressurerange;
+      disPressureUnitA.value = dispressureunit == 1;
+      disPressureTypeA.value = dispressuretype;
+      disPressureRangeA.value = dispressurerange;
+      dischargeOffsetA.value = disOffsetA;
+      oilPressureUnitA.value = oilpressureunit == 1;
+      oilPressureTypeA.value = oilpressuretype;
+      oilPressureRangeA.value = oilpressurerange;
+      oilOffsetA.value = oiloffsetA;
+      suctionOffsetA.value = sucoffsettA;
+      //Setpoints A
+      oilPressurespA.value = oilPrespA;
+      amperespA.value = ampSpA;
+      sucPressurespA.value = suctionPressureA;
+      disPressurespA.value = dischargePressureA;
+      sucTempspA.value = suctionTempA;
+      disTempspA.value = dischargeTempA;
+      lowSprayTempspA.value = lowSprayA;
+      superHeatspA.value = superheatA;
+      // integralspA.value = integralA;
+      // derivativespA.value = derivativeA;
+      // propostionalspA.value = proportionalA;
+      exvPosiSwA.value = exvPosiA == 1;
+      exvPosiSwecoA.value = exvPosiecoA == 1;
+      leadlagASwitch.value = leadlagA == 1;
+      circuitAenable.value = enableA == 1;
+      fan1and2ASwitch.value = fansw12A == 1;
+      fan3and4ASwitch.value = fansw34A == 1;
+      fan5and6ASwitch.value = fansw56A == 1;
+      log("Updated connection List: $deviceConnections");
+      log("Received MQTT Data:");
+    } catch (e) {
+      log("Error parsing JSON: DM $e");
+    }
   }
 
   //Circuit A
@@ -3514,7 +3708,16 @@ class MqttController extends GetxController {
     String jsonString = jsonEncode(jsonPayload);
     publishMessage(jsonString);
   }
-
+ void buildJsonPayloadCHMMaster() {
+    Map<String, dynamic> jsonPayload = {
+      "setPoint": dmSetpoint.value,
+      "powerSwitch": dmPower.value,
+      "resetValues": dmResetValues.value,
+   
+    };
+    String jsonString = jsonEncode(jsonPayload);
+    publishMessage(jsonString);
+  }
   void buildJsonPayloadDMA() {
     Map<String, dynamic> jsonPayload = {
       "offset${address1A.value}": offsett1A.value,
@@ -3560,21 +3763,27 @@ class MqttController extends GetxController {
     }
   }
 
-  void buildJsonPayloadCiruitA() {
+  void buildJsonPayloadCHMCiruitA() {
     Map<String, dynamic> jsonPayload = {
       //gas
       "gasA": gasA.value,
       //EXV Settings
       "exvMstepA": exvMaxStepA.value,
+      "exvMstepecoA": exvMaxStepecoA.value,
       "ampSpA": amperespA.value,
       "exvStepDA": exvStepDelayA.value,
+        "exvStepDecoA": exvStepDelayecoA.value,
       "ExvselA": selectedEXVModeA.value,
-      "PidIA": integralspA.value,
-      "PidDA": derivativespA.value,
-      "PidPA": propostionalspA.value,
+       "ExvselecoA": selectedEXVModeecoA.value,
+      // "PidIA": integralspA.value,
+      // "PidDA": derivativespA.value,
+      // "PidPA": propostionalspA.value,
       "minA": minValueA.value,
       "maxA": maxValueA.value,
+       "minecoA": minValueecoA.value,
+      "maxecoA": maxValueecoA.value,
       "modeA": exvPosiSwA.value ? 1 : 0,
+       "modeecoA": exvPosiSwecoA.value ? 1 : 0,
       "fan1EA": fan1and2ASwitch.value ? 1 : 0,
       "fan3EA": fan3and4ASwitch.value ? 1 : 0,
       "fan5EA": fan5and6ASwitch.value ? 1 : 0,
@@ -3599,19 +3808,19 @@ class MqttController extends GetxController {
       "oilPreUnitA": oilPressureUnitA.value ? 1 : 0,
       "oiloffsetA": oilOffsetA.value,
       "driveA": selectedModeA.value,
-      "vfdMinFreA": vfdMinFrequencyA.value,
-      "vfdMaxFreA": vfdMaxFrequencyA.value,
-      "vfdDelayA": vfdDelayA.value,
+      // "vfdMinFreA": vfdMinFrequencyA.value,
+      // "vfdMaxFreA": vfdMaxFrequencyA.value,
+      // "vfdDelayA": vfdDelayA.value,
       "enableA": circuitAenable.value ? 1 : 0,
-      "leadlagA": leadlagASwitch.value ? 1 : 0,
+      // "leadlagA": leadlagASwitch.value ? 1 : 0,
       "startdelayA": dmStartA.value,
-      "stepsizeA": dmStepSizeA.value,
-      "fan1HA": fan1and2HighALimit.value,
-      "fan3HA": fan3and4HighALimit.value,
-      "fan5HA": fan5and6HighALimit.value,
-      "fan1LA": fan1and2LowALimit.value,
-      "fan3LA": fan3and4LowALimit.value,
-      "fan5LA": fan5and6LowALimit.value,
+      // "stepsizeA": dmStepSizeA.value,
+      // "fan1HA": fan1and2HighALimit.value,
+      // "fan3HA": fan3and4HighALimit.value,
+      // "fan5HA": fan5and6HighALimit.value,
+      // "fan1LA": fan1and2LowALimit.value,
+      // "fan3LA": fan3and4LowALimit.value,
+      // "fan5LA": fan5and6LowALimit.value,
     };
     String jsonString = jsonEncode(jsonPayload);
     publishMessageSensor(jsonString); //2
@@ -4009,7 +4218,7 @@ class MqttController extends GetxController {
   }
 
   RxBool chmfan1and2ASwLoading = false.obs;
-  Future<void> chmfan1and2A(bool value) async {
+  Future<void> chmfan1and2A(bool value, ) async {
     fan1and2ASwLoading.value = true;
     fan1and2ASwitch.value = value;
     buildJsonPayloadCiruitA();
@@ -4018,7 +4227,7 @@ class MqttController extends GetxController {
   }
 
   RxBool chmfan3and4ASwLoading = false.obs;
-  Future<void> chmfan3and4A(bool value) async {
+  Future<void> chmfan3and4A(bool value, ) async {
     fan3and4ASwLoading.value = true;
     fan3and4ASwitch.value = value;
     buildJsonPayloadCiruitA();
@@ -4027,7 +4236,7 @@ class MqttController extends GetxController {
   }
 
   RxBool chmfan5and6ASwLoading = false.obs;
-  Future<void> chmfan5and6A(bool value) async {
+  Future<void> chmfan5and6A(bool value, ) async {
     fan5and6ASwLoading.value = true;
     fan5and6ASwitch.value = value;
     buildJsonPayloadCiruitA();
@@ -4040,7 +4249,7 @@ class MqttController extends GetxController {
     update();
   }
 
-  void chmupdateFanSetpointA(double value) {
+  void chmupdateFanSetpointA(double value,) {
     buildJsonPayloadCiruitA();
     update();
   }
@@ -4049,7 +4258,7 @@ class MqttController extends GetxController {
   RxBool chmexvPosiSwLoadingB = false.obs;
   RxBool chmexvPosiSwA = false.obs;
   RxBool chmexvPosiSwB = false.obs;
-  Future<void> chmexvPosiSwitchA(bool value) async {
+  Future<void> chmexvPosiSwitchA(bool value,  ) async {
     exvPosiSwLoadingA.value = true;
     exvPosiSwA.value = value;
     buildJsonPayloadCiruitA();
@@ -4206,12 +4415,12 @@ class MqttController extends GetxController {
 
   }
 
-    void buildJsonPayloadCHMCiruitA(){
+    void buildJsonPayloadCiruitA(){
     Map<String, dynamic> jsonPayload = {
       //gas
       "gasA": gasA.value,
       //EXV Settings
-      "exvMstepA": exvMaxStepA.value,
+      // "exvMstepA": exvMaxStepA.value,
       "ampSpA": amperespA.value,
       "exvStepDA": exvStepDelayA.value,
       "ExvselA": selectedEXVModeA.value,

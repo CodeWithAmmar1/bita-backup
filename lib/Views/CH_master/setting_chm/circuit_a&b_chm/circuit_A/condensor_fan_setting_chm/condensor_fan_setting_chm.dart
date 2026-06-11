@@ -80,7 +80,7 @@ class _SystemSetpointState extends State<CondensorFanSettingChm> {
                                         true;
                                     final newValue =
                                         !_mqttController.fan1and2ASwitch.value;
-                                    await _mqttController.fan1and2A(newValue);
+                                    // await _mqttController.fan1and2A(newValue);
                                     _mqttController.fan1and2ASwLoading.value =
                                         false;
                                     return newValue;
@@ -99,7 +99,7 @@ class _SystemSetpointState extends State<CondensorFanSettingChm> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => FanaSetpoint(
+                                Get.to(() => FanaSetpoint(permission: true,
                                     title: "Fan 1&2 high Limit",
                                     initialvalue:
                                         _mqttController.fan1and2HighALimit,
@@ -244,7 +244,7 @@ class _SystemSetpointState extends State<CondensorFanSettingChm> {
                                         true;
                                     final newValue =
                                         !_mqttController.fan3and4ASwitch.value;
-                                    await _mqttController.fan3and4A(newValue);
+                                    // await _mqttController.fan3and4A(newValue);
                                     _mqttController.fan3and4ASwLoading.value =
                                         false;
                                     return newValue;
@@ -408,7 +408,7 @@ class _SystemSetpointState extends State<CondensorFanSettingChm> {
                                         true;
                                     final newValue =
                                         !_mqttController.fan5and6ASwitch.value;
-                                    await _mqttController.fan5and6A(newValue);
+                                    // await _mqttController.fan5and6A(newValue);
                                     _mqttController.fan5and6ASwLoading.value =
                                         false;
                                     return newValue;
@@ -427,7 +427,7 @@ class _SystemSetpointState extends State<CondensorFanSettingChm> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => FanaSetpoint(
+                                Get.to(() => FanaSetpoint(permission: true,
                                     title: "Fan 5&6 high Limit",
                                     initialvalue:
                                         _mqttController.fan5and6HighALimit,

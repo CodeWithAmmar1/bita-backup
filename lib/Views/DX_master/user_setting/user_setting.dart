@@ -49,12 +49,13 @@ class UserSetting extends StatelessWidget {
                   onTap: () async {
                     _mqttController.circuitALoading.value = true;
                     final newValue = !_mqttController.circuitAenable.value;
-                    await _mqttController.enableCircuitA(newValue);
+                    await _mqttController.enableCircuitA(newValue,permission: permission);
                     _mqttController.circuitALoading.value = false;
                     return newValue;
                   },
                 ),
               ),
+                if (permission)
               SizedBox(
                 height: 30,
               ),
@@ -72,27 +73,30 @@ class UserSetting extends StatelessWidget {
                     },
                   ),
                 ),
+                  if (permission)
               SizedBox(
                 height: 20,
               ),
-              Obx(
-                () => RestartToggleDX(
-                  // leftText: ' Temp \nSensor'.tr,
-                  // rightText: 'Beca'.tr,
-                  // title: 'Return Temp Selection'.tr,
-                  title: mainhead,
-                  leftText: lefthead,
-                  rightText: righthead,
-                  value: _mqttController.tempSelectionSwitch.value,
-                  onTap: () async {
-                    _mqttController.tempselectionSwLoading.value = true;
-                    final newValue = !_mqttController.tempSelectionSwitch.value;
-                    await _mqttController.tempSelectSwitch(newValue);
-                    _mqttController.tempselectionSwLoading.value = false;
-                    return newValue;
-                  },
+              if (permission)
+                Obx(
+                  () => RestartToggleDX(
+                    // leftText: ' Temp \nSensor'.tr,
+                    // rightText: 'Beca'.tr,
+                    // title: 'Return Temp Selection'.tr,
+                    title: mainhead,
+                    leftText: lefthead,
+                    rightText: righthead,
+                    value: _mqttController.tempSelectionSwitch.value,
+                    onTap: () async {
+                      _mqttController.tempselectionSwLoading.value = true;
+                      final newValue =
+                          !_mqttController.tempSelectionSwitch.value;
+                      await _mqttController.tempSelectSwitch(newValue,permission: permission);
+                      _mqttController.tempselectionSwLoading.value = false;
+                      return newValue;
+                    },
+                  ),
                 ),
-              ),
               SizedBox(
                 height: 10,
               ),
@@ -101,7 +105,9 @@ class UserSetting extends StatelessWidget {
               if (_mqttController.circuitAenable.value == true)
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => const CircuitAUser());
+                    Get.to(() =>  CircuitAUser(
+                      permission: permission,
+                    ));
                   },
                   child: ListTile(
                     leading: Icon(

@@ -37,6 +37,12 @@ class Dmcard extends StatelessWidget {
           child: InkWell(
             onTap: () {
               Get.to(() =>   MainScreenDxMaster(
+                ret: "Return",
+                sup: "Supply",
+                sub: "Sub Cooling",
+                exvleft: "Manual",
+                exvright: "Auto",
+                exvtitle: "EXV Position",
                 permission: true,
                 title: "DM-MASTER",
                lefthead: ' Temp \nSensor'.tr,

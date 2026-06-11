@@ -7,7 +7,11 @@ import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class Systemsetpointa extends StatefulWidget {
-  const Systemsetpointa({super.key});
+  final bool permission;
+    final String val1A;
+
+  
+  const Systemsetpointa({super.key, required this.val1A, required this.permission});
 
   @override
   State<Systemsetpointa> createState() => _SystemsetpointaState();
@@ -49,7 +53,11 @@ class _SystemsetpointaState extends State<Systemsetpointa> {
                             maxValue: 100,
                             value: _mqttController.sucPressurespA,
                             onPublish: () {
-                              _mqttController.buildJsonPayloadCiruitA();
+                             if (widget.permission) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                             },
                           ),
                         ),
@@ -75,7 +83,11 @@ class _SystemsetpointaState extends State<Systemsetpointa> {
                                   maxValue: 700,
                                   value: _mqttController.disPressurespA,
                                   onPublish: () {
-                                    _mqttController.buildJsonPayloadCiruitA();
+                                   if (widget.permission) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                                   },
                                 ),
                               ),
@@ -103,7 +115,11 @@ class _SystemsetpointaState extends State<Systemsetpointa> {
                             maxValue: 30,
                             value: _mqttController.sucTempspA,
                             onPublish: () {
-                              _mqttController.buildJsonPayloadCiruitA();
+                             if (widget.permission) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                             },
                           ),
                         ),
@@ -129,7 +145,11 @@ class _SystemsetpointaState extends State<Systemsetpointa> {
                                   maxValue: 100,
                                   value: _mqttController.disTempspA,
                                   onPublish: () {
-                                    _mqttController.buildJsonPayloadCiruitA();
+                                   if (widget.permission) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                                   },
                                 ),
                               ),
@@ -151,19 +171,23 @@ class _SystemsetpointaState extends State<Systemsetpointa> {
                       child: GestureDetector(
                         onTap: () => Get.to(
                           () => SetpointWidget(
-                            title: "Low Spray Temp",
+                            title: "Low ${widget.val1A}",
                             unit: "°C",
                             minValue: -10,
                             maxValue: 50,
                             value: _mqttController.lowSprayTempspA,
                             onPublish: () {
-                              _mqttController.buildJsonPayloadCiruitA();
+                             if (widget.permission) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                             },
                           ),
                         ),
                         child: StatusCard(
                           limit: 50,
-                          title: "Low Spray Temp",
+                          title: "Low ${widget.val1A}",
                           unit: "°C",
                           setpoint:
                               _mqttController.lowSprayTempspA.value.toString(),
@@ -183,7 +207,11 @@ class _SystemsetpointaState extends State<Systemsetpointa> {
                                   maxValue: 20,
                                   value: _mqttController.superHeatspA,
                                   onPublish: () {
-                                    _mqttController.buildJsonPayloadCiruitA();
+                                   if (widget.permission) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                                   },
                                 ),
                               ),
@@ -211,7 +239,11 @@ class _SystemsetpointaState extends State<Systemsetpointa> {
                                   maxValue: 100,
                                   value: _mqttController.amperespA,
                                   onPublish: () {
-                                    _mqttController.buildJsonPayloadCiruitA();
+                                   if (widget.permission) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                                   },
                                 ),
                               ),
@@ -235,7 +267,11 @@ class _SystemsetpointaState extends State<Systemsetpointa> {
                                   maxValue: 100,
                                   value: _mqttController.oilPressurespA,
                                   onPublish: () {
-                                    _mqttController.buildJsonPayloadCiruitA();
+                                   if (widget.permission) {
+                                _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                                   },
                                 ),
                               ),

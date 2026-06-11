@@ -7,7 +7,16 @@ import 'package:testappbita/controller/sensor_switch_controller/sensor_switch_co
 import 'package:testappbita/utils/theme/theme.dart';
 
 class SensorselectiondmA extends StatefulWidget {
-  const SensorselectiondmA({super.key});
+  final bool permission;
+  final String sub;
+  final String sup;
+  final String ret;
+  const SensorselectiondmA(
+      {super.key,
+      required this.permission,
+      required this.sub,
+      required this.sup,
+      required this.ret});
 
   @override
   State<SensorselectiondmA> createState() => _SensorselectiondmAState();
@@ -18,15 +27,16 @@ Timer? publishTimer;
 class _SensorselectiondmAState extends State<SensorselectiondmA> {
   final MqttController _mqttController = Get.find<MqttController>();
   final SensorSwitchController controller = Get.put(SensorSwitchController());
-  final List<String> params = [
-    'none'.tr,
-    'suction'.tr,
-    'discharge'.tr,
-    'Sub Cooling'.tr,
-    'Spray'.tr,
-    'supply'.tr,
-    'return'.tr,
-  ];
+
+  List<String> get params => [
+        'none'.tr,
+        'suction'.tr,
+        'discharge'.tr,
+        widget.sub.tr,
+        'Spray'.tr,
+        widget.sup.tr,
+        widget.ret.tr,
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -67,13 +77,13 @@ class _SensorselectiondmAState extends State<SensorselectiondmA> {
       case '2':
         return 'discharge'.tr;
       case '3':
-        return 'Sub Cooling'.tr;
+        return widget.sub.tr;
       case '4':
         return 'Spray'.tr;
       case '5':
-        return 'supply'.tr;
+        return widget.sup.tr;
       case '6':
-        return 'return'.tr;
+        return widget.ret.tr;
       default:
         return 'none'.tr;
     }

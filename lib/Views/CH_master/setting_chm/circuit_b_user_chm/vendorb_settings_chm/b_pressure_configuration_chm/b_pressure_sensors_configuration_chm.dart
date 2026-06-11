@@ -31,7 +31,7 @@ class BPressureSensorsConfigurationChm extends StatelessWidget {
             SizedBox(height: 10),
             GestureDetector(
               onTap: () {
-                Get.to(() => PressureSelectiondx(
+                Get.to(() => PressureSelectiondx(permission1: true,
                       permission: false,
                       offset: _mqttController.suctionOffsetB,
                       title: 'suction'.tr,
@@ -60,6 +60,7 @@ class BPressureSensorsConfigurationChm extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 Get.to(() => PressureSelectiondx(
+                  permission1: true,
                       permission: false,
                       offset: _mqttController.dischargeOffsetB,
                       title: 'discharge'.tr,
@@ -88,6 +89,7 @@ class BPressureSensorsConfigurationChm extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 Get.to(PressureSelectiondx(
+                     permission1: true,
                   permission: false,
                   offset: _mqttController.oilOffsetB,
                   title: 'oil'.tr,

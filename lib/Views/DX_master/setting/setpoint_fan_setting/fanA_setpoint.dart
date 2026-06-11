@@ -6,6 +6,7 @@ import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class FanaSetpoint extends StatefulWidget {
+  final bool permission;
   final String title;
   final RxInt initialvalue;
   final int min;
@@ -15,7 +16,7 @@ class FanaSetpoint extends StatefulWidget {
       required this.title,
       required this.initialvalue,
       required this.min,
-      required this.max});
+      required this.max, required this.permission});
 
   @override
   State<FanaSetpoint> createState() => _FanaSetpointState();
@@ -96,7 +97,12 @@ class _FanaSetpointState extends State<FanaSetpoint> {
                     onChangeEnd: (_) {
                       publishTimer?.cancel();
                       publishTimer = Timer(Duration(seconds: 1), () {
+                         if (widget.permission) {
+                          
                         _mqttController.buildJsonPayloadDXMaster();
+                        } else {
+                            _mqttController.buildJsonPayloadCHMMaster();
+                        }
                         publishTimer = Timer(Duration(seconds: 1), () {
                           _mqttController.isUserInteracting.value = false;
                         });

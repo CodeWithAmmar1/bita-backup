@@ -5,7 +5,10 @@ import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/conden
 import 'package:testappbita/utils/theme/theme.dart';
 
 class CircuitAUser extends StatefulWidget {
-  const CircuitAUser({super.key});
+ 
+   final bool permission;
+   CircuitAUser({super.key, required this.permission,
+   });
 
   @override
   State<CircuitAUser> createState() => _CircuitAState();
@@ -37,7 +40,9 @@ class _CircuitAState extends State<CircuitAUser> {
               SizedBox(height: 10),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => CircuitSelectionSetting());
+                  Get.to(() => CircuitSelectionSetting(
+                    permission: widget.permission,
+                  ));
                 },
                 child: ListTile(
                   leading: Icon(
@@ -60,7 +65,9 @@ class _CircuitAState extends State<CircuitAUser> {
               SizedBox(height: Get.height * 0.02),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => CondensorFanSetting());
+                  Get.to(() => CondensorFanSetting(
+                    permission: widget.permission,
+                  ));
                 },
                 child: ListTile(
                   leading: Icon(

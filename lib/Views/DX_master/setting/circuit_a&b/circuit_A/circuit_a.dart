@@ -9,8 +9,20 @@ import 'package:testappbita/Views/DX_master/setting/circuit_a&b/circuit_A/setpoi
 import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
-class CircuitA extends StatefulWidget {
-  const CircuitA({super.key});
+class CircuitA extends StatefulWidget {final String sub;
+  final String sup;
+  final String ret;
+  final String val1A;
+  final bool permission;
+  final String exvright;
+  final String exvtitle;
+  final String exvleft;
+  const CircuitA(
+      {super.key,
+      required this.permission,
+      required this.exvtitle,
+      required this.exvleft,
+      required this.exvright, required this.val1A, required this.sub, required this.sup, required this.ret});
 
   @override
   State<CircuitA> createState() => _CircuitAState();
@@ -42,7 +54,9 @@ class _CircuitAState extends State<CircuitA> {
               SizedBox(height: 10),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => DriveASetting());
+                  Get.to(() => DriveASetting(
+                        permission: widget.permission,
+                      ));
                 },
                 child: ListTile(
                   leading: Icon(
@@ -62,10 +76,15 @@ class _CircuitAState extends State<CircuitA> {
                   ),
                 ),
               ),
-               SizedBox(height: Get.height * 0.02),
+              SizedBox(height: Get.height * 0.02),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => SensorselectiondmA());
+                  Get.to(() => SensorselectiondmA(
+                    permission: widget.permission,
+                    sub: widget.sub,
+                    sup: widget.sup,
+                    ret: widget.ret,
+                  ));
                 },
                 child: ListTile(
                   leading: Icon(
@@ -88,7 +107,9 @@ class _CircuitAState extends State<CircuitA> {
               SizedBox(height: Get.height * 0.02),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => PressureSensorconfiguration());
+                  Get.to(() => PressureSensorconfiguration(
+                    permission: widget.permission,
+                  ));
                 },
                 child: ListTile(
                   leading: Icon(
@@ -111,7 +132,10 @@ class _CircuitAState extends State<CircuitA> {
               SizedBox(height: Get.height * 0.02),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => Systemsetpointa());
+                  Get.to(() => Systemsetpointa(
+  permission: widget.permission,
+                    val1A: widget.val1A,
+                  ));
                 },
                 child: ListTile(
                   leading: Icon(
@@ -135,9 +159,14 @@ class _CircuitAState extends State<CircuitA> {
               GestureDetector(
                 onTap: () {
                   Get.to(() => ExvSetting(
-                    exvcurrentStep: _mqttController.exvCurrentStepA,
-                    exvmaxstep: _mqttController.exvMaxStepA,
-                    exvstepDelay: _mqttController.exvStepDelayA,
+                        permission2: false,
+                        permission: widget.permission,
+                        exvtitle: widget.exvtitle,
+                        exvleft: widget.exvleft,
+                        exvright: widget.exvright,
+                        exvcurrentStep: _mqttController.exvCurrentStepA,
+                        exvmaxstep: _mqttController.exvMaxStepA,
+                        exvstepDelay: _mqttController.exvStepDelayA,
                         min: _mqttController.minValueA,
                         max: _mqttController.maxValueA,
                         derivative: _mqttController.derivativespA,
@@ -170,10 +199,56 @@ class _CircuitAState extends State<CircuitA> {
                   ),
                 ),
               ),
+              if (!widget.permission) 
               SizedBox(height: Get.height * 0.02),
+              
+              if (!widget.permission)
+                GestureDetector(
+                  onTap: () {
+                    Get.to(() => ExvSetting(
+                        permission2: true,
+                        permission: widget.permission,
+                        exvtitle: widget.exvtitle,
+                        exvleft: widget.exvleft,
+                        exvright: widget.exvright,
+                        exvcurrentStep: _mqttController.exvCurrentStepecoA,
+                        exvmaxstep: _mqttController.exvMaxStepecoA,
+                        exvstepDelay: _mqttController.exvStepDelayecoA,
+                        min: _mqttController.minValueecoA,
+                        max: _mqttController.maxValueecoA,
+                        derivative: _mqttController.derivativespA,
+                        integral: _mqttController.integralspA,
+                        proportional: _mqttController.propostionalspA,
+                        superHeat: _mqttController.superHeatspA,
+                        permissionExv: true,
+                          disPressure: _mqttController.dmdischargePressureA,
+                          disTemp: _mqttController.dmdischargeTempA,
+                          selectedEXVMode: _mqttController.selectedEXVModeecoA,
+                          sucPressure: _mqttController.dmSuctionPressureecoA,
+                          sucTemp: _mqttController.dmSuctionTempecoA,
+                        ));
+                  },
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.settings,
+                      color: Get.isDarkMode ? Colors.white : Colors.black,
+                    ),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Get.isDarkMode ? Colors.white : Colors.black,
+                      size: 20,
+                    ),
+                    title: Text(
+                      'EXV Eco Settings'.tr,
+                      style: TextStyle(
+                        color: Get.isDarkMode ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  ),
+                ),  SizedBox(height: Get.height * 0.02),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => Gasdx(
+                  Get.to(() => Gasdx(permission: widget.permission,
                         permissiongas: true,
                         gas: _mqttController.gasA,
                       ));

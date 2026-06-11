@@ -7,7 +7,7 @@ import 'package:testappbita/utils/theme/theme.dart';
 
 // ignore: must_be_immutable
 class MinMaxExv extends StatelessWidget {
-  final bool permission;
+  final bool permission; final bool permission2;
   final RxInt minn;
   final RxInt maxx;
 
@@ -17,7 +17,7 @@ class MinMaxExv extends StatelessWidget {
       {super.key,
       required this.minn,
       required this.maxx,
-      required this.permission});
+      required this.permission, required this.permission2});
   Timer? publishTimer;
   @override
   Widget build(BuildContext context) {
@@ -136,17 +136,26 @@ class MinMaxExv extends StatelessWidget {
                           ),
                           onChanged: (RangeValues values) {
                               _mqttController.isUserInteracting.value = true;
+                            if (permission2) {
                             if (permission) {
                               _mqttController.updateRangeA(values);
                             } else {
                               _mqttController.updateRangeB(values);
                             }
+                              
+                            } else {
+                               _mqttController.updateRangeecoA(values);
+                            }  
                           },
                           onChangeEnd: (RangeValues values) {
                             publishTimer?.cancel();
                             publishTimer = Timer(Duration(seconds: 1), () {
                               if (permission) {
+                              if (permission) {
                                 _mqttController.buildJsonPayloadCiruitA();
+                            } else {
+                                _mqttController.buildJsonPayloadCHMCiruitA();
+                            }
                               } else {
                                 _mqttController.buildJsonPayloadCiruitB();
                               }

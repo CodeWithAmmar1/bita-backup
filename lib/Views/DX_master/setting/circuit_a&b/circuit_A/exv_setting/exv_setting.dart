@@ -10,6 +10,11 @@ import 'package:testappbita/utils/theme/theme.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class ExvSetting extends StatelessWidget {
+  final bool permission2;
+  final bool permission;
+  final String exvtitle;
+  final String exvleft;
+  final String exvright;
   final RxInt min;
   final RxInt max;
   final RxDouble integral;
@@ -25,8 +30,11 @@ class ExvSetting extends StatelessWidget {
   final RxInt exvcurrentStep;
   final RxInt exvstepDelay;
   final RxInt exvmaxstep;
-   ExvSetting({
+  ExvSetting({
     super.key,
+    required this.exvtitle,
+    required this.exvleft,
+    required this.exvright,
     required this.selectedEXVMode,
     required this.sucPressure,
     required this.disPressure,
@@ -42,6 +50,8 @@ class ExvSetting extends StatelessWidget {
     required this.exvcurrentStep,
     required this.exvstepDelay,
     required this.exvmaxstep,
+    required this.permission,
+    required this.permission2,
   });
   final MqttController _mqttController = Get.find<MqttController>();
 
@@ -53,7 +63,7 @@ class ExvSetting extends StatelessWidget {
         backgroundColor: ThemeColor().actual,
         centerTitle: true,
         title: Text(
-          'EXV Settings',
+          permission2 ? 'EXV Eco Settings' : 'EXV Settings',
           style: TextStyle(
               fontSize: Get.width * 0.06,
               fontWeight: FontWeight.bold,
@@ -88,13 +98,17 @@ class ExvSetting extends StatelessWidget {
                     : ThemeColor().mode1Sec,
                 inactiveFgColor: Get.isDarkMode ? Colors.white : Colors.black,
                 totalSwitches: 2,
-                labels: ['EXV', 'TXV'],
+                labels: [permission2 ? 'EXV Eco' : 'EXV', 'TXV'],
                 onToggle: (index) {
                   if (index != null) {
                     log('switched to: $index');
                     selectedEXVMode.value = index;
                     if (permissionExv) {
-                      _mqttController.buildJsonPayloadCiruitA();
+                      if (permission) {
+                        _mqttController.buildJsonPayloadCiruitA();
+                      } else {
+                        _mqttController.buildJsonPayloadCHMCiruitA();
+                      }
                     } else {
                       _mqttController.buildJsonPayloadCiruitB();
                     }
@@ -110,7 +124,7 @@ class ExvSetting extends StatelessWidget {
                   children: [
                     Container(
                       height: 70,
-                      width: double.infinity,
+                      width: permission2 ? 190 : double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         color: Get.isDarkMode
@@ -204,88 +218,90 @@ class ExvSetting extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Container(
-                              width: Get.width * 0.22,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                color: Get.isDarkMode
-                                    ? ThemeColor().mode2
-                                    : ThemeColor().mode1,
+                            if (!permission2)
+                              Container(
+                                width: Get.width * 0.22,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                  color: Get.isDarkMode
+                                      ? ThemeColor().mode2
+                                      : ThemeColor().mode1,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Discharge",
+                                      style: TextStyle(
+                                          fontSize: Get.width * 0.035,
+                                          fontWeight: FontWeight.bold,
+                                          color: Get.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                    Text(
+                                      "Temp",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Get.width * 0.035,
+                                          color: Get.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                    Text(
+                                      "$disTemp°C",
+                                      style: TextStyle(
+                                          fontSize: Get.width * 0.035,
+                                          color: Get.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Discharge",
-                                    style: TextStyle(
-                                        fontSize: Get.width * 0.035,
-                                        fontWeight: FontWeight.bold,
-                                        color: Get.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black),
-                                  ),
-                                  Text(
-                                    "Temp",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Get.width * 0.035,
-                                        color: Get.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black),
-                                  ),
-                                  Text(
-                                    "$disTemp°C",
-                                    style: TextStyle(
-                                        fontSize: Get.width * 0.035,
-                                        color: Get.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black),
-                                  ),
-                                ],
+                            if (!permission2)
+                              Container(
+                                width: Get.width * 0.22,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                  color: Get.isDarkMode
+                                      ? ThemeColor().mode2
+                                      : ThemeColor().mode1,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Discharge",
+                                      style: TextStyle(
+                                          fontSize: Get.width * 0.035,
+                                          fontWeight: FontWeight.bold,
+                                          color: Get.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                    Text(
+                                      "Pressure",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Get.width * 0.035,
+                                          color: Get.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                    Text(
+                                      "$disPressure PSI",
+                                      style: TextStyle(
+                                          fontSize: Get.width * 0.035,
+                                          color: Get.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Container(
-                              width: Get.width * 0.22,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                color: Get.isDarkMode
-                                    ? ThemeColor().mode2
-                                    : ThemeColor().mode1,
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Discharge",
-                                    style: TextStyle(
-                                        fontSize: Get.width * 0.035,
-                                        fontWeight: FontWeight.bold,
-                                        color: Get.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black),
-                                  ),
-                                  Text(
-                                    "Pressure",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Get.width * 0.035,
-                                        color: Get.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black),
-                                  ),
-                                  Text(
-                                    "$disPressure PSI",
-                                    style: TextStyle(
-                                        fontSize: Get.width * 0.035,
-                                        color: Get.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -306,7 +322,9 @@ class ExvSetting extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Text(
-                                'EXV Parameters',
+                                permission2
+                                    ? "EXV Eco Parameters"
+                                    : "EXV Parameters",
                                 style: TextStyle(
                                     fontSize: Get.width * 0.045,
                                     fontWeight: FontWeight.bold,
@@ -335,7 +353,9 @@ class ExvSetting extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Text(
-                                        'EXV Position',
+                                        permission2
+                                            ? "EXV Eco Working"
+                                            : exvtitle,
                                         style: TextStyle(
                                             fontSize: Get.width * 0.045,
                                             fontWeight: FontWeight.bold,
@@ -351,7 +371,7 @@ class ExvSetting extends StatelessWidget {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            "Manual",
+                                            exvleft,
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 15,
@@ -363,110 +383,102 @@ class ExvSetting extends StatelessWidget {
                                           SizedBox(
                                             width: 10,
                                           ),
-                                          LoadSwitch(
-                                            height: Get.height * 0.038,
-                                            width: Get.height * 0.08,
-                                            value: permissionExv
-                                                ? _mqttController
-                                                    .exvPosiSwA.value
-                                                : _mqttController
-                                                    .exvPosiSwB.value,
-                                            future: () async {
-                                              if (permissionExv) {
-                                                _mqttController
-                                                    .exvPosiSwLoadingA
-                                                    .value = true;
-                                                final newValue =
-                                                    !_mqttController
-                                                        .exvPosiSwA.value;
-                                                await _mqttController
-                                                    .exvPosiSwitchA(
-                                                  newValue,
-                                                );
-                                                _mqttController
-                                                    .exvPosiSwLoadingA
-                                                    .value = false;
-                                                return newValue;
-                                              } else {
-                                                _mqttController
-                                                    .exvPosiSwLoadingB
-                                                    .value = true;
-                                                final newValue =
-                                                    !_mqttController
-                                                        .exvPosiSwB.value;
-                                                await _mqttController
-                                                    .exvPosiSwitchB(
-                                                  newValue,
-                                                );
-                                                _mqttController
-                                                    .exvPosiSwLoadingB
-                                                    .value = false;
-                                                return newValue;
-                                              }
-                                            },
-                                            onChange: (_) {},
-                                            onTap: (val) {},
-                                            animationDuration: const Duration(
-                                                milliseconds: 300),
-                                            curveIn: Curves.easeInBack,
-                                            curveOut: Curves.easeOutBack,
-                                            style: SpinStyle.material,
-                                            switchDecoration:
-                                                (value, loading) =>
-                                                    BoxDecoration(
-                                              color: value
-                                                  ? ThemeColor()
-                                                      .actual
-                                                      .withValues(alpha: 0.2)
-                                                  : Colors.red[100],
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: value
-                                                      ? ThemeColor()
-                                                          .actual
-                                                          .withValues(
-                                                              alpha: 0.2)
-                                                      : Colors.red.withValues(
-                                                          alpha: 0.2),
-                                                  spreadRadius: 5,
-                                                  blurRadius: 7,
-                                                  offset: const Offset(0, 3),
-                                                ),
-                                              ],
-                                            ),
-                                            spinColor: (value) => value
-                                                ? ThemeColor().actual
-                                                : const Color.fromARGB(
-                                                    255, 255, 77, 77),
-                                            spinStrokeWidth: 3,
-                                            thumbDecoration: (value, loading) =>
-                                                BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: value
-                                                      ? ThemeColor()
-                                                          .actual
-                                                          .withValues(
-                                                              alpha: 0.2)
-                                                      : Colors.red.withValues(
-                                                          alpha: 0.2),
-                                                  spreadRadius: 5,
-                                                  blurRadius: 7,
-                                                  offset: const Offset(0, 3),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                        Obx(() {
+  // 1. Resolve the current value based on permissions reactively
+  final bool currentValue = permission2
+      ? (permissionExv 
+          ? _mqttController.exvPosiSwA.value 
+          : _mqttController.exvPosiSwB.value)
+      : _mqttController.exvPosiSwecoA.value;
+
+  return LoadSwitch(
+    height: Get.height * 0.038,
+    width: Get.height * 0.08,
+    value: currentValue,
+    future: () async {
+      
+        if (permissionExv) {
+          if (permission2) {
+            
+            _mqttController.exvPosiSwLoadingecoA.value = true;
+            final newValue = !_mqttController.exvPosiSwecoA.value;
+          
+          await _mqttController.exvPosiSwitchEcoA(newValue, );
+           
+          _mqttController.exvPosiSwLoadingecoA.value = false;
+          return newValue;
+          } else {  
+            _mqttController.exvPosiSwLoadingA.value = true;
+            
+          final newValue = !_mqttController.exvPosiSwA.value;
+          
+          await _mqttController.exvPosiSwitchA(newValue, permission: permission);
+          _mqttController.exvPosiSwLoadingA.value = false;
+          return newValue;
+            
+          
+          }
+          
+          // _mqttController.exvPosiSwLoadingA.value = false;
+          // return newValue;
+        } else {
+          _mqttController.exvPosiSwLoadingB.value = true;
+          final newValue = !_mqttController.exvPosiSwB.value;
+          
+          await _mqttController.exvPosiSwitchB(newValue);
+          
+          _mqttController.exvPosiSwLoadingB.value = false;
+          return newValue;
+        }
+      
+    },
+    onChange: (_) {},
+    onTap: (val) {},
+    animationDuration: const Duration(milliseconds: 300),
+    curveIn: Curves.easeInBack,
+    curveOut: Curves.easeOutBack,
+    style: SpinStyle.material,
+    switchDecoration: (value, loading) => BoxDecoration(
+      color: value
+          ? ThemeColor().actual.withValues(alpha: 0.2)
+          : Colors.red[100],
+      borderRadius: BorderRadius.circular(30),
+      boxShadow: [
+        BoxShadow(
+          color: value
+              ? ThemeColor().actual.withValues(alpha: 0.2)
+              : Colors.red.withValues(alpha: 0.2),
+          spreadRadius: 5,
+          blurRadius: 7,
+          offset: const Offset(0, 3),
+        ),
+      ],
+    ),
+    spinColor: (value) => value
+        ? ThemeColor().actual
+        : const Color.fromARGB(255, 255, 77, 77),
+    spinStrokeWidth: 3,
+    thumbDecoration: (value, loading) => BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(30),
+      boxShadow: [
+        BoxShadow(
+          color: value
+              ? ThemeColor().actual.withValues(alpha: 0.2)
+              : Colors.red.withValues(alpha: 0.2),
+          spreadRadius: 5,
+          blurRadius: 7,
+          offset: const Offset(0, 3),
+        ),
+      ],
+    ),
+  );
+}),
                                           SizedBox(
                                             width: 10,
                                           ),
                                           Text(
-                                            "Auto",
+                                            exvright,
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 15,
@@ -487,17 +499,21 @@ class ExvSetting extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() =>
-                                 SetpointWidget(
+                                Get.to(() => SetpointWidget(
                                       title: "Super Heat",
                                       unit: "°C",
-                                      minValue:2,
+                                      minValue: 2,
                                       maxValue: 20,
                                       value: superHeat,
                                       onPublish: () {
                                         if (permissionExv) {
-                                          _mqttController
-                                              .buildJsonPayloadCiruitA();
+                                          if (permission) {
+                                            _mqttController
+                                                .buildJsonPayloadCiruitA();
+                                          } else {
+                                            _mqttController
+                                                .buildJsonPayloadCHMCiruitA();
+                                          }
                                         } else {
                                           _mqttController
                                               .buildJsonPayloadCiruitB();
@@ -529,138 +545,152 @@ class ExvSetting extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(() => SetpointEXVWidget(
-                                      title: "Proportional",
-                                      unit: "°C",
-                                      minValue: 0.0,
-                                      maxValue: 20.0,
-                                      value: proportional,
-                                      onPublish: () {
-                                        if (permissionExv) {
-                                          _mqttController
-                                              .buildJsonPayloadCiruitA();
-                                        } else {
-                                          _mqttController
-                                              .buildJsonPayloadCiruitB();
-                                        }
-                                      },
-                                    ));
-                              },
-                              child: ListTile(
-                                leading: Icon(
-                                  Icons.settings,
-                                  color: Get.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
-                                trailing: Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  color: Get.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  size: 20,
-                                ),
-                                title: Text(
-                                  'Proportional'.tr,
-                                  style: TextStyle(
+                            if (permission)
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(() => SetpointEXVWidget(
+                                        title: "Proportional",
+                                        unit: "°C",
+                                        minValue: 0.0,
+                                        maxValue: 20.0,
+                                        value: proportional,
+                                        onPublish: () {
+                                          if (permissionExv) {
+                                            if (permission) {
+                                              _mqttController
+                                                  .buildJsonPayloadCiruitA();
+                                            } else {
+                                              _mqttController
+                                                  .buildJsonPayloadCHMCiruitA();
+                                            }
+                                          } else {
+                                            _mqttController
+                                                .buildJsonPayloadCiruitB();
+                                          }
+                                        },
+                                      ));
+                                },
+                                child: ListTile(
+                                  leading: Icon(
+                                    Icons.settings,
                                     color: Get.isDarkMode
                                         ? Colors.white
                                         : Colors.black,
                                   ),
+                                  trailing: Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: Get.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    size: 20,
+                                  ),
+                                  title: Text(
+                                    'Proportional'.tr,
+                                    style: TextStyle(
+                                      color: Get.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(() => SetpointEXVWidget(
-                                      title: "Integral",
-                                      unit: "°C",
-                                      minValue: 0.0,
-                                      maxValue: 20.0,
-                                      value: integral,
-                                      onPublish: () {
-                                        if (permissionExv) {
-                                          _mqttController
-                                              .buildJsonPayloadCiruitA();
-                                        } else {
-                                          _mqttController
-                                              .buildJsonPayloadCiruitB();
-                                        }
-                                      },
-                                    ));
-                              },
-                              child: ListTile(
-                                leading: Icon(
-                                  Icons.settings,
-                                  color: Get.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
-                                trailing: Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  color: Get.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  size: 20,
-                                ),
-                                title: Text(
-                                  'Integral'.tr,
-                                  style: TextStyle(
+                            if (permission)
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(() => SetpointEXVWidget(
+                                        title: "Integral",
+                                        unit: "°C",
+                                        minValue: 0.0,
+                                        maxValue: 20.0,
+                                        value: integral,
+                                        onPublish: () {
+                                          if (permissionExv) {
+                                            if (permission) {
+                                              _mqttController
+                                                  .buildJsonPayloadCiruitA();
+                                            } else {
+                                              _mqttController
+                                                  .buildJsonPayloadCHMCiruitA();
+                                            }
+                                          } else {
+                                            _mqttController
+                                                .buildJsonPayloadCiruitB();
+                                          }
+                                        },
+                                      ));
+                                },
+                                child: ListTile(
+                                  leading: Icon(
+                                    Icons.settings,
                                     color: Get.isDarkMode
                                         ? Colors.white
                                         : Colors.black,
                                   ),
+                                  trailing: Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: Get.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    size: 20,
+                                  ),
+                                  title: Text(
+                                    'Integral'.tr,
+                                    style: TextStyle(
+                                      color: Get.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(() => SetpointEXVWidget(
-                                      title: "Deravtive",
-                                      unit: "°C",
-                                      minValue: 0.0,
-                                      maxValue: 20.0,
-                                      value: derivative,
-                                      onPublish: () {
-                                        if (permissionExv) {
-                                          _mqttController
-                                              .buildJsonPayloadCiruitA();
-                                        } else {
-                                          _mqttController
-                                              .buildJsonPayloadCiruitB();
-                                        }
-                                      },
-                                    ));
-                              },
-                              child: ListTile(
-                                leading: Icon(
-                                  Icons.settings,
-                                  color: Get.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
-                                trailing: Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  color: Get.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  size: 20,
-                                ),
-                                title: Text(
-                                  'Deravtive'.tr,
-                                  style: TextStyle(
+                            if (permission)
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(() => SetpointEXVWidget(
+                                        title: "Deravtive",
+                                        unit: "°C",
+                                        minValue: 0.0,
+                                        maxValue: 20.0,
+                                        value: derivative,
+                                        onPublish: () {
+                                          if (permissionExv) {
+                                            _mqttController
+                                                .buildJsonPayloadCiruitA();
+                                          } else {
+                                            _mqttController
+                                                .buildJsonPayloadCiruitB();
+                                          }
+                                        },
+                                      ));
+                                },
+                                child: ListTile(
+                                  leading: Icon(
+                                    Icons.settings,
                                     color: Get.isDarkMode
                                         ? Colors.white
                                         : Colors.black,
                                   ),
+                                  trailing: Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: Get.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    size: 20,
+                                  ),
+                                  title: Text(
+                                    'Deravtive'.tr,
+                                    style: TextStyle(
+                                      color: Get.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
                             GestureDetector(
                               onTap: () {
                                 Get.to(() => MinMaxExv(
+                                  permission2: permission2,
                                       permission: permissionExv,
                                       maxx: max,
                                       minn: min,
@@ -692,11 +722,12 @@ class ExvSetting extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => ExvSteps(permissionExv: permissionExv,
+                                Get.to(() => ExvSteps(
+                                      permissionExv: permissionExv,
                                       exvcurrentStep: exvcurrentStep,
                                       exvstepDelay: exvstepDelay,
-                                      exvmaxstep: exvmaxstep, 
-                                ));
+                                      exvmaxstep: exvmaxstep,
+                                    ));
                               },
                               child: ListTile(
                                 leading: Icon(

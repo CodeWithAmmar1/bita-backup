@@ -5,6 +5,7 @@ import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class Chw extends StatelessWidget {
+  final bool permission;
   final String lefttitle;
   final String righttitle;
   final String deviceid;
@@ -12,7 +13,7 @@ class Chw extends StatelessWidget {
       {super.key,
       required this.deviceid,
       required this.lefttitle,
-      required this.righttitle});
+      required this.righttitle, required this.permission});
   final MqttController _mqttController = Get.find<MqttController>();
   @override
   Widget build(BuildContext context) {
@@ -78,7 +79,9 @@ class Chw extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Get.to(() => ChillWaterSp());
+                Get.to(() => ChillWaterSp(
+                  permission: permission,
+                ));
               },
               child: Container(
                 height: baseSize * 0.08,

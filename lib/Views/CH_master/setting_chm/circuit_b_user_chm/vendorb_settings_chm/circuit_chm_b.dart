@@ -10,7 +10,10 @@ import 'package:testappbita/controller/mqtt_controller/mqtt_controller.dart';
 import 'package:testappbita/utils/theme/theme.dart';
 
 class CircuitChmB extends StatefulWidget {
-  const CircuitChmB({super.key});
+    final String exvtitle;
+  final String exvleft;
+   final String exvright;
+  const CircuitChmB({super.key, required this.exvtitle, required this.exvleft, required this.exvright});
 
   @override
   State<CircuitChmB> createState() => _CircuitAState();
@@ -134,6 +137,11 @@ class _CircuitAState extends State<CircuitChmB> {
               GestureDetector(
                 onTap: () {
                   Get.to(() => ExvSetting(
+                    permission2: false,
+                    permission: false,
+                     exvtitle: widget.exvtitle,
+                        exvleft: widget.exvleft,
+                        exvright: widget.exvright,
                         exvcurrentStep: _mqttController.exvCurrentStepB,
                         exvmaxstep: _mqttController.exvMaxStepB,
                         exvstepDelay: _mqttController.exvStepDelayB,
@@ -172,7 +180,7 @@ class _CircuitAState extends State<CircuitChmB> {
               SizedBox(height: Get.height * 0.02),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => Gasdx(
+                  Get.to(() => Gasdx(permission: true,
                         permissiongas: false,
                         gas: _mqttController.gasB,
                       ));
